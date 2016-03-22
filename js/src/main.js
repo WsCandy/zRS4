@@ -10,6 +10,8 @@
 
 		});
 
+		slider.test();
+
 	};
 
 	init();

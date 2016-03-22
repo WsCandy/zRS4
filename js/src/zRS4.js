@@ -10,30 +10,29 @@
 			option: 'tester'
 
 		};
-		var modules = {};
-		var objects = {
+		var modules = {
 
-			setUp: function() {
+			setUp: {
 
-				this.test = function() {
+				test : function() {
 
 					console.log('test');
 
-				};
+				}
 
 			},
 
-			elements: function() {
-
-
-			},
-
-			controls: function() {
+			elements: {
 
 
 			},
 
-			transitions: function() {
+			controls: {
+
+
+			},
+
+			transitions: {
 
 
 			}
@@ -42,26 +41,17 @@
 
 		var __construct = function() {
 
-			/**
-			 * Create modules
-			 */
-
-			for(var module in objects) {
-
-				if(objects.hasOwnProperty(module)) {
-
-					modules[module] = new objects[module];
-
-				}
-
-			}
-
 		};
 
-		ins.publicMethods = {
+		/**
+		 * Public
+		 */
 
+		ins.test = modules.setUp.test;
 
-		};
+		/**
+		 * Construct
+		 */
 
 		__construct();
 
