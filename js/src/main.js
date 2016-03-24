@@ -4,13 +4,12 @@
 
 	var init = function() {
 
-		var slider = new zRS4('.zRS4', {
+		window.slider = new zRS('.zRS', {
 
-			option: 'example'
+			example: 100,
+			option: 2
 
 		});
-
-		slider.test();
 
 	};
 

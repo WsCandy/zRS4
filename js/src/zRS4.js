@@ -2,38 +2,69 @@
 
 	'use strict';
 
-	window.zRS4 = function(element, options) {
+	window.zRS = function(element, options) {
+
+		var version = '4.0.1';
 
 		var ins = this;
 		var defaults = {
 
-			option: 'tester'
+			option: 1,
+			example: 2
 
 		};
+		var settings = defaults;
 		var modules = {
 
 			setUp: {
 
-				test : function() {
+				setOptions: function(update) {
 
-					console.log('test');
+					if(!update) { return; }
+
+					if(typeof update !== 'object') {
+
+						modules.util.log('Please provide an object to this method', 'warn');
+						return;
+
+					}
+
+					for(var option in defaults) {
+
+						if(defaults.hasOwnProperty(option)) {
+
+							if(update[option] === undefined) {
+
+								settings[option] = defaults[option];
+								continue;
+
+							}
+
+							settings[option] = update[option];
+
+						}
+
+					}
 
 				}
 
 			},
 
-			elements: {
+			elements: {},
 
+			controls: {},
 
-			},
+			transitions: {},
 
-			controls: {
+			util: {
 
+				log: function(message, type) {
 
-			},
+					type = type ? type : 'log';
 
-			transitions: {
+					console[type]('[zRS ' + version + ']: ' + message);
 
+				}
 
 			}
 
@@ -41,13 +72,15 @@
 
 		var __construct = function() {
 
+			modules.setUp.setOptions(options);
+
 		};
 
 		/**
-		 * Public
+		 * Public Properties
 		 */
 
-		ins.test = modules.setUp.test;
+		ins.setOptions = modules.setUp.setOptions;
 
 		/**
 		 * Construct
