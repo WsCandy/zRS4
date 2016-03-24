@@ -1,7 +1,9 @@
-var zRS = require('./zRS');
+;(function(window) {
 
-var slider = new zRS('.zRS', {
+	window.slider = new zRS('.zRS', {
 
-	example: 100
+		example: 100
 
-});
+	});
+
+})(window);

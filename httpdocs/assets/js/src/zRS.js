@@ -1,136 +1,138 @@
-var zRS = function(element, options) {
+;(function(window) {
 
-	var version = '4.0.1';
+	var zRS = function(element, options) {
 
-	var ins = this;
-	var defaults = {
+		var version = '4.0.1';
 
-		option: 1,
-		example: 2
+		var ins = this;
+		var defaults = {
 
-	};
-	var settings = defaults;
-	var modules = {
+			option: 1,
+			example: 2
 
-		setUp: {
+		};
+		var settings = defaults;
+		var modules = {
 
-			init: function() {
+			setUp: {
 
-				if(modules.setUp.setContainer() === false) {
+				init: function() {
 
-					modules.util.log('Initialisation aborted, please make sure your selectors are correct', 'error');
+					if(modules.setUp.setContainer() === false) {
 
-					return;
+						modules.util.log('Initialisation aborted, please make sure your selectors are correct', 'error');
 
-				}
-
-				modules.setUp.setOptions(options);
-
-			},
-
-			setOptions: function(update) {
-
-				if(!update) {
-
-					return;
-
-				}
-
-				if(typeof update !== 'object') {
-
-					modules.util.log('Please provide an object to this method', 'warn');
-					return;
-
-				}
-
-				for(var option in defaults) {
-
-					if(defaults.hasOwnProperty(option)) {
-
-						if(update[option] === undefined) {
-
-							settings[option] = defaults[option];
-							continue;
-
-						}
-
-						settings[option] = update[option];
+						return;
 
 					}
 
+					modules.setUp.setOptions(options);
+
+				},
+
+				setOptions: function(update) {
+
+					if(!update) {
+
+						return;
+
+					}
+
+					if(typeof update !== 'object') {
+
+						modules.util.log('Please provide an object to this method', 'warn');
+						return;
+
+					}
+
+					for(var option in defaults) {
+
+						if(defaults.hasOwnProperty(option)) {
+
+							if(update[option] === undefined) {
+
+								settings[option] = defaults[option];
+								continue;
+
+							}
+
+							settings[option] = update[option];
+
+						}
+
+					}
+
+				},
+
+				setContainer: function() {
+
+					switch(element[0]) {
+
+						case '.' :
+
+							ins.elements.slider = document.querySelectorAll(element);
+
+							break;
+
+						case '#' :
+
+							ins.elements.slider = document.getElementById(element.substr(1));
+
+							break;
+
+						default:
+
+							return false;
+
+							break;
+
+					}
+
+					console.log(ins.elements.slider);
+
 				}
 
 			},
 
-			setContainer: function() {
+			controls: {},
 
-				switch(element[0]) {
+			transitions: {},
 
-					case '.' :
+			util: {
 
-						ins.elements.slider = document.querySelectorAll(element);
+				log: function(message, type) {
 
-					break;
+					type = type ? type : 'log';
 
-					case '#' :
-
-						ins.elements.slider = document.getElementById(element.substr(1));
-
-					break;
-
-					default:
-
-						return false;
-
-					break;
+					console[type]('[zRS ' + version + ']: ' + message);
 
 				}
 
-				console.log(ins.elements.slider);
-
 			}
 
-		},
+		};
 
-		controls: {},
+		var __construct = function() {
 
-		transitions: {},
+			modules.setUp.init();
 
-		util: {
+		};
 
-			log: function(message, type) {
+		/**
+		 * Public Properties
+		 */
 
-				type = type ? type : 'log';
+		ins.setOptions = modules.setUp.setOptions;
+		ins.elements = {};
 
-				console[type]('[zRS ' + version + ']: ' + message);
+		/**
+		 * Construct
+		 */
 
-			}
-
-		}
-
-	};
-
-	var __construct = function() {
-
-		modules.setUp.init();
+		__construct();
 
 	};
-
-	/**
-	 * Public Properties
-	 */
-
-	ins.setOptions = modules.setUp.setOptions;
-	ins.elements = {};
-
-	/**
-	 * Construct
-	 */
-
-	__construct();
 
 	window.zRS = zRS;
 
-};
-
-module.exports = zRS;
+})(window);
