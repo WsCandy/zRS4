@@ -1,0 +1,3 @@
+[submodule "floe-gulp"]
+	path = floe-gulp
+	url = git@github.com:WsCandy/floe-gulp.git
