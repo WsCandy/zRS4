@@ -28,6 +28,7 @@ node_modules
 
 # cache
 floe/app/cache
+.idea/
 
 # gulp generated files
 
