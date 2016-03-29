@@ -2,10 +2,10 @@ class zRSUtil {
 
 	static log(message, type = `log`) {
 
-		console[type](`[zRS]: ${message}`);
+		console[type](`[zRS - ${zRS.version()}]: ${message}`);
 
 	}
 
 }
 
-module.exports = zRSUtil;
+export default zRSUtil;

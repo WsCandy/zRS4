@@ -1,16 +1,21 @@
-var zRSUtil = require('./zRSUtil');
+import zRSUtil from './zRSUtil';
+import zRSCore from './zRSCore';
 
-;(function(window) {
+(function(window) {
 
 	'use strict';
 
 	class zRS {
 
-		constructor(element, options) {
+		static version() {
 
-			this.version = `4.0.1`;
+			return `4.0.1`;
+
+		}
+
+		constructor(element, options = {}) {
+
 			this.element = element;
-			this.elements = {};
 			this.defaults = this.settings = {
 
 				option: 1,
@@ -20,13 +25,16 @@ var zRSUtil = require('./zRSUtil');
 
 			if(this.setContainer() === false) {
 
-				zRSUtil.log(`Initialisation aborted, please make sure your selectors are correct`, `error`);
+				zRSUtil.log(`Cannot find container, stopping initialisation`, `error`);
 
 				return;
 
 			}
 
 			this.setOptions(options);
+			this.setObjects();
+
+			return this.core;
 
 		}
 
@@ -40,13 +48,13 @@ var zRSUtil = require('./zRSUtil');
 
 			if(typeof update !== 'object') {
 
-				zRSUtil.log(`Please provide an object to this method`, `warn`);
+				zRSUtil.log(`Please provide an object for this method`, `warn`);
 
 				return;
 
 			}
 
-			for(var option in this.defaults) {
+			for(let option in this.defaults) {
 
 				if(this.defaults.hasOwnProperty(option)) {
 
@@ -71,13 +79,13 @@ var zRSUtil = require('./zRSUtil');
 
 				case '.' :
 
-					this.elements.slider = document.querySelectorAll(this.element);
+					this.sliders = document.querySelectorAll(this.element);
 
 					break;
 
 				case '#' :
 
-					this.elements.slider = document.getElementById(this.element.substr(1));
+					this.sliders = document.getElementById(this.element.substr(1));
 
 					break;
 
@@ -86,6 +94,26 @@ var zRSUtil = require('./zRSUtil');
 					return false;
 
 					break;
+
+			}
+
+		}
+
+		setObjects() {
+
+			if(this.sliders.length) {
+
+				this.core = [];
+
+				for(let i = 0, l = this.sliders.length; i < l; i++) {
+
+					this.core[i] = new zRSCore(this.settings);
+
+				}
+
+			} else {
+
+				this.core = new zRSCore(this.settings);
 
 			}
 
