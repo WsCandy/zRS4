@@ -1,137 +1,97 @@
+var zRSUtil = require('./zRSUtil');
+
 ;(function(window) {
 
-	var zRS = function(element, options) {
+	'use strict';
 
-		var version = '4.0.1';
+	class zRS {
 
-		var ins = this;
-		var defaults = {
+		constructor(element, options) {
 
-			option: 1,
-			example: 2
+			this.version = `4.0.1`;
+			this.element = element;
+			this.elements = {};
+			this.defaults = this.settings = {
 
-		};
-		var settings = defaults;
-		var modules = {
+				option: 1,
+				example: 2
 
-			setUp: {
+			};
 
-				init: function() {
+			if(this.setContainer() === false) {
 
-					if(modules.setUp.setContainer() === false) {
+				zRSUtil.log(`Initialisation aborted, please make sure your selectors are correct`, `error`);
 
-						modules.util.log('Initialisation aborted, please make sure your selectors are correct', 'error');
+				return;
 
-						return;
+			}
 
-					}
+			this.setOptions(options);
 
-					modules.setUp.setOptions(options);
+		}
 
-				},
+		setOptions(update) {
 
-				setOptions: function(update) {
+			if(!update) {
 
-					if(!update) {
+				return;
 
-						return;
+			}
 
-					}
+			if(typeof update !== 'object') {
 
-					if(typeof update !== 'object') {
+				zRSUtil.log(`Please provide an object to this method`, `warn`);
 
-						modules.util.log('Please provide an object to this method', 'warn');
-						return;
+				return;
 
-					}
+			}
 
-					for(var option in defaults) {
+			for(var option in this.defaults) {
 
-						if(defaults.hasOwnProperty(option)) {
+				if(this.defaults.hasOwnProperty(option)) {
 
-							if(update[option] === undefined) {
+					if(update[option] === undefined) {
 
-								settings[option] = defaults[option];
-								continue;
-
-							}
-
-							settings[option] = update[option];
-
-						}
+						this.settings[option] = this.defaults[option];
+						continue;
 
 					}
 
-				},
-
-				setContainer: function() {
-
-					switch(element[0]) {
-
-						case '.' :
-
-							ins.elements.slider = document.querySelectorAll(element);
-
-							break;
-
-						case '#' :
-
-							ins.elements.slider = document.getElementById(element.substr(1));
-
-							break;
-
-						default:
-
-							return false;
-
-							break;
-
-					}
-
-					console.log(ins.elements.slider);
-
-				}
-
-			},
-
-			controls: {},
-
-			transitions: {},
-
-			util: {
-
-				log: function(message, type) {
-
-					type = type ? type : 'log';
-
-					console[type]('[zRS ' + version + ']: ' + message);
+					this.settings[option] = update[option];
 
 				}
 
 			}
 
-		};
+		}
 
-		var __construct = function() {
+		setContainer() {
 
-			modules.setUp.init();
+			switch(this.element[0]) {
 
-		};
+				case '.' :
 
-		/**
-		 * Public Properties
-		 */
+					this.elements.slider = document.querySelectorAll(this.element);
 
-		ins.setOptions = modules.setUp.setOptions;
-		ins.elements = {};
+					break;
 
-		/**
-		 * Construct
-		 */
+				case '#' :
 
-		__construct();
+					this.elements.slider = document.getElementById(this.element.substr(1));
 
-	};
+					break;
+
+				default:
+
+					return false;
+
+					break;
+
+			}
+
+		}
+
+	}
 
 	window.zRS = zRS;
 
