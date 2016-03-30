@@ -6,6 +6,12 @@ class zRS_util {
 
 	}
 
+	static getChild(element, className) {
+
+
+
+	}
+
 }
 
 export default zRS_util;

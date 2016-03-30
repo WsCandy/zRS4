@@ -18,13 +18,14 @@ import zRS_core from './zRS_core';
 			this.element = element;
 			this.defaults = this.settings = {
 
-				transition: 'fade'
+				transition: 'fade',
+				inner: '.zRS__inner'
 
 			};
 
 			if(this.setContainer() === false) {
 
-				zRSUtil.log(`Cannot find container, stopping initialisation`, `error`);
+				zRS_util.log(`Cannot find container, stopping initialisation`, `error`);
 
 				return;
 
@@ -47,7 +48,7 @@ import zRS_core from './zRS_core';
 
 			if(typeof update !== 'object') {
 
-				zRSUtil.log(`Please provide an object for this method`, `warn`);
+				zRS_util.log(`Please provide an object for this method`, `warn`);
 
 				return;
 

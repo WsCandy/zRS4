@@ -6,15 +6,44 @@ class zRS_core {
 
 		var zRS_trans = require(`./zRS_${options.transition}`).default;
 
-		this.element = element;
 		this.options = options;
-		this.transition = new zRS_trans(this.element, this.options);
+		this.events = {};
+		this.elements = {
+
+			slider: element,
+			inner: null,
+			slides: null,
+			pager: null
+
+		};
+
+		this.createEvents();
+		this.indexElements();
+
+		this.elements.slider.addEventListener('load', function() {
+
+			alert('lal');
+			
+		});
+
+		this.transition = new zRS_trans(this.elements, this.options);
+
+		this.elements.slider.dispatchEvent(this.events.load);
 
 	}
 
-	setUp() {
+	indexElements() {
 
+		this.elements.inner = this.elements.slider.querySelectorAll(this.options.inner)[0];
+		this.elements.slides = this.elements.inner.children;
 
+		console.log(this.elements);
+
+	}
+
+	createEvents() {
+
+		this.events.load = new Event('load');
 
 	}
 
