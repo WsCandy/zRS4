@@ -2,9 +2,8 @@
 
 	window.slider = new zRS('#zRS', {
 
+		//transition: 'slide'
 
 	});
-
-	console.log(slider);
 
 })(window);

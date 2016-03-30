@@ -1,5 +1,5 @@
-import zRSUtil from './zRSUtil';
-import zRSCore from './zRSCore';
+import zRS_util from './zRS_util';
+import zRS_core from './zRS_core';
 
 (function(window) {
 
@@ -18,8 +18,7 @@ import zRSCore from './zRSCore';
 			this.element = element;
 			this.defaults = this.settings = {
 
-				option: 1,
-				example: 2
+				transition: 'fade'
 
 			};
 
@@ -107,13 +106,13 @@ import zRSCore from './zRSCore';
 
 				for(let i = 0, l = this.sliders.length; i < l; i++) {
 
-					this.core[i] = new zRSCore(this.settings);
+					this.core[i] = new zRS_core(this.sliders[i], this.settings);
 
 				}
 
 			} else {
 
-				this.core = new zRSCore(this.settings);
+				this.core = new zRS_core(this.sliders, this.settings);
 
 			}
 

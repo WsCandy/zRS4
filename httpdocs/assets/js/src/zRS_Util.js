@@ -1,4 +1,4 @@
-class zRSUtil {
+class zRS_util {
 
 	static log(message, type = `log`) {
 
@@ -8,4 +8,4 @@ class zRSUtil {
 
 }
 
-export default zRSUtil;
+export default zRS_util;
