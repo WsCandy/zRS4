@@ -1,14 +1,14 @@
 ;(function(window) {
 
-	window.slider = new zRS('#zRS', {
+	document.getElementById('zRS').addEventListener('load', function() {
 
-		//transition: 'slide'
+		alert('loaded');
 
 	});
 
-	document.getElementById('zRS').addEventListener('load', function() {
+	window.slider = new zRS('#zRS', {
 
-		console.log('loaded');
+		//transition: 'slide'
 
 	});
 

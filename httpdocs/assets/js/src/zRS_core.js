@@ -19,13 +19,6 @@ class zRS_core {
 
 		this.createEvents();
 		this.indexElements();
-
-		this.elements.slider.addEventListener('load', function() {
-
-			alert('lal');
-			
-		});
-
 		this.transition = new zRS_trans(this.elements, this.options);
 
 		this.elements.slider.dispatchEvent(this.events.load);
