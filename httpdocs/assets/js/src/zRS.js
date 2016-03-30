@@ -75,25 +75,37 @@ import zRS_core from './zRS_core';
 
 		setContainer() {
 
-			switch(this.element[0]) {
+			if(typeof this.element === 'string') {
 
-				case '.' :
+				switch(this.element[0]) {
 
-					this.sliders = document.querySelectorAll(this.element);
+					case '.' :
 
-					break;
+						this.sliders = document.querySelectorAll(this.element);
 
-				case '#' :
+						break;
 
-					this.sliders = document.getElementById(this.element.substr(1));
+					case '#' :
 
-					break;
+						this.sliders = document.getElementById(this.element.substr(1));
 
-				default:
+						break;
 
-					return false;
+					default:
 
-					break;
+						return false;
+
+						break;
+
+				}
+
+			} else if(typeof this.element === 'object') {
+
+				this.sliders = this.element;
+
+			} else {
+
+				return false;
 
 			}
 

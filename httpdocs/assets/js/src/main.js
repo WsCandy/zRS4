@@ -1,14 +1,16 @@
 ;(function(window) {
 
-	document.getElementById('zRS').addEventListener('load', function() {
+	var cont = document.getElementById('zRS');
+
+	cont.addEventListener('load', function() {
 
 		alert('loaded');
 
 	});
 
-	window.slider = new zRS('#zRS', {
+	window.slider = new zRS(cont, {
 
-		//transition: 'slide'
+		transition: 'fade'
 
 	});
 

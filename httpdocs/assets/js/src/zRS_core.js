@@ -21,7 +21,13 @@ class zRS_core {
 		this.indexElements();
 		this.transition = new zRS_trans(this.elements, this.options);
 
-		this.elements.slider.dispatchEvent(this.events.load);
+		zRS_util.dispatchEvent({
+
+			name: 'load',
+			event: this.events.load,
+			element: this.elements.slider
+
+		});
 
 	}
 
@@ -36,7 +42,7 @@ class zRS_core {
 
 	createEvents() {
 
-		this.events.load = new Event('load');
+		this.events.load = zRS_util.createEvent('load');
 
 	}
 
