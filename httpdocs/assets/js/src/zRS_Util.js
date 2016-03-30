@@ -10,7 +10,7 @@ class zRS_util {
 
 		var event;
 
-		if(document.createEvent) {
+		if(Event) {
 
 			event = new Event(name);
 
