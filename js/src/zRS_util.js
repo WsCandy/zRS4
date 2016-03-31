@@ -35,6 +35,54 @@ class zRS_util {
 
 	}
 
+	static addClass(element, className) {
+
+		if(element.classList) {
+
+			element.classList.add(className);
+
+		} else {
+
+			element.className += ` ${className}`;
+
+		}
+		
+	}
+
+	static interateObj(obj) {
+
+		let index = 0;
+
+		let propKeys = Reflect.ownKeys(obj);
+
+		return {
+
+			[Symbol.iterator]() {
+
+				return this;
+
+			},
+			next() {
+				if(index < propKeys.length) {
+
+					let key = propKeys[index];
+
+					index++;
+
+					return {value: [key, obj[key]]};
+
+				} else {
+
+					return {done: true};
+
+				}
+
+			}
+
+		}
+
+	}
+
 }
 
 export default zRS_util;

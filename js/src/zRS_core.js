@@ -7,6 +7,7 @@ class zRS_core {
 		var zRS_trans = require(`./zRS_${options.transition}`).default;
 
 		this.options = options;
+		this.timer = null;
 		this.events = {};
 		this.elements = {
 
@@ -19,7 +20,11 @@ class zRS_core {
 
 		this.createEvents();
 		this.indexElements();
+		this.styleElements();
+
 		this.transition = new zRS_trans(this.elements, this.options);
+
+		this.play();
 
 		zRS_util.dispatchEvent({
 
@@ -34,15 +39,70 @@ class zRS_core {
 	indexElements() {
 
 		this.elements.inner = this.elements.slider.querySelectorAll(this.options.inner)[0];
+
+		if(!this.elements.inner) {
+
+			zRS_util.log(`Cannot find ${this.options.inner} inner element, please check your markup`, 'warn');
+
+			return;
+
+		}
+
 		this.elements.slides = this.elements.inner.children;
 
-		console.log(this.elements);
+	}
+
+	styleElements() {
+
+		this.elements.inner.style.width = '100%';
+		this.elements.inner.style.overflow = 'hidden';
+		this.elements.inner.style.position = 'relative';
+
+		for(let [key, element] of zRS_util.interateObj(this.elements.slides)) {
+
+			zRS_util.addClass(element, 'zRS__slide');
+
+		}
 
 	}
 
 	createEvents() {
 
 		this.events.load = zRS_util.createEvent('load');
+		this.events.beforeTrans = zRS_util.createEvent('beforeTrans');
+		this.events.afterTrans = zRS_util.createEvent('afterTrans');
+		this.events.play = zRS_util.createEvent('play');
+		this.events.pause = zRS_util.createEvent('pause');
+		
+	}
+
+	play() {
+
+		clearInterval(this.timer);
+
+		this.timer = setInterval(this.options.direction === 'forward' ? this.transition.next : this.transition.prev, this.options.delay);
+
+		zRS_util.dispatchEvent({
+
+			name: 'play',
+			event: this.events.play,
+			element: this.elements.slider
+
+		});
+
+	}
+
+	pause() {
+
+		clearInterval(this.timer);
+
+		zRS_util.dispatchEvent({
+
+			name: 'pause',
+			event: this.events.pause,
+			element: this.elements.slider
+
+		});
 
 	}
 

@@ -19,7 +19,9 @@ import zRS_core from './zRS_core';
 			this.defaults = this.settings = {
 
 				transition: 'fade',
-				inner: '.zRS__inner'
+				inner: '.zRS__inner',
+				delay: 5000,
+				direction: 'forward'
 
 			};
 
@@ -54,20 +56,16 @@ import zRS_core from './zRS_core';
 
 			}
 
-			for(let option in this.defaults) {
+			for(let [key, value] of zRS_util.interateObj(this.defaults)) {
 
-				if(this.defaults.hasOwnProperty(option)) {
+				if(update[key] === undefined) {
 
-					if(update[option] === undefined) {
-
-						this.settings[option] = this.defaults[option];
-						continue;
-
-					}
-
-					this.settings[option] = update[option];
+					this.settings[key] = value;
+					continue;
 
 				}
+
+				this.settings[key] = update[key];
 
 			}
 
