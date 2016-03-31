@@ -28,7 +28,7 @@ class zRS_core {
 			element: this.elements.slider
 
 		});
-
+		
 	}
 
 	indexElements() {

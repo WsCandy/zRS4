@@ -1,62 +1,60 @@
 var gulp = require('gulp'),
-    gutil = require('gulp-util'),
-    webpack = require("webpack");
+	gutil = require('gulp-util'),
+	webpack = require("webpack");
 
-gulp.task('default', ['webpack']);
+gulp.task('default', function() {
 
-gulp.task('webpack', function() {
+	webpack({
 
-    webpack({
+		watch: true,
+		entry: `${process.env.PWD}/js/src/zRS.js`,
+		output: {
 
-        watch: true,
-        entry: `${process.env.PWD}/js/src/zRS.js`,
-        output: {
+			path: `${process.env.PWD}/js/`,
+			filename: 'zRS.min.js'
 
-            path: `${process.env.PWD}/js/`,
-            filename: 'zRS.min.js'
+		},
+		module: {
 
-        },
-        module: {
+			loaders: [
 
-            loaders: [
+				{
 
-                {
+					loader: 'babel-loader',
+					query: {
 
-                    loader: 'babel-loader',
-                    query: {
+						presets: ['es2015']
 
-                        presets: ['es2015']
+					},
+					exclude: /(node_modules|bower_components)/
 
-                    },
-                    exclude: /(node_modules|bower_components)/
+				}
 
-                }
+			]
 
-            ]
+		},
+		plugins: [
+			new webpack.NoErrorsPlugin(),
+			new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+			new webpack.optimize.UglifyJsPlugin(),
+			new webpack.DefinePlugin({
+				'process.env': {
 
-        },
-        plugins: [
-            new webpack.NoErrorsPlugin(),
-            new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-            new webpack.optimize.UglifyJsPlugin(),
-            new webpack.DefinePlugin({
-                'process.env': {
+					'NODE_ENV': JSON.stringify('production'),
+				}
+			})
+		]
 
-                    'NODE_ENV': JSON.stringify('production'),
-                }
-            })
-        ]
+	}, function(err, stats) {
 
-    }, function(err, stats) {
+		if(err) throw new gutil.PluginError("webpack", err);
 
-        if(err) throw new gutil.PluginError("webpack", err);
+		gutil.log("[webpack]", stats.toString({
+			// output options
+		}));
 
-        gutil.log("[webpack]", stats.toString({
-            // output options
-        }));
+		gutil.log(gutil.colors.green('Webpack Compile Complete!'));
 
-        gutil.log(gutil.colors.green('Webpack Compile Complete!'));
-
-    });
+	});
 
 });
