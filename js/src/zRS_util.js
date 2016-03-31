@@ -10,14 +10,10 @@ class zRS_util {
 
 		var event;
 
-		if(Event) {
-
-			event = new Event(name);
-
-		} else {
+		if(document.createEvent) {
 
 			event = document.createEvent('Event');
-			event.initEvent('load', false, false);
+			event.initEvent(name, false, false);
 
 		}
 
