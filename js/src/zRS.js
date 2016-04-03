@@ -20,6 +20,7 @@ import zRS_core from './zRS_core';
 
 				transition: 'fade',
 				inner: '.zRS__inner',
+				slides: 'zRS__slide',
 				delay: 5000,
 				direction: 'forward'
 
@@ -115,9 +116,9 @@ import zRS_core from './zRS_core';
 
 				this.core = [];
 
-				for(let i = 0, l = this.sliders.length; i < l; i++) {
+				for(let slider of this.sliders) {
 
-					this.core[i] = new zRS_core(this.sliders[i], this.settings);
+					this.core[i] = new zRS_core(slider, this.settings);
 
 				}
 

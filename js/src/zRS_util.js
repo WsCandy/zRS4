@@ -46,14 +46,13 @@ class zRS_util {
 			element.className += ` ${className}`;
 
 		}
-		
+
 	}
 
 	static interateObj(obj) {
 
-		let index = 0;
-
-		let propKeys = Reflect.ownKeys(obj);
+		let index = 0,
+			propKeys = Reflect.ownKeys(obj);
 
 		return {
 
@@ -63,6 +62,7 @@ class zRS_util {
 
 			},
 			next() {
+
 				if(index < propKeys.length) {
 
 					let key = propKeys[index];
@@ -73,7 +73,11 @@ class zRS_util {
 
 				} else {
 
-					return {done: true};
+					return {
+
+						done: true
+
+					};
 
 				}
 

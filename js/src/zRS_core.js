@@ -4,7 +4,7 @@ class zRS_core {
 
 	constructor(element, options) {
 
-		var zRS_trans = require(`./zRS_${options.transition}`).default;
+		const zRS_trans = require(`./zRS_${options.transition}`).default;
 
 		this.options = options;
 		this.timer = null;
@@ -22,9 +22,16 @@ class zRS_core {
 		this.indexElements();
 		this.styleElements();
 
-		this.transition = new zRS_trans(this.elements, this.options);
+		this.transition = new zRS_trans({
+
+			events: this.events,
+			elements : this.elements,
+			options: this.options
+
+		});
 
 		this.play();
+		this.bindings();
 
 		zRS_util.dispatchEvent({
 
@@ -60,7 +67,8 @@ class zRS_core {
 
 		for(let [key, element] of zRS_util.interateObj(this.elements.slides)) {
 
-			zRS_util.addClass(element, 'zRS__slide');
+			element.style.display = 'block';
+			zRS_util.addClass(element, this.options.slides);
 
 		}
 
@@ -74,6 +82,22 @@ class zRS_core {
 		this.events.play = zRS_util.createEvent('play');
 		this.events.pause = zRS_util.createEvent('pause');
 		
+	}
+
+	bindings() {
+
+		window.addEventListener('blur', () => {
+
+			this.pause();
+
+		});
+
+		window.addEventListener('focus', () => {
+
+			this.play();
+
+		});
+
 	}
 
 	play() {

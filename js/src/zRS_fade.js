@@ -2,10 +2,11 @@ import zRS_util from './zRS_util';
 
 class zRS_fade {
 
-	constructor(elements, options) {
+	constructor(data) {
 
-		this.elements = elements;
-		this.options = options;
+		this.elements = data.elements;
+		this.options = data.options;
+		this.events = data.events;
 
 		this.setup();
 
@@ -26,7 +27,7 @@ class zRS_fade {
 			element.style.left = '0';
 
 			if(key === '0') {
-
+				
 				element.style.position = 'relative';
 				element.style.zIndex = 1;
 				element.style.opacity = 1;
