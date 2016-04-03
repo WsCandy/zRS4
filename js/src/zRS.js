@@ -22,6 +22,7 @@ import zRS_core from './zRS_core';
 				inner: '.zRS__inner',
 				slides: 'zRS__slide',
 				delay: 5000,
+				slideBy: 1,
 				direction: 'forward'
 
 			};
@@ -67,6 +68,12 @@ import zRS_core from './zRS_core';
 				}
 
 				this.settings[key] = update[key];
+
+			}
+
+			if(this.settings.direction === 'back') {
+
+				this.settings.slideBy = -Math.abs(this.settings.slideBy);
 
 			}
 

@@ -4,11 +4,23 @@ class zRS_core {
 
 	constructor(element, options) {
 
-		const zRS_trans = require(`./zRS_${options.transition}`).default;
+		var zRS_trans;
+
+		try {
+
+			zRS_trans = require(`./zRS_${options.transition}`).default;
+
+		} catch(error) {
+
+			zRS_util.log(`The transition '${options.transition}' doesn't exist, falling back to fade.`, `warn`);
+			zRS_trans = require(`./zRS_fade`).default;
+
+		}
 
 		this.options = options;
 		this.timer = null;
 		this.events = {};
+		this.currentSlide = 0;
 		this.elements = {
 
 			slider: element,
@@ -17,7 +29,7 @@ class zRS_core {
 			pager: null
 
 		};
-
+		
 		this.createEvents();
 		this.indexElements();
 		this.styleElements();
@@ -77,8 +89,6 @@ class zRS_core {
 	createEvents() {
 
 		this.events.load = zRS_util.createEvent('load');
-		this.events.beforeTrans = zRS_util.createEvent('beforeTrans');
-		this.events.afterTrans = zRS_util.createEvent('afterTrans');
 		this.events.play = zRS_util.createEvent('play');
 		this.events.pause = zRS_util.createEvent('pause');
 		
@@ -104,7 +114,11 @@ class zRS_core {
 
 		clearInterval(this.timer);
 
-		this.timer = setInterval(this.options.direction === 'forward' ? this.transition.next : this.transition.prev, this.options.delay);
+		this.timer = setInterval(() => {
+
+			this.handleTransition(this.options.slideBy);
+
+		}, this.options.delay);
 
 		zRS_util.dispatchEvent({
 
@@ -127,6 +141,51 @@ class zRS_core {
 			element: this.elements.slider
 
 		});
+
+	}
+
+	handleTransition(steps = 1) {
+
+		let current = this.currentSlide;
+
+		this.currentSlide += steps;
+
+		if(this.currentSlide >= this.elements.slides.length) {
+
+			this.currentSlide -= this.elements.slides.length;
+
+		} else if(this.currentSlide < 0) {
+
+			this.currentSlide += this.elements.slides.length;
+
+		}
+
+		this.events.before = zRS_util.createEvent('before', {
+
+			current : current,
+			currentSlide : this.elements.slides[current],
+			target: this.currentSlide,
+			targetSlide: this.elements.slides[this.currentSlide]
+
+		});
+
+		zRS_util.dispatchEvent({
+
+			name: 'before',
+			event: this.events.before,
+			element: this.elements.slider
+
+		});
+
+		if(steps > 0) {
+
+			this.transition.next(this.elements.slides[this.currentSlide]);
+
+		} else if(steps < 0) {
+
+			this.transition.prev(this.elements.slides[this.currentSlide]);
+
+		}
 
 	}
 

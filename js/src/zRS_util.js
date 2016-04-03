@@ -6,14 +6,14 @@ class zRS_util {
 
 	}
 
-	static createEvent(name) {
+	static createEvent(name, detail = {}) {
 
 		var event;
 
 		if(document.createEvent) {
 
-			event = document.createEvent('Event');
-			event.initEvent(name, false, false);
+			event = document.createEvent('CustomEvent');
+			event.initCustomEvent(name, false, false, detail);
 
 		}
 

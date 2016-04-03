@@ -27,7 +27,7 @@ class zRS_fade {
 			element.style.left = '0';
 
 			if(key === '0') {
-				
+
 				element.style.position = 'relative';
 				element.style.zIndex = 1;
 				element.style.opacity = 1;
