@@ -10,14 +10,13 @@
 
 	cont.addEventListener('before', function(e) {
 
-		console.log(e.detail);
+		// console.log(e.detail);
 
 	});
 
 	window.slider = new zRS(cont, {
 
-		transition: 'awdaw',
-		delay: 1000
+		speed: 500
 
 	});
 

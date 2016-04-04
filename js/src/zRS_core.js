@@ -177,15 +177,7 @@ class zRS_core {
 
 		});
 
-		if(steps > 0) {
-
-			this.transition.next(this.elements.slides[this.currentSlide]);
-
-		} else if(steps < 0) {
-
-			this.transition.prev(this.elements.slides[this.currentSlide]);
-
-		}
+		this.transition.handle(this.elements.slides[this.currentSlide], this.elements.slides[current]);
 
 	}
 

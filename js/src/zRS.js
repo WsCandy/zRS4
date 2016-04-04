@@ -22,7 +22,9 @@ import zRS_core from './zRS_core';
 				inner: '.zRS__inner',
 				slides: 'zRS__slide',
 				delay: 5000,
+				speed: 1000,
 				slideBy: 1,
+				visibleSlides: 1,
 				direction: 'forward'
 
 			};

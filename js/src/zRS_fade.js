@@ -7,6 +7,7 @@ class zRS_fade {
 		this.elements = data.elements;
 		this.options = data.options;
 		this.events = data.events;
+		this.animations = {};
 
 		this.setup();
 
@@ -25,12 +26,12 @@ class zRS_fade {
 			element.style.width = '100%';
 			element.style.top = '0';
 			element.style.left = '0';
+			element.style.opacity = 1;
 
 			if(key === '0') {
 
 				element.style.position = 'relative';
-				element.style.zIndex = 1;
-				element.style.opacity = 1;
+				element.style.zIndex = 2;
 
 				continue;
 
@@ -38,21 +39,57 @@ class zRS_fade {
 
 			element.style.position = 'absolute';
 			element.style.zIndex = 0;
-			element.style.opacity = 0;
 
 		}
 
 	}
 
-	next() {
+	animate(key, element, opacity = 0) {
+		
+		opacity += ((1000 / 60) / this.options.speed);
 
-		console.log('next');
+		this.animations[key] = requestAnimationFrame(() => {
+
+			element.style.opacity = Math.min(opacity, 1);
+
+			if(Math.min(opacity, 1) !== 1) {
+
+				this.animate(key, element, opacity);
+
+				return;
+
+			}
+
+			console.log('ended');
+
+		});
 
 	}
 
-	prev() {
+	handle(nextSlide, currentSlide) {
 
-		console.log('prev');
+		for(let [key, element] of zRS_util.interateObj(this.elements.slides)) {
+
+			if(element === currentSlide) {
+
+				element.style.zIndex = 1;
+				continue;
+
+			}
+
+			if(element === nextSlide) {
+
+				element.style.zIndex = 2;
+
+				this.animate(key, element, 0);
+
+				continue;
+
+			}
+
+			element.style.zIndex = 0;
+
+		}
 
 	}
 
