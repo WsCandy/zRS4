@@ -94,14 +94,20 @@ class zRS_core {
 
 		let pager = this.elements.pager.length ? this.elements.pager[0] : this.elements.pager;
 
-		if(!pager.children) {
+		if(!pager.children.length) {
 
 			console.log('create children');
 
 		} else {
 
-			console.log('has children');
+			if(pager.children.length !== this.elements.slides.length) {
 
+				zRS_util.log(`Please make sure your pager contains ${this.elements.slides.length} children to use customer pager elements.`, 'warn');
+
+				return;
+
+			}
+			
 		}
 
 	}
