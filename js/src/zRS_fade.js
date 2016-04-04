@@ -21,7 +21,7 @@ class zRS_fade {
 
 	styleSlides() {
 
-		for(let [key, element] of zRS_util.interateObj(this.elements.slides)) {
+		for(let [key, element] of zRS_util.iterateObj(this.elements.slides)) {
 
 			element.style.width = '100%';
 			element.style.top = '0';
@@ -83,7 +83,7 @@ class zRS_fade {
 
 	handle(nextSlide, prevSlide) {
 
-		for(let [key, element] of zRS_util.interateObj(this.elements.slides)) {
+		for(let [key, element] of zRS_util.iterateObj(this.elements.slides)) {
 
 			if(element === this.elements.slides[prevSlide]) {
 

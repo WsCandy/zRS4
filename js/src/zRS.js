@@ -63,7 +63,7 @@ import zRS_core from './zRS_core';
 
 			}
 
-			for(let [key, value] of zRS_util.interateObj(this.defaults)) {
+			for(let [key, value] of zRS_util.iterateObj(this.defaults)) {
 
 				if(update[key] === undefined) {
 
@@ -90,7 +90,7 @@ import zRS_core from './zRS_core';
 
 				this.core = [];
 
-				for(let [key, element] of zRS_util.interateObj(this.sliders)) {
+				for(let [key, element] of zRS_util.iterateObj(this.sliders)) {
 
 					this.core[key] = new zRS_core(element, this.settings);
 

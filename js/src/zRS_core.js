@@ -27,7 +27,8 @@ class zRS_core {
 			slider: element,
 			inner: null,
 			slides: null,
-			pager: null
+			pager: null,
+			anchors: []
 
 		};
 		
@@ -96,7 +97,24 @@ class zRS_core {
 
 		if(!pager.children.length) {
 
-			console.log('create children');
+			for(let i = 0, l = this.elements.slides.length; i < l; i++) {
+
+				let anchor = document.createElement('a');
+					anchor.href = 'javascript:void(0);';
+
+				if(i === 0) {
+
+					zRS_util.addClass(anchor, 'active');
+
+				}
+
+				zRS_util.addClass(anchor, 'zRS__anchor');
+
+				this.elements.anchors.push(anchor);
+
+				pager.appendChild(anchor);
+
+			}
 
 		} else {
 
@@ -107,8 +125,27 @@ class zRS_core {
 				return;
 
 			}
-			
+
+			for(let [key, element] of zRS_util.iterateObj(pager.children)) {
+
+				if(parseInt(key) === 0) {
+
+					zRS_util.addClass(element, 'active');
+
+				}
+
+				this.elements.anchors.push(element);
+
+			}
+
 		}
+
+		this.elements.slider.addEventListener('before', (e) => {
+
+			zRS_util.removeClass(this.elements.anchors[e.detail.current], 'active');
+			zRS_util.addClass(this.elements.anchors[e.detail.target], 'active');
+
+		});
 
 	}
 
@@ -118,7 +155,7 @@ class zRS_core {
 		this.elements.inner.style.overflow = 'hidden';
 		this.elements.inner.style.position = 'relative';
 
-		for(let [key, element] of zRS_util.interateObj(this.elements.slides)) {
+		for(let [key, element] of zRS_util.iterateObj(this.elements.slides)) {
 
 			element.style.display = 'block';
 			zRS_util.addClass(element, this.options.slides);

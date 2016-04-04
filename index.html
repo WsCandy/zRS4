@@ -2,7 +2,47 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Title</title>
+	<title>zRS4</title>
+
+	<style>
+
+		.zRS {
+
+			position: relative;
+
+		}
+
+		.zRS__pager {
+
+			position: absolute;
+			bottom: 10px;
+			left: 0;
+			right: 0;
+			z-index: 10;
+			text-align: center;
+
+		}
+
+		.zRS__pager a {
+
+			display: inline-block;
+			height: 10px;
+			width: 10px;
+			margin: 0 5px;
+			background: hotpink;
+
+			transition: 0.25s ease;
+
+		}
+
+		.zRS__pager a.active {
+
+			transform: rotate(45deg);
+
+		}
+
+	</style>
+
 </head>
 <body>
 	<div class="zRS" id="zRS">

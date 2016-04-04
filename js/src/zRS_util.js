@@ -49,11 +49,25 @@ class zRS_util {
 
 	}
 
-	static interateObj(obj) {
+	static removeClass(element, className) {
+
+		if(element.classList) {
+
+			element.classList.remove(className);
+
+		} else {
+
+			element.className = element.className.replace(new RegExp(`(^|\\b)${className.split(' ').join('|')}(\\b|$)`, `gi`), ' ').trim();
+
+		}
+
+	}
+
+	static iterateObj(obj) {
 
 		let index = 0,
 			propKeys = Object.keys(obj);
-		
+
 		return {
 
 			[Symbol.iterator]() {
