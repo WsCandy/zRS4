@@ -21,6 +21,7 @@ import zRS_core from './zRS_core';
 				transition: 'fade',
 				inner: '.zRS__inner',
 				slides: 'zRS__slide',
+				pager: null,
 				delay: 5000,
 				speed: 1000,
 				slideBy: 1,
@@ -29,7 +30,9 @@ import zRS_core from './zRS_core';
 
 			};
 
-			if(this.setContainer() === false) {
+			this.sliders = zRS_util.findElement(this.element);
+
+			if(this.sliders === false) {
 
 				zRS_util.log(`Cannot find container, stopping initialisation`, `error`);
 
@@ -81,53 +84,15 @@ import zRS_core from './zRS_core';
 
 		}
 
-		setContainer() {
-
-			if(typeof this.element === 'string') {
-
-				switch(this.element[0]) {
-
-					case '.' :
-
-						this.sliders = document.querySelectorAll(this.element);
-
-						break;
-
-					case '#' :
-
-						this.sliders = document.getElementById(this.element.substr(1));
-
-						break;
-
-					default:
-
-						return false;
-
-						break;
-
-				}
-
-			} else if(typeof this.element === 'object') {
-
-				this.sliders = this.element;
-
-			} else {
-
-				return false;
-
-			}
-
-		}
-
 		setObjects() {
 
 			if(this.sliders.length) {
 
 				this.core = [];
 
-				for(let slider of this.sliders) {
+				for(let [key, element] of zRS_util.interateObj(this.sliders)) {
 
-					this.core[i] = new zRS_core(slider, this.settings);
+					this.core[key] = new zRS_core(element, this.settings);
 
 				}
 

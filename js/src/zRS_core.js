@@ -1,4 +1,5 @@
 import zRS_util from './zRS_util';
+import zRS_public from './zRS_public';
 
 class zRS_core {
 
@@ -33,6 +34,7 @@ class zRS_core {
 		this.createEvents();
 		this.indexElements();
 		this.styleElements();
+		this.setUpPager();
 
 		this.transition = new zRS_trans({
 
@@ -52,6 +54,8 @@ class zRS_core {
 			element: this.elements.slider
 
 		});
+
+		return new zRS_public(this);
 		
 	}
 
@@ -67,7 +71,38 @@ class zRS_core {
 
 		}
 
+		this.elements.pager = zRS_util.findElement(this.options.pager);
 		this.elements.slides = this.elements.inner.children;
+
+	}
+
+	setUpPager() {
+
+		if(!this.options.pager) {
+
+			return;
+
+		}
+
+		if(!this.elements.pager) {
+
+			zRS_util.log(`Cannot find pager container ${this.options.pager}, please double check your reference.`, 'warn');
+
+			return;
+
+		}
+
+		let pager = this.elements.pager.length ? this.elements.pager[0] : this.elements.pager;
+
+		if(!pager.children) {
+
+			console.log('create children');
+
+		} else {
+
+			console.log('has children');
+
+		}
 
 	}
 

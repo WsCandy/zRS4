@@ -87,6 +87,46 @@ class zRS_util {
 
 	}
 
+	static findElement(element) {
+
+		if(typeof element === 'string') {
+
+			switch(element[0]) {
+
+				case '.' :
+
+					let selector = document.querySelectorAll(element);
+
+					return selector.length > 0 ? selector : false;
+
+					break;
+
+				case '#' :
+
+					return document.getElementById(element.substr(1));
+
+					break;
+
+				default:
+
+					return false;
+
+					break;
+
+			}
+
+		} else if(typeof element === 'object') {
+
+			return element;
+
+		} else {
+
+			return false;
+
+		}
+
+	}
+
 }
 
 export default zRS_util;
