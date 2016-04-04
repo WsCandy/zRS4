@@ -44,8 +44,8 @@ class zRS_fade {
 
 	}
 
-	animate(key, element, opacity = 0) {
-		
+	animate(key, element, opacity = 0, prevSlide) {
+
 		opacity += ((1000 / 60) / this.options.speed);
 
 		this.animations[key] = requestAnimationFrame(() => {
@@ -54,34 +54,49 @@ class zRS_fade {
 
 			if(Math.min(opacity, 1) !== 1) {
 
-				this.animate(key, element, opacity);
+				this.animate(key, element, opacity, prevSlide);
 
 				return;
 
 			}
 
-			console.log('ended');
+			this.events.after = zRS_util.createEvent('after', {
+
+				current : parseInt(key),
+				currentSlide : this.elements.slides[key],
+				prev: parseInt(prevSlide),
+				prevSlide: this.elements.slides[prevSlide]
+
+			});
+
+			zRS_util.dispatchEvent({
+
+				name: 'after',
+				event: this.events.after,
+				element: this.elements.slider
+
+			});
 
 		});
 
 	}
 
-	handle(nextSlide, currentSlide) {
+	handle(nextSlide, prevSlide) {
 
 		for(let [key, element] of zRS_util.interateObj(this.elements.slides)) {
 
-			if(element === currentSlide) {
+			if(element === this.elements.slides[prevSlide]) {
 
 				element.style.zIndex = 1;
 				continue;
 
 			}
 
-			if(element === nextSlide) {
+			if(element === this.elements.slides[nextSlide]) {
 
 				element.style.zIndex = 2;
 
-				this.animate(key, element, 0);
+				this.animate(key, element, 0, prevSlide);
 
 				continue;
 

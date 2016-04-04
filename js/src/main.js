@@ -14,6 +14,12 @@
 
 	});
 
+	cont.addEventListener('after', function(e) {
+
+		console.log(e.detail);
+
+	});
+
 	window.slider = new zRS(cont, {
 
 		speed: 500

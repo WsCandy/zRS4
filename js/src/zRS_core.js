@@ -162,9 +162,9 @@ class zRS_core {
 
 		this.events.before = zRS_util.createEvent('before', {
 
-			current : current,
+			current : parseInt(current),
 			currentSlide : this.elements.slides[current],
-			target: this.currentSlide,
+			target: parseInt(this.currentSlide),
 			targetSlide: this.elements.slides[this.currentSlide]
 
 		});
@@ -177,7 +177,7 @@ class zRS_core {
 
 		});
 
-		this.transition.handle(this.elements.slides[this.currentSlide], this.elements.slides[current]);
+		this.transition.handle(this.currentSlide, current);
 
 	}
 
