@@ -52,8 +52,8 @@ class zRS_util {
 	static interateObj(obj) {
 
 		let index = 0,
-			propKeys = Reflect.ownKeys(obj);
-
+			propKeys = Object.keys(obj);
+		
 		return {
 
 			[Symbol.iterator]() {
