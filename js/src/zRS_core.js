@@ -114,6 +114,13 @@ class zRS_core {
 
 				pager.appendChild(anchor);
 
+				anchor.addEventListener('click', (e) => {
+
+					e.preventDefault();
+					this.transTo(i);
+
+				});
+
 			}
 
 		} else {
@@ -128,13 +135,22 @@ class zRS_core {
 
 			for(let [key, element] of zRS_util.iterateObj(pager.children)) {
 
-				if(parseInt(key) === 0) {
+				key = parseInt(key);
+
+				if(key === 0) {
 
 					zRS_util.addClass(element, 'active');
 
 				}
 
 				this.elements.anchors.push(element);
+
+				element.addEventListener('click', (e) => {
+
+					e.preventDefault();
+					this.transTo(key);
+
+				});
 
 			}
 
@@ -205,6 +221,29 @@ class zRS_core {
 			element: this.elements.slider
 
 		});
+
+	}
+
+	transTo(slide) {
+
+		let difference = slide - this.currentSlide;
+
+		if(!this.elements.slides[slide]) {
+
+			zRS_util.log(`Slide ${slide} doesn't exist, please amend the method call.`, 'warn');
+
+			return;
+
+		}
+
+		if(difference === 0) {
+
+			return;
+
+		}
+
+		this.play();
+		this.handleTransition(difference);
 
 	}
 

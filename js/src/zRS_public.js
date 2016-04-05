@@ -26,6 +26,12 @@ class zRS_public {
 
 		};
 
+		this.transTo = (slide) => {
+
+			core.transTo(slide);
+
+		};
+
 		this.currentSlide = () => {
 
 			return core.currentSlide;

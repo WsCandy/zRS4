@@ -88,6 +88,7 @@ class zRS_fade {
 			if(element === this.elements.slides[prevSlide]) {
 
 				element.style.zIndex = 1;
+				element.style.position = 'absolute';
 				continue;
 
 			}
@@ -95,6 +96,7 @@ class zRS_fade {
 			if(element === this.elements.slides[nextSlide]) {
 
 				element.style.zIndex = 2;
+				element.style.position = 'relative';
 
 				this.animate(key, element, 0, prevSlide);
 
