@@ -67,7 +67,7 @@ class zRS_util {
 
 		let index = 0,
 			propKeys = Object.keys(obj);
-
+		
 		return {
 
 			[Symbol.iterator]() {

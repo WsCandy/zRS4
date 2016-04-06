@@ -222,10 +222,9 @@ class zRS_core {
 		this.elements.inner.style.overflow = 'hidden';
 		this.elements.inner.style.position = 'relative';
 
-		for(let [key, element] of zRS_util.iterateObj(this.elements.slides)) {
+		for(let i = 0, l = this.elements.slides.length; i < l; i++) {
 
-			element.style.display = 'block';
-			zRS_util.addClass(element, this.options.slides);
+			zRS_util.addClass(this.elements.slides[i], this.options.slides);
 
 		}
 

@@ -21,14 +21,16 @@ class zRS_fade {
 
 	styleSlides() {
 
-		for(let [key, element] of zRS_util.iterateObj(this.elements.slides)) {
+		for(let i = 0, l = this.elements.slides.length; i < l; i++) {
+
+			let element = this.elements.slides[i];
 
 			element.style.width = '100%';
 			element.style.top = '0';
 			element.style.left = '0';
 			element.style.opacity = 1;
 
-			if(key === '0') {
+			if(i === 0) {
 
 				element.style.position = 'relative';
 				element.style.zIndex = 2;
@@ -39,6 +41,7 @@ class zRS_fade {
 
 			element.style.position = 'absolute';
 			element.style.zIndex = 0;
+			element.style.opacity = 0;
 
 		}
 
@@ -59,6 +62,8 @@ class zRS_fade {
 				return;
 
 			}
+
+			this.elements.slides[prevSlide].style.opacity = 0;
 
 			this.events.after = zRS_util.createEvent('after', {
 
@@ -83,7 +88,9 @@ class zRS_fade {
 
 	handle(nextSlide, prevSlide) {
 
-		for(let [key, element] of zRS_util.iterateObj(this.elements.slides)) {
+		for(let i = 0, l = this.elements.slides.length; i < l; i++) {
+
+			let element = this.elements.slides[i];
 
 			if(element === this.elements.slides[prevSlide]) {
 
@@ -98,7 +105,7 @@ class zRS_fade {
 				element.style.zIndex = 2;
 				element.style.position = 'relative';
 
-				this.animate(key, element, 0, prevSlide);
+				this.animate(i, element, 0, prevSlide);
 
 				continue;
 
