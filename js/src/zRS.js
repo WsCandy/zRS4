@@ -21,6 +21,7 @@ import zRS_core from './zRS_core';
 				transition: 'fade',
 				inner: '.zRS__inner',
 				slides: 'zRS__slide',
+				controls: [],
 				pager: null,
 				delay: 5000,
 				speed: 1000,

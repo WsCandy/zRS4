@@ -28,6 +28,7 @@ class zRS_core {
 			inner: null,
 			slides: null,
 			pager: null,
+			controls: [],
 			anchors: []
 
 		};
@@ -36,6 +37,7 @@ class zRS_core {
 		this.indexElements();
 		this.styleElements();
 		this.setUpPager();
+		this.setUpControls();
 
 		this.transition = new zRS_trans({
 
@@ -73,7 +75,56 @@ class zRS_core {
 		}
 
 		this.elements.pager = zRS_util.findElement(this.options.pager);
+
+		for(let control of this.options.controls) {
+
+			this.elements.controls.push(zRS_util.findElement(control));
+
+		}
+
 		this.elements.slides = this.elements.inner.children;
+
+	}
+
+	setUpControls() {
+
+		let index = 0;
+
+		if(this.options.controls.length === 0) {
+
+			return;
+
+		}
+
+		for(let control of this.elements.controls) {
+
+			if(!control) {
+
+				zRS_util.log(`Cannot find control ${this.options.controls[index]}, please double check your reference.`, 'warn');
+
+				index++;
+
+				continue;
+
+			}
+
+			control = control.length ? control[0] : control;
+
+			control.addEventListener('click', (e) => {
+
+				let forwardControl = this.elements.controls[0].length ? this.elements.controls[0][0] : this.elements.controls[0],
+					step = e.target === forwardControl ? 1 : -1;
+
+				e.preventDefault();
+
+				this.resetTimer();
+				this.handleTransition(step);
+
+			});
+
+			index++;
+
+		}
 
 	}
 
@@ -206,13 +257,7 @@ class zRS_core {
 
 	play() {
 
-		clearInterval(this.timer);
-
-		this.timer = setInterval(() => {
-
-			this.handleTransition(this.options.slideBy);
-
-		}, this.options.delay);
+		this.resetTimer();
 
 		zRS_util.dispatchEvent({
 
@@ -242,8 +287,20 @@ class zRS_core {
 
 		}
 
-		this.play();
+		this.resetTimer();
 		this.handleTransition(difference);
+
+	}
+
+	resetTimer() {
+
+		clearInterval(this.timer);
+
+		this.timer = setInterval(() => {
+
+			this.handleTransition(this.options.slideBy);
+
+		}, this.options.delay);
 
 	}
 

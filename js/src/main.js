@@ -5,7 +5,8 @@
 	window.slider = new zRS(cont, {
 
 		speed: 500,
-		pager: '.zRS__pager'
+		pager: '.zRS__pager',
+		controls: ['.zRS__nav--next', '.zRS__nav--prev']
 
 	});
 
