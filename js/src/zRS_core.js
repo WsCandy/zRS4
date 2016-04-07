@@ -50,6 +50,8 @@ class zRS_core {
 		this.play();
 		this.bindings();
 
+		zRS_util.loadImages(this.elements.slides[this.currentSlide]);
+
 		zRS_util.dispatchEvent({
 
 			name: 'load',
@@ -252,9 +254,26 @@ class zRS_core {
 
 		});
 
+		window.addEventListener('resize', () => {
+
+			window.requestAnimationFrame(() => {
+				
+				zRS_util.loadImages(this.elements.slides[this.currentSlide]);
+
+			});
+
+
+		});
+
 	}
 
 	play() {
+
+		if(this.elements.slides.length <= 1) {
+
+			return;
+
+		}
 
 		this.resetTimer();
 
@@ -349,6 +368,8 @@ class zRS_core {
 			element: this.elements.slider
 
 		});
+
+		zRS_util.loadImages(this.elements.slides[this.currentSlide]);
 
 		this.transition.handle(this.currentSlide, current);
 

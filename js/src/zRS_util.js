@@ -141,6 +141,91 @@ class zRS_util {
 
 	}
 
+	static loadImages(slide) {
+
+		if(slide.hasAttribute('zRS-srcset')) {
+
+			let src = this.determineSize(slide.getAttribute('zRS-srcset'));
+
+			if(slide.nodeName === 'IMG') {
+
+				this.swapSrc(slide, src);
+
+			}
+
+		} else if(slide.hasAttribute('zRS-src')) {
+
+			let src = slide.getAttribute('zRS-src');
+
+			if(slide.nodeName === 'IMG') {
+
+				this.swapSrc(slide, src);
+
+			}
+
+		}
+
+	}
+
+	static swapSrc(slide, src) {
+
+		if(src === slide.src) {
+
+			return;
+
+		}
+
+		slide.src = src;
+
+	};
+
+	static determineSize(srcset) {
+
+		let src = [null, 0],
+			smallest;
+
+		srcset = srcset.split(', ');
+
+		smallest = srcset[0].split(' ');
+
+		for(let image of srcset) {
+
+			image = image.split(' ');
+
+			if(document.documentElement.clientWidth >= parseInt(image[1])) {
+
+				if(parseInt(image[1]) < parseInt(src[1])) {
+
+					continue;
+
+				}
+
+				src = image;
+
+			} else if(document.documentElement.clientWidth <= parseInt(image[1])) {
+
+				if(parseInt(image[1]) > parseInt(smallest[1])) {
+
+					continue;
+
+				}
+
+				smallest = image;
+
+			}
+
+		}
+
+		if(src[0] === null) {
+
+			src = smallest;
+
+		}
+
+		return src[0];
+
+	}
+
 }
 
 export default zRS_util;
