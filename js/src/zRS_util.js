@@ -211,8 +211,6 @@ class zRS_util {
 
 		}
 
-		console.log(src, element.clientWidth);
-
 		return src[0];
 
 	}
