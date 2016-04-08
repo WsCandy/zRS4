@@ -29,6 +29,7 @@ class zRS_fade {
 			element.style.top = '0';
 			element.style.left = '0';
 			element.style.opacity = 1;
+			element.style.transform = 'translateZ(0)';
 
 			if(i === 0) {
 

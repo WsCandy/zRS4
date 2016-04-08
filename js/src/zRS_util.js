@@ -67,7 +67,7 @@ class zRS_util {
 
 		let index = 0,
 			propKeys = Object.keys(obj);
-		
+
 		return {
 
 			[Symbol.iterator]() {
@@ -145,7 +145,7 @@ class zRS_util {
 
 		if(slide.hasAttribute('zRS-srcset')) {
 
-			let src = this.determineSize(slide.getAttribute('zRS-srcset'));
+			let src = this.determineSize(slide, slide.getAttribute('zRS-srcset'));
 
 			if(slide.nodeName === 'IMG') {
 
@@ -179,38 +179,27 @@ class zRS_util {
 
 	};
 
-	static determineSize(srcset) {
+	static determineSize(element, srcset) {
 
 		let src = [null, 0],
-			smallest;
+			largest;
 
 		srcset = srcset.split(', ');
-
-		smallest = srcset[0].split(' ');
+		largest = srcset[0].split(' ');
 
 		for(let image of srcset) {
 
 			image = image.split(' ');
 
-			if(document.documentElement.clientWidth >= parseInt(image[1])) {
+			if(parseInt(image[1]) > parseInt(largest[1])) {
 
-				if(parseInt(image[1]) < parseInt(src[1])) {
+				largest = image;
 
-					continue;
+			}
 
-				}
+			if(element.clientWidth <= parseInt(image[1])) {
 
 				src = image;
-
-			} else if(document.documentElement.clientWidth <= parseInt(image[1])) {
-
-				if(parseInt(image[1]) > parseInt(smallest[1])) {
-
-					continue;
-
-				}
-
-				smallest = image;
 
 			}
 
@@ -218,9 +207,11 @@ class zRS_util {
 
 		if(src[0] === null) {
 
-			src = smallest;
+			src = largest;
 
 		}
+
+		console.log(src, element.clientWidth);
 
 		return src[0];
 

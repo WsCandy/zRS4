@@ -43,7 +43,7 @@ import zRS_core from './zRS_core';
 
 			this.setOptions(options);
 			this.setObjects();
-
+			
 			return this.core;
 
 		}

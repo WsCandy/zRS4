@@ -2,6 +2,12 @@
 
 	var cont = document.getElementById('zRS');
 
+	cont.addEventListener('play', function(e) {
+
+		console.log('play');
+
+	});
+
 	window.slider = new zRS(cont, {
 
 		speed: 500,

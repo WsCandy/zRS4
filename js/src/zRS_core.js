@@ -157,7 +157,7 @@ class zRS_core {
 
 				if(i === 0) {
 
-					zRS_util.addClass(anchor, 'active');
+					zRS_util.addClass(anchor, 'is-active');
 
 				}
 
@@ -192,7 +192,7 @@ class zRS_core {
 
 				if(key === 0) {
 
-					zRS_util.addClass(element, 'active');
+					zRS_util.addClass(element, 'is-active');
 
 				}
 
@@ -211,8 +211,8 @@ class zRS_core {
 
 		this.elements.slider.addEventListener('before', (e) => {
 
-			zRS_util.removeClass(this.elements.anchors[e.detail.current], 'active');
-			zRS_util.addClass(this.elements.anchors[e.detail.target], 'active');
+			zRS_util.removeClass(this.elements.anchors[e.detail.current], 'is-active');
+			zRS_util.addClass(this.elements.anchors[e.detail.target], 'is-active');
 
 		});
 
