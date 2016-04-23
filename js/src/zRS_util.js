@@ -141,7 +141,7 @@ class zRS_util {
 
 	}
 
-	static loadImages(slide) {
+	static loadImages(slide, promise) {
 
 		if(slide.hasAttribute('zRS-srcset')) {
 
@@ -149,7 +149,7 @@ class zRS_util {
 
 			if(slide.nodeName === 'IMG') {
 
-				this.swapSrc(slide, src);
+				this.swapSrc(slide, src, promise);
 
 			}
 
@@ -159,7 +159,7 @@ class zRS_util {
 
 			if(slide.nodeName === 'IMG') {
 
-				this.swapSrc(slide, src);
+				this.swapSrc(slide, src, promise);
 
 			}
 
@@ -167,15 +167,36 @@ class zRS_util {
 
 	}
 
-	static swapSrc(slide, src) {
+	static swapSrc(slide, src, promise) {
+
+		let img;
 
 		if(src === slide.src) {
+
+			if(promise) {
+
+				promise.resolve();
+
+			}
 
 			return;
 
 		}
 
-		slide.src = src;
+		img = new Image();
+		img.onload = function() {
+
+			slide.src = src;
+
+			if(promise) {
+
+				promise.resolve();
+
+			}
+
+		};
+
+		img.src = src;
 
 	};
 

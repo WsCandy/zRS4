@@ -32,7 +32,7 @@ class zRS_core {
 			anchors: []
 
 		};
-		
+
 		this.createEvents();
 		this.indexElements();
 		this.styleElements();
@@ -42,7 +42,7 @@ class zRS_core {
 		this.transition = new zRS_trans({
 
 			events: this.events,
-			elements : this.elements,
+			elements: this.elements,
 			options: this.options
 
 		});
@@ -50,7 +50,11 @@ class zRS_core {
 		this.play();
 		this.bindings();
 
-		zRS_util.loadImages(this.elements.slides[this.currentSlide]);
+		new Promise((resolve, reject) => {
+
+			zRS_util.loadImages(this.elements.slides[this.currentSlide], {resolve: resolve, reject: reject});
+
+		});
 
 		zRS_util.dispatchEvent({
 
@@ -61,7 +65,7 @@ class zRS_core {
 		});
 
 		return new zRS_public(this);
-		
+
 	}
 
 	indexElements() {
@@ -153,7 +157,7 @@ class zRS_core {
 			for(let i = 0, l = this.elements.slides.length; i < l; i++) {
 
 				let anchor = document.createElement('a');
-					anchor.href = 'javascript:void(0);';
+				anchor.href = 'javascript:void(0);';
 
 				if(i === 0) {
 
@@ -237,7 +241,7 @@ class zRS_core {
 		this.events.load = zRS_util.createEvent('load');
 		this.events.play = zRS_util.createEvent('play');
 		this.events.pause = zRS_util.createEvent('pause');
-		
+
 	}
 
 	bindings() {
@@ -257,11 +261,10 @@ class zRS_core {
 		window.addEventListener('resize', () => {
 
 			window.requestAnimationFrame(() => {
-				
+
 				zRS_util.loadImages(this.elements.slides[this.currentSlide]);
 
 			});
-
 
 		});
 
@@ -338,7 +341,8 @@ class zRS_core {
 
 	handleTransition(steps = 1) {
 
-		let current = this.currentSlide;
+		let current = this.currentSlide,
+			promise;
 
 		this.currentSlide += steps;
 
@@ -354,8 +358,8 @@ class zRS_core {
 
 		this.events.before = zRS_util.createEvent('before', {
 
-			current : parseInt(current),
-			currentSlide : this.elements.slides[current],
+			current: parseInt(current),
+			currentSlide: this.elements.slides[current],
 			target: parseInt(this.currentSlide),
 			targetSlide: this.elements.slides[this.currentSlide]
 
@@ -369,9 +373,17 @@ class zRS_core {
 
 		});
 
-		zRS_util.loadImages(this.elements.slides[this.currentSlide]);
+		promise = new Promise((resolve, reject) => {
 
-		this.transition.handle(this.currentSlide, current);
+			zRS_util.loadImages(this.elements.slides[this.currentSlide], {resolve: resolve, reject: reject});
+
+		});
+
+		promise.then(() => {
+
+			this.transition.handle(this.currentSlide, current);
+
+		});
 
 	}
 
