@@ -9,12 +9,6 @@ class zRS_fade {
 		this.events = data.events;
 		this.animations = {};
 
-		this.setup();
-
-	}
-
-	setup() {
-
 		this.styleSlides();
 
 	}

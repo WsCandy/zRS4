@@ -59,19 +59,35 @@
 
 		}
 
+		.slide {
+
+			float: left;
+
+		}
+
+		.slide img {
+
+			float: left;
+			width: 50%;
+
+		}
+
 	</style>
 
 </head>
 <body>
 	<div class="zRS" id="zRS">
 		<div class="zRS__inner">
-			<img zRS-srcset="images/1.jpg 700w, images/3.jpg 500w, images/2.jpg 300w" alt="zRS4">
-			<img zRS-src="images/2.jpg" alt="zRS4">
-			<img zRS-src="images/3.jpg" alt="zRS4">
-			<img zRS-src="images/4.jpg" alt="zRS4">
+			<div class="slide">
+				<img zRS-srcset="images/1.jpg 700w, images/3.jpg 500w, images/2.jpg 300w" alt="zRS4">
+				<img zRS-src="images/2.jpg" alt="zRS4">
+			</div>
+			<div class="slide">
+				<img zRS-src="images/3.jpg" alt="zRS4">
+				<img zRS-src="images/4.jpg" alt="zRS4">
+			</div>
 		</div>
-		<div class="zRS__pager">
-		</div>
+		<div class="zRS__pager"></div>
 		<a href="javascript:void(0);" class="zRS__nav  zRS__nav--next">Next</a>
 		<a href="javascript:void(0);" class="zRS__nav  zRS__nav--prev">Prev</a>
 	</div>

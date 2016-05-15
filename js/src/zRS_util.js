@@ -113,19 +113,13 @@ class zRS_util {
 
 					return selector.length > 0 ? selector : false;
 
-					break;
-
 				case '#' :
 
 					return document.getElementById(element.substr(1));
 
-					break;
-
 				default:
 
 					return false;
-
-					break;
 
 			}
 
@@ -143,25 +137,41 @@ class zRS_util {
 
 	static loadImages(slide, promise) {
 
-		if(slide.hasAttribute('zRS-srcset')) {
+		let images = [];
 
-			let src = this.determineSize(slide, slide.getAttribute('zRS-srcset'));
+		if(slide.hasAttribute('zRS-srcset') || slide.hasAttribute('zRS-src')) {
 
-			if(slide.nodeName === 'IMG') {
+			images.push(slide);
 
-				this.swapSrc(slide, src, promise);
+		} else {
+			
+			
+			
+		}
+
+		for(let i = 0, l = images.length; i < l; i++) {
+
+			let src;
+
+			if(images[i].hasAttribute('zRS-srcset')) {
+
+				src = this.determineSize(slide, slide.getAttribute('zRS-srcset'));
+
+				this.determineSize(slide, slide.getAttribute('zRS-srcset'));
+
+			} else {
+
+				src = images[i].getAttribute('zRS-src');
 
 			}
 
-		} else if(slide.hasAttribute('zRS-src')) {
+			this.swapSrc(images[i], src, promise);
 
-			let src = slide.getAttribute('zRS-src');
+		}
 
-			if(slide.nodeName === 'IMG') {
+		if(images.length === 0) {
 
-				this.swapSrc(slide, src, promise);
-
-			}
+			promise.resolve();
 
 		}
 

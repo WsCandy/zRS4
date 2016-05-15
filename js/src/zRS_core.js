@@ -341,8 +341,7 @@ class zRS_core {
 
 	handleTransition(steps = 1) {
 
-		let current = this.currentSlide,
-			promise;
+		let current = this.currentSlide;
 
 		this.currentSlide += steps;
 
@@ -373,13 +372,11 @@ class zRS_core {
 
 		});
 
-		promise = new Promise((resolve, reject) => {
+		new Promise((resolve, reject) => {
 
 			zRS_util.loadImages(this.elements.slides[this.currentSlide], {resolve: resolve, reject: reject});
 
-		});
-
-		promise.then(() => {
+		}).then(() => {
 
 			this.transition.handle(this.currentSlide, current);
 
