@@ -137,7 +137,8 @@ class zRS_util {
 
 	static loadImages(slide, promise) {
 
-		let images = [];
+		let images = [],
+			promises = [];
 
 		if(slide.hasAttribute('zRS-srcset') || slide.hasAttribute('zRS-src')) {
 
@@ -163,21 +164,35 @@ class zRS_util {
 
 			let src;
 
-			if(images[i].hasAttribute('zRS-srcset')) {
+			promises[i] = new Promise((resolve, reject) => {
 
-				src = this.determineSize(images[i], images[i].getAttribute('zRS-srcset'));
+				if(images[i].hasAttribute('zRS-srcset')) {
 
-				this.determineSize(images[i], images[i].getAttribute('zRS-srcset'));
+					src = this.determineSize(images[i], images[i].getAttribute('zRS-srcset'));
 
-			} else {
+					this.determineSize(images[i], images[i].getAttribute('zRS-srcset'));
 
-				src = images[i].getAttribute('zRS-src');
+				} else {
+
+					src = images[i].getAttribute('zRS-src');
+
+				}
+
+				this.swapSrc(images[i], src, {resolve: resolve, reject: reject});
+
+			});
+
+		}
+
+		Promise.all(promises).then(() => {
+
+			if(promise) {
+
+				promise.resolve();
 
 			}
 
-			this.swapSrc(images[i], src, promise);
-
-		}
+		});
 
 		if(images.length === 0) {
 
