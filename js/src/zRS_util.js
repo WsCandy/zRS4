@@ -144,9 +144,19 @@ class zRS_util {
 			images.push(slide);
 
 		} else {
-			
-			
-			
+
+			let children = slide.querySelectorAll('*');
+
+			for(let i = 0, l = children.length; i < l; i++) {
+
+				if(children[i].hasAttribute('zRS-srcset') || children[i].hasAttribute('zRS-src')) {
+
+					images.push(children[i]);
+
+				}
+
+			}
+
 		}
 
 		for(let i = 0, l = images.length; i < l; i++) {
@@ -155,9 +165,9 @@ class zRS_util {
 
 			if(images[i].hasAttribute('zRS-srcset')) {
 
-				src = this.determineSize(slide, slide.getAttribute('zRS-srcset'));
+				src = this.determineSize(images[i], images[i].getAttribute('zRS-srcset'));
 
-				this.determineSize(slide, slide.getAttribute('zRS-srcset'));
+				this.determineSize(images[i], images[i].getAttribute('zRS-srcset'));
 
 			} else {
 
