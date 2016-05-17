@@ -178,7 +178,18 @@ class zRS_util {
 
 				}
 
-				this.swapSrc(images[i], src, {resolve: resolve, reject: reject});
+				this.swapSrc({
+
+					image: images[i],
+					src: src,
+					promise: {
+
+						resolve: resolve,
+						reject: reject
+
+					}
+
+				});
 
 			});
 
@@ -202,15 +213,15 @@ class zRS_util {
 
 	}
 
-	static swapSrc(slide, src, promise) {
+	static swapSrc(data) {
 
 		let img;
 
-		if(src === slide.src) {
+		if(data.src === data.image.getAttribute(`src`) || `url("${data.src}")` === data.image.style.backgroundImage) {
 
-			if(promise) {
+			if(data.promise) {
 
-				promise.resolve();
+				data.promise.resolve();
 
 			}
 
@@ -219,19 +230,28 @@ class zRS_util {
 		}
 
 		img = new Image();
-		img.onload = function() {
 
-			slide.src = src;
+		img.addEventListener('load', () => {
 
-			if(promise) {
+			if(data.image.nodeName !== 'IMG') {
 
-				promise.resolve();
+				data.image.style.backgroundImage = `url("${data.src}")`;
+
+			} else {
+
+				data.image.src = data.src;
 
 			}
 
-		};
+			if(data.promise) {
 
-		img.src = src;
+				data.promise.resolve();
+
+			}
+
+		});
+
+		img.src = data.src;
 
 	};
 
