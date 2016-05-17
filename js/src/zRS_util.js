@@ -138,23 +138,20 @@ class zRS_util {
 	static loadImages(slide, promise) {
 
 		let images = [],
-			promises = [];
+			promises = [],
+			children = slide.querySelectorAll('*');
 
 		if(slide.hasAttribute('zRS-srcset') || slide.hasAttribute('zRS-src')) {
 
 			images.push(slide);
 
-		} else {
+		}
 
-			let children = slide.querySelectorAll('*');
+		for(let i = 0, l = children.length; i < l; i++) {
 
-			for(let i = 0, l = children.length; i < l; i++) {
+			if(children[i].hasAttribute('zRS-srcset') || children[i].hasAttribute('zRS-src')) {
 
-				if(children[i].hasAttribute('zRS-srcset') || children[i].hasAttribute('zRS-src')) {
-
-					images.push(children[i]);
-
-				}
+				images.push(children[i]);
 
 			}
 
