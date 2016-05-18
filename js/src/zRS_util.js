@@ -63,44 +63,6 @@ class zRS_util {
 
 	}
 
-	static iterateObj(obj) {
-
-		let index = 0,
-			propKeys = Object.keys(obj);
-
-		return {
-
-			[Symbol.iterator]() {
-
-				return this;
-
-			},
-			next() {
-
-				if(index < propKeys.length) {
-
-					let key = propKeys[index];
-
-					index++;
-
-					return {value: [key, obj[key]]};
-
-				} else {
-
-					return {
-
-						done: true
-
-					};
-
-				}
-
-			}
-
-		}
-
-	}
-
 	static findElement(element) {
 
 		if(typeof element === 'string') {

@@ -64,16 +64,20 @@ import zRS_core from './zRS_core';
 
 			}
 
-			for(let [key, value] of zRS_util.iterateObj(this.defaults)) {
+			for(let key in this.defaults) {
 
-				if(update[key] === undefined) {
+				if(this.defaults.hasOwnProperty(key)) {
 
-					this.settings[key] = value;
-					continue;
+					if(update[key] === undefined) {
+
+						this.settings[key] = this.defaults[key];
+						continue;
+
+					}
+
+					this.settings[key] = update[key];
 
 				}
-
-				this.settings[key] = update[key];
 
 			}
 
@@ -91,9 +95,13 @@ import zRS_core from './zRS_core';
 
 				this.core = [];
 
-				for(let [key, element] of zRS_util.iterateObj(this.sliders)) {
+				for(let key in this.sliders) {
 
-					this.core[key] = new zRS_core(element, this.settings);
+					if(this.sliders.hasOwnProperty(key)) {
+
+						this.core[key] = new zRS_core(this.sliders[key], this.settings);
+
+					}
 
 				}
 

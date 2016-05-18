@@ -190,22 +190,20 @@ class zRS_core {
 
 			}
 
-			for(let [key, element] of zRS_util.iterateObj(pager.children)) {
+			for(let i = 0, l = pager.children.length; i < l; i++) {
 
-				key = parseInt(key);
+				if(i === 0) {
 
-				if(key === 0) {
-
-					zRS_util.addClass(element, 'is-active');
+					zRS_util.addClass(pager.children[i], 'is-active');
 
 				}
 
-				this.elements.anchors.push(element);
+				this.elements.anchors.push(pager.children[i]);
 
-				element.addEventListener('click', (e) => {
+				pager.children[i].addEventListener('click', (e) => {
 
 					e.preventDefault();
-					this.transTo(key);
+					this.transTo(i);
 
 				});
 
