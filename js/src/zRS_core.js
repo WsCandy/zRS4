@@ -82,9 +82,9 @@ class zRS_core {
 
 		this.elements.pager = zRS_util.findElement(this.options.pager);
 
-		for(let control of this.options.controls) {
+		for(let i = 0, l = this.options.controls.length; i < l; i++) {
 
-			this.elements.controls.push(zRS_util.findElement(control));
+			this.elements.controls.push(zRS_util.findElement(this.options.controls[i]));
 
 		}
 
@@ -94,27 +94,25 @@ class zRS_core {
 
 	setUpControls() {
 
-		let index = 0;
-
 		if(this.options.controls.length === 0) {
 
 			return;
 
 		}
 
-		for(let control of this.elements.controls) {
+		for(let i = 0, l = this.elements.controls.length; i < l; i++) {
 
-			if(!control) {
+			let control;
 
-				zRS_util.log(`Cannot find control ${this.options.controls[index]}, please double check your reference.`, 'warn');
+			if(!this.elements.controls[i]) {
 
-				index++;
+				zRS_util.log(`Cannot find control ${this.options.controls[i]}, please double check your reference.`, 'warn');
 
 				continue;
 
 			}
 
-			control = control.length ? control[0] : control;
+			control = this.elements.controls[i].length ? this.elements.controls[i][0] : this.elements.controls[i];
 
 			control.addEventListener('click', (e) => {
 
@@ -127,8 +125,6 @@ class zRS_core {
 				this.handleTransition(step);
 
 			});
-
-			index++;
 
 		}
 
