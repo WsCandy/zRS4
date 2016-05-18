@@ -290,7 +290,7 @@ class zRS_core {
 
 	}
 
-	transTo(slide) {
+	transTo(slide, speed = this.options.speed) {
 
 		let difference = slide - this.currentSlide;
 
@@ -309,7 +309,7 @@ class zRS_core {
 		}
 
 		this.resetTimer();
-		this.handleTransition(difference);
+		this.handleTransition(difference, speed);
 
 	}
 
@@ -339,7 +339,7 @@ class zRS_core {
 
 	}
 
-	handleTransition(steps = 1) {
+	handleTransition(steps = 1, speed = this.options.speed) {
 
 		let current = this.currentSlide;
 
@@ -378,7 +378,7 @@ class zRS_core {
 
 		}).then(() => {
 
-			this.transition.handle(this.currentSlide, current);
+			this.transition.handle(this.currentSlide, current, speed);
 
 		});
 

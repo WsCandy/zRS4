@@ -32,6 +32,12 @@ class zRS_public {
 
 		};
 
+		this.jumpTo = (slide) => {
+
+			core.transTo(slide, 0);
+
+		};
+
 		this.currentSlide = () => {
 
 			return core.currentSlide;

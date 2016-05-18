@@ -42,9 +42,9 @@ class zRS_fade {
 
 	}
 
-	animate(key, element, opacity = 0, prevSlide) {
+	animate(key, element, opacity = 0, prevSlide, speed) {
 
-		opacity += ((1000 / 60) / this.options.speed);
+		opacity += ((1000 / 60) / speed);
 
 		this.animations[key] = requestAnimationFrame(() => {
 
@@ -52,7 +52,7 @@ class zRS_fade {
 
 			if(Math.min(opacity, 1) !== 1) {
 
-				this.animate(key, element, opacity, prevSlide);
+				this.animate(key, element, opacity, prevSlide, speed);
 
 				return;
 
@@ -81,7 +81,7 @@ class zRS_fade {
 
 	}
 
-	handle(nextSlide, prevSlide) {
+	handle(nextSlide, prevSlide, speed) {
 
 		for(let i = 0, l = this.elements.slides.length; i < l; i++) {
 
@@ -100,7 +100,7 @@ class zRS_fade {
 				element.style.zIndex = 2;
 				element.style.position = 'relative';
 
-				this.animate(i, element, 0, prevSlide);
+				this.animate(i, element, 0, prevSlide, speed);
 
 				continue;
 
