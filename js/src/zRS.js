@@ -1,3 +1,6 @@
+require('core-js/es6/symbol');
+require('core-js/es6/promise');
+
 import zRS_util from './zRS_util';
 import zRS_core from './zRS_core';
 
