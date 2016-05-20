@@ -7,10 +7,10 @@ gulp.task('default', function() {
 	webpack({
 
 		watch: true,
-		entry: `${process.env.PWD}/js/src/zRS.js`,
+		entry: `${process.env.PWD}/src/zRS.js`,
 		output: {
 
-			path: `${process.env.PWD}/js/`,
+			path: `${process.env.PWD}/dist/`,
 			filename: 'zRS.min.js'
 
 		},
