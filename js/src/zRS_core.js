@@ -254,7 +254,7 @@ class zRS_core {
 
 		window.addEventListener('resize', () => {
 
-			window.requestAnimationFrame(() => {
+			zRS_util.animationFrame(() => {
 
 				zRS_util.loadImages(this.elements.slides[this.currentSlide]);
 

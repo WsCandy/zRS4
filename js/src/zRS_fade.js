@@ -46,7 +46,7 @@ class zRS_fade {
 
 		opacity += ((1000 / 60) / speed);
 
-		this.animations[key] = requestAnimationFrame(() => {
+		this.animations[key] = zRS_util.animationFrame(() => {
 
 			element.style.opacity = Math.min(opacity, 1);
 

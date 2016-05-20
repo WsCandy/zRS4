@@ -1,3 +1,5 @@
+var lastTime = 0;
+
 class zRS_util {
 
 	static log(message, type = `log`) {
@@ -247,6 +249,25 @@ class zRS_util {
 		}
 
 		return src[0];
+
+	}
+
+	static animationFrame(anim) {
+
+		if(!window.requestAnimationFrame) {
+			
+			var currTime = new Date().getTime(),
+				timeToCall = Math.max(0, 16 - (currTime - lastTime));
+
+			window.setTimeout(anim, timeToCall);
+
+			lastTime = currTime + timeToCall;
+
+		} else {
+
+			requestAnimationFrame(anim);
+
+		}
 
 	}
 
