@@ -70,11 +70,12 @@ class zRS_core {
 
 	indexElements() {
 
-		this.elements.inner = this.elements.slider.querySelectorAll(this.options.inner)[0];
+		this.elements.inner = zRS_util.findElement(this.options.inner);
+		this.elements.inner = this.elements.inner.length ? this.elements.inner[0] : this.elements.inner;
 
 		if(!this.elements.inner) {
 
-			zRS_util.log(`Cannot find ${this.options.inner} inner element, please check your markup`, 'warn');
+			zRS_util.log(`Cannot find ${this.options.inner} inner element, please check your markup`, 'error');
 
 			return;
 
@@ -303,6 +304,7 @@ class zRS_core {
 		}
 
 		this.resetTimer();
+		this.resetTimer();
 		this.handleTransition(difference, speed);
 
 	}
@@ -311,9 +313,17 @@ class zRS_core {
 
 		clearInterval(this.timer);
 
+		if(this.options.delay < 0) {
+
+			return;
+
+		}
+
 		this.timer = setInterval(() => {
 
-			this.handleTransition(this.options.slideBy);
+			let slideBy = this.options.direction === 'reverse' ? -Math.abs(this.options.slideBy) : this.options.slideBy;
+
+			this.handleTransition(slideBy);
 
 		}, this.options.delay);
 

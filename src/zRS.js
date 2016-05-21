@@ -12,7 +12,7 @@ import zRS_core from './zRS_core';
 
 		static version() {
 
-			return `4.0.1`;
+			return `4.0.0`;
 
 		}
 
@@ -29,7 +29,6 @@ import zRS_core from './zRS_core';
 				delay: 5000,
 				speed: 1000,
 				slideBy: 1,
-				visibleSlides: 1,
 				direction: 'forward'
 
 			};
