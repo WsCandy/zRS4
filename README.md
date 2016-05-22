@@ -57,9 +57,9 @@ Further details on each option can be found below.
 
 The transition option allows you to switch between a number of supported transitions. 
 
-Supported Options: `'fade'`
+**Supported Options:** `'fade'`
 
-Default Value: `'fade'`
+**Default Value:** `'fade'`
 
 Example:
 
@@ -73,9 +73,9 @@ Using an unsupported transition option will result in a console warning and the 
 
 The inner option allows you to set a custom selector or element object for the inner element of the slider.
 
-Default Value: `'.zRS__inner'`
+**Default Value:** `'.zRS__inner'`
 
-Example:
+**Example:**
 
     inner: '.zRS__inner'
 
@@ -87,9 +87,9 @@ If the inner element cannot be found then a error will be logged and the slider 
 
 The slides option allows you to set a custom class that appears on your slides after the slider has finished it's initialisation. This can be used to customise the appearance of your slides once loaded.
 
-Default Value `'zRS__slide'`
+**Default Value:** `'zRS__slide'`
 
-Example: 
+**Example:** 
 
     slides: 'slider__slide'
 
@@ -99,9 +99,9 @@ Example:
 
 The controls option allows you to specify elements, that when clicked, will transition the slider forwards and backwards. The first item in the array corresponds to the _forward_ action and the second item in the array if for the _previous_.
 
-Default Value: `[]`
+**Default Value:** `[]`
 
-Example:
+**Example:**
 
     controls: ['.zRS__nav--next', '.zRS__nav--prev']
 
@@ -112,9 +112,9 @@ Example:
 The pager option allows you to select a pager container. This container will then be populated with `<a>` tags which will serve as another means of navigating the slider. 
 If elements are placed within the pager element specified these will instead be used and the `<a>` tags will not be created. This allows you to have full control over the pager.
 
-Default Value: `null`
+**Default Value:** `null`
 
-Example:
+**Example:**
 
     pager: '.zRS__pager'
 
@@ -128,9 +128,9 @@ If you're using custom pager elements and there aren't an equal amount of custom
 
 The delay option allows you to specify the timing between automatic slide transitions in ms.
 
-Default Value: `5000`
+**Default Value:** `5000`
 
-Example:
+**Example:**
 
     delay: 6000
 
@@ -142,9 +142,9 @@ Setting the delay option to `-1` will stop the slider from automatically transit
 
 The speed option controls the speed in which the transition animations play in ms.
 
-Default Value: `1000`
+**Default Value:** `1000`
 
-Example:
+**Example:**
 
     speed: 500
     
@@ -156,9 +156,9 @@ For instant transitions just set speed to `0` with the `fade` transition.
 
 The slide by option allows you to set the amount of slides you wish to transition forwards or backwards by when either event is fired.
  
-Default Value: `1`
+**Default Value:** `1`
 
-Example:
+**Example:**
 
     slideBy: 2
 
@@ -168,11 +168,11 @@ Example:
 
 The direction option allows you to control which way the slider transitions automatically.
 
-Supported Options: `'forward'`, `'reverse'`
+**Supported Options:** `'forward'`, `'reverse'`
 
-Default Value: `'forward'`
+**Default Value:** `'forward'`
 
-Example: 
+**Example:** 
 
     direction: 'reverse'
 
@@ -185,14 +185,14 @@ Events
 
 zRS fires numerous events while it's running, you can hook into these events to further customise how your application interacts with zRS and add extra functionality.
 
-Supported Events `play`, `pause`, `load`, `before`, `after`.
+**Supported Events:** `play`, `pause`, `load`, `before`, `after`.
 
 All events are fired on the container element, so you need to listen to this element for the events.
 
-Example:
+**Example:**
 
     var element = document.getElementById('slider'),
-        zRS = new zRS(element, {});
+        slider = new zRS(element, {});
         
     element.addEventListener('load', function(e) {
         
@@ -206,7 +206,7 @@ Further details on all the events can be found below.
 
 The `play` event will fire every time the slider starts to resume it's normal automated cycle. (This includes when the window is re-focused as the slider pauses when the window isn't active).
 
-Example:
+**Example:**
 
     element.addEventListener('play', function(e) {
         
@@ -220,7 +220,7 @@ Example:
 
 The `pause` event will fire every time the slider is paused from it's normal automated cycle. (The slider will automatically pause when you inspect element or take your focus away from your window).
 
-Example:
+**Example:**
 
     element.addEventListener('pause', function(e) {
         
@@ -234,7 +234,7 @@ Example:
 
 The `load` event will fire once per slider when it's first initialised.
 
-Example:
+**Example:**
 
     element.addEventListener('load', function(e) {
         
@@ -248,14 +248,14 @@ Example:
 
 The `before` event will fire as a transition starts, this event passes through data that includes your current slide and your target slide.
 
-Data:
+**Data:**
 
 - `e.detail.current` _(int)_
 - `e.detail.currentSlide` _(element object)_
 - `e.detail.target` _(int)_
 - `e.detail.targetSlide` _(element object)_
 
-Example: 
+**Example:** 
 
     element.addEventListener('before', function(e) {
         
@@ -267,20 +267,122 @@ Example:
 
 The `after` event will fire after a transition finishes, this event passes through data that includes your current slide and your previous slide.
 
-Data:
+**Data:**
 
 - `e.detail.current` _(int)_
 - `e.detail.currentSlide` _(element object)_
 - `e.detail.prev` _(int)_
 - `e.detail.prevSlide` _(element object)_
 
-Example: 
+**Example:** 
 
     element.addEventListener('after', function(e) {
         
         console.log('After slider transtiion!', e.detail);
         
     });
+
+zRS API
+---
+
+zRS supports numerous methods that can be called at anytime to manipulate how the slider functions, or to retrieve data, after it's been initialised.
+
+**Supported Methods:** `next`, `prev`, `pause`, `play`, `transTo`, `jumpTo`, `currentSlide`.
+
+**Example:**
+
+    var element = document.getElementById('slider'),
+        slider = new zRS(element, {});
+        
+    element.addEventListener('click', function(e) {
+    
+        e.preventDefault();
+        
+        slider.next();
+    
+    });
+    
+The above example is simple enough, when the slider element is clicked it will transition to the next slide.
+
+See below for explanations and examples of all the methods.
+
+#### Next
+
+The `next` method will transition the slider to the next slide.
+
+**Example:**
+
+    slider.next();
+
+---
+
+#### Prev
+
+The `prev` method will transition the slider to the previous slide.
+
+**Example:**
+
+    slider.prev();
+
+---
+
+#### Pause
+
+The `pause` method will pause the slider.
+
+**Example:**
+
+    slider.pause();
+
+---
+
+#### Play
+
+The `play` method will resume the sliders automatic cycle.
+
+**Example:**
+
+    slider.play();
+
+---
+
+#### Trans To
+
+The `transTo` method will transition the slider to the specified slide.
+
+**Parameters:**
+
+- `target` _(int)_
+
+**Example:**
+
+    slider.transTo(3);
+
+---
+
+#### Jump To
+
+The `jumpTo` method will instantly jump the slider to the specified slide.
+
+**Parameters:**
+
+- `target` _(int)_
+
+**Example:**
+
+    slider.jumpTo(2);
+
+---
+
+#### Current Slide
+
+The `currentSlide` method will return the sliders current slide _(int)_.
+
+**Example:**
+
+    slider.currentSlide();
+
+---
 
 #####Release History
 
