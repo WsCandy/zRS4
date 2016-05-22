@@ -36,6 +36,45 @@ HTML Structure
         </div>
     </div>
 
+Automated Features
+---
+
+zRS has a few features that will be utilised if you structure your HTML in a specific way, depending on which attributes or elements you use, behaviour varies.
+
+#### zRS-src
+
+By putting the attribute `zRs-src` or `zRS-srcset` on an element you will enable zRS's lazy loading feature.
+
+**Example:**
+
+    <img zRS-src="images/1.jpg" alt="zRS4" />
+    
+zRS will automatically load the image for the next slide before it transitions, it will wait until the image has been loaded before it transitions to achieve a smooth effect. If the next slide contains multiple images then it will load **ALL** the images before it transitions.
+
+---
+
+#### zRS-srcset
+
+`zRS-srcset` allows you to load in specific images based on the elements size. It's format is the same as the html attribute `srcset`. `zRS-srcset` currently doesn't support retina screen checking and various other options.
+
+**Example**
+
+    <img zRS-srcset="images/1.jpg 600w, images/2.jpg 300w" />
+
+The expected behaviour of the example above is: `1.jpg` will be used when the slide with is above `600px` width and not below `300px` width. `2.jpg` will be used when the slide width is below `300px`. 
+
+---
+
+#### Background Images
+
+If the element you add `zRS-src` or `zRS-srcset` to is not an image then zRS will lazy load the image and set it as a `background-image` instead. The same rules apply as with normal images, zRS will load them all before transitioning. 
+
+**Example:**
+
+    <div zRS-src"images/1.jpg"></div>
+
+These methods can be combined to create a slide with a lazy loaded background image that contains other images, all of which will be loaded into the document when they're needed.
+
 Options
 ---
 
