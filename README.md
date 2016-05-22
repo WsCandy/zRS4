@@ -88,7 +88,8 @@ Here is a list of all the available options and their default values:
     delay: 5000,
     speed: 1000,
     slideBy: 1,
-    direction: 'forward'
+    direction: 'forward',
+    keyboardControls: true
     
 Further details on each option can be found below.
 
@@ -216,6 +217,18 @@ The direction option allows you to control which way the slider transitions auto
     direction: 'reverse'
 
 Setting `slideBy` to a negative number also has the same effect.
+
+---
+
+#### Keyboard Controls _(bool)_
+
+Turn keyboard controls on or off. When they're enabled then you can navigate using the arrow keys on your keyboard.
+
+**Default Value:** `true`
+
+**Example:** 
+
+    keyboardControls: false
 
 ---
 

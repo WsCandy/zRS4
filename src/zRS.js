@@ -29,7 +29,8 @@ import zRS_core from './zRS_core';
 				delay: 5000,
 				speed: 1000,
 				slideBy: 1,
-				direction: 'forward'
+				direction: 'forward',
+				keyboardControls: true
 
 			};
 

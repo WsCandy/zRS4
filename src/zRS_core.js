@@ -263,6 +263,32 @@ class zRS_core {
 
 		});
 
+		if(this.options.keyboardControls === true) {
+
+			this.elements.slider.tabIndex = 0;
+			this.elements.slider.style.outline = 'none';
+
+			this.elements.slider.addEventListener('mouseenter', this.elements.slider.focus);
+			this.elements.slider.addEventListener('mouseleave', this.elements.slider.blur);
+
+			this.elements.slider.addEventListener('keydown', (e) => {
+
+				this.resetTimer();
+
+				if(e.which === 37) {
+
+					this.handleTransition(-1);
+
+				} else if(e.which === 39) {
+
+					this.handleTransition(1);
+
+				}
+
+			});
+
+		}
+
 	}
 
 	play() {
@@ -303,7 +329,6 @@ class zRS_core {
 
 		}
 
-		this.resetTimer();
 		this.resetTimer();
 		this.handleTransition(difference, speed);
 
