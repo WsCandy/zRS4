@@ -58,6 +58,7 @@ Further details on each option can be found below.
 The transition option allows you to switch between a number of supported transitions. 
 
 Supported Options: `'fade'`
+
 Default Value: `'fade'`
 
 Example:
@@ -168,6 +169,7 @@ Example:
 The direction option allows you to control which way the slider transitions automatically.
 
 Supported Options: `'forward'`, `'reverse'`
+
 Default Value: `'forward'`
 
 Example: 
@@ -177,6 +179,108 @@ Example:
 Setting `slideBy` to a negative number also has the same effect.
 
 ---
+
+Events
+------
+
+zRS fires numerous events while it's running, you can hook into these events to further customise how your application interacts with zRS and add extra functionality.
+
+Supported Events `play`, `pause`, `load`, `before`, `after`.
+
+All events are fired on the container element, so you need to listen to this element for the events.
+
+Example:
+
+    var element = document.getElementById('slider'),
+        zRS = new zRS(element, {});
+        
+    element.addEventListener('load', function(e) {
+        
+        console.log('Slider loaded!');
+        
+    });
+
+Further details on all the events can be found below.
+
+#### Play Event
+
+The `play` event will fire every time the slider starts to resume it's normal automated cycle. (This includes when the window is re-focused as the slider pauses when the window isn't active).
+
+Example:
+
+    element.addEventListener('play', function(e) {
+        
+        console.log('Slider playing!');
+        
+    });
+
+---
+
+#### Pause Event
+
+The `pause` event will fire every time the slider is paused from it's normal automated cycle. (The slider will automatically pause when you inspect element or take your focus away from your window).
+
+Example:
+
+    element.addEventListener('pause', function(e) {
+        
+        console.log('Slider paused');
+        
+    });
+
+---
+
+#### Load Event
+
+The `load` event will fire once per slider when it's first initialised.
+
+Example:
+
+    element.addEventListener('load', function(e) {
+        
+        console.log('Slider loaded!');
+        
+    });
+    
+---
+
+#### Before Event
+
+The `before` event will fire as a transition starts, this event passes through data that includes your current slide and your target slide.
+
+Data:
+
+- `e.detail.current` _(int)_
+- `e.detail.currentSlide` _(element object)_
+- `e.detail.target` _(int)_
+- `e.detail.targetSlide` _(element object)_
+
+Example: 
+
+    element.addEventListener('before', function(e) {
+        
+        console.log('Before slider transtiion!', e.detail);
+        
+    });
+
+#### After Event
+
+The `after` event will fire after a transition finishes, this event passes through data that includes your current slide and your previous slide.
+
+Data:
+
+- `e.detail.current` _(int)_
+- `e.detail.currentSlide` _(element object)_
+- `e.detail.prev` _(int)_
+- `e.detail.prevSlide` _(element object)_
+
+Example: 
+
+    element.addEventListener('after', function(e) {
+        
+        console.log('After slider transtiion!', e.detail);
+        
+    });
 
 #####Release History
 
