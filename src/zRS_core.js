@@ -346,7 +346,7 @@ class zRS_core {
 
 		this.timer = setInterval(() => {
 
-			let slideBy = this.options.direction === 'reverse' ? -Math.abs(this.options.slideBy) : this.options.slideBy;
+			let slideBy = this.options.slideBy;
 
 			this.handleTransition(slideBy);
 

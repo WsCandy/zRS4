@@ -1,123 +1,119 @@
+'use strict';
+
 require('core-js/es6/symbol');
 require('core-js/es6/promise');
 
 import zRS_util from './zRS_util';
 import zRS_core from './zRS_core';
 
-(function(window) {
+class zRS {
 
-	'use strict';
+	static version() {
 
-	class zRS {
+		return `4.0.0`;
 
-		static version() {
+	}
 
-			return `4.0.0`;
+	constructor(element, options = {}) {
 
-		}
+		this.element = element;
+		this.defaults = this.settings = {
 
-		constructor(element, options = {}) {
+			transition: 'fade',
+			inner: '.zRS__inner',
+			slides: 'zRS__slide',
+			controls: [],
+			pager: null,
+			delay: 5000,
+			speed: 1000,
+			slideBy: 1,
+			direction: 'forward',
+			keyboardControls: true
 
-			this.element = element;
-			this.defaults = this.settings = {
+		};
 
-				transition: 'fade',
-				inner: '.zRS__inner',
-				slides: 'zRS__slide',
-				controls: [],
-				pager: null,
-				delay: 5000,
-				speed: 1000,
-				slideBy: 1,
-				direction: 'forward',
-				keyboardControls: true
+		this.sliders = zRS_util.findElement(this.element);
 
-			};
+		if(this.sliders === false) {
 
-			this.sliders = zRS_util.findElement(this.element);
+			zRS_util.log(`Cannot find container, stopping initialisation`, `error`);
 
-			if(this.sliders === false) {
-
-				zRS_util.log(`Cannot find container, stopping initialisation`, `error`);
-
-				return;
-
-			}
-
-			this.setOptions(options);
-			this.setObjects();
-			
-			return this.core;
+			return;
 
 		}
 
-		setOptions(update) {
+		this.setOptions(options);
+		this.setObjects();
 
-			if(!update) {
+		return this.core;
 
-				return;
+	}
 
-			}
+	setOptions(update) {
 
-			if(typeof update !== 'object') {
+		if(!update) {
 
-				zRS_util.log(`Please provide an object for this method`, `warn`);
+			return;
 
-				return;
+		}
 
-			}
+		if(typeof update !== 'object') {
 
-			for(let key in this.defaults) {
+			zRS_util.log(`Please provide an object for this method`, `warn`);
 
-				if(this.defaults.hasOwnProperty(key)) {
+			return;
 
-					if(update[key] === undefined) {
+		}
 
-						this.settings[key] = this.defaults[key];
-						continue;
+		for(let key in this.defaults) {
 
-					}
+			if(this.defaults.hasOwnProperty(key)) {
 
-					this.settings[key] = update[key];
+				if(update[key] === undefined) {
+
+					this.settings[key] = this.defaults[key];
+					continue;
 
 				}
 
-			}
-
-			if(this.settings.direction === 'back') {
-
-				this.settings.slideBy = -Math.abs(this.settings.slideBy);
+				this.settings[key] = update[key];
 
 			}
 
 		}
 
-		setObjects() {
+		if(this.settings.direction === 'reverse') {
 
-			if(this.sliders.length) {
-
-				this.core = [];
-
-				for(let key in this.sliders) {
-
-					if(this.sliders.hasOwnProperty(key)) {
-
-						this.core[key] = new zRS_core(this.sliders[key], this.settings);
-
-					}
-
-				}
-
-			} else {
-
-				this.core = new zRS_core(this.sliders, this.settings);
-
-			}
+			this.settings.slideBy = -Math.abs(this.settings.slideBy);
 
 		}
 
 	}
 
-	window.zRS = zRS;
+	setObjects() {
 
-})(window);
+		if(this.sliders.length) {
+
+			this.core = [];
+
+			for(let key in this.sliders) {
+
+				if(this.sliders.hasOwnProperty(key)) {
+
+					this.core[key] = new zRS_core(this.sliders[key], this.settings);
+
+				}
+
+			}
+
+		} else {
+
+			this.core = new zRS_core(this.sliders, this.settings);
+
+		}
+
+	}
+
+}
+
+window.zRS = zRS;
