@@ -33,8 +33,13 @@ class zRS_core {
 
 		};
 
+		if(this.indexElements() !== true) {
+
+			return;
+
+		}
+
 		this.createEvents();
-		this.indexElements();
 		this.styleElements();
 		this.setUpPager();
 		this.setUpControls();
@@ -70,26 +75,36 @@ class zRS_core {
 
 	indexElements() {
 
-		this.elements.inner = zRS_util.findElement(this.options.inner);
+		this.elements.inner = zRS_util.findElement(this.elements.slider, this.options.inner);
 		this.elements.inner = this.elements.inner.length ? this.elements.inner[0] : this.elements.inner;
 
 		if(!this.elements.inner) {
 
-			zRS_util.log(`Cannot find ${this.options.inner} inner element, please check your markup`, 'error');
+			zRS_util.log(`Cannot find ${this.options.inner} inner element, stopping initialisation`, 'error');
 
-			return;
+			return false;
 
 		}
 
-		this.elements.pager = zRS_util.findElement(this.options.pager);
+		this.elements.pager = zRS_util.findElement(this.elements.slider, this.options.pager);
 
 		for(let i = 0, l = this.options.controls.length; i < l; i++) {
 
-			this.elements.controls.push(zRS_util.findElement(this.options.controls[i]));
+			this.elements.controls.push(zRS_util.findElement(this.elements.slider, this.options.controls[i]));
+
+		}
+
+		if(this.elements.inner.children.length <= 0) {
+
+			zRS_util.log(`Cannot find any slides, stopping initialisation`, 'error');
+
+			return false;
 
 		}
 
 		this.elements.slides = this.elements.inner.children;
+
+		return true;
 
 	}
 
@@ -267,9 +282,6 @@ class zRS_core {
 
 			this.elements.slider.tabIndex = 0;
 			this.elements.slider.style.outline = 'none';
-
-			this.elements.slider.addEventListener('mouseenter', this.elements.slider.focus);
-			this.elements.slider.addEventListener('mouseleave', this.elements.slider.blur);
 
 			this.elements.slider.addEventListener('keydown', (e) => {
 

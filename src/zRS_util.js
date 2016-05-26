@@ -65,7 +65,7 @@ class zRS_util {
 
 	}
 
-	static findElement(element) {
+	static findElement(parent, element) {
 
 		if(typeof element === 'string') {
 
@@ -73,13 +73,13 @@ class zRS_util {
 
 				case '.' :
 
-					let selector = document.querySelectorAll(element);
+					let selector = parent.querySelectorAll(element);
 
 					return selector.length > 0 ? selector : false;
 
 				case '#' :
 
-					return document.getElementById(element.substr(1));
+					return parent.getElementById(element.substr(1));
 
 				default:
 

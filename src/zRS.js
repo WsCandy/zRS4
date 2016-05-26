@@ -17,6 +17,7 @@ class zRS {
 	constructor(element, options = {}) {
 
 		this.element = element;
+		this.instances = {};
 		this.defaults = this.settings = {
 
 			transition: 'fade',
@@ -32,11 +33,9 @@ class zRS {
 
 		};
 
-		this.sliders = zRS_util.findElement(this.element);
+		this.sliders = zRS_util.findElement(document, this.element);
 
-		if(this.sliders === false) {
-
-			zRS_util.log(`Cannot find container, stopping initialisation`, `error`);
+		if(!this.sliders || this.sliders.length === 0) {
 
 			return;
 
@@ -45,7 +44,7 @@ class zRS {
 		this.setOptions(options);
 		this.setObjects();
 
-		return this.core;
+		return this.instances;
 
 	}
 
@@ -93,22 +92,18 @@ class zRS {
 	setObjects() {
 
 		if(this.sliders.length) {
+			
+			for(var i = 0, l = this.sliders.length; i < l; i++) {
 
-			this.core = [];
+				let id = this.sliders[i].getAttribute('id') || i;
 
-			for(let key in this.sliders) {
-
-				if(this.sliders.hasOwnProperty(key)) {
-
-					this.core[key] = new zRS_core(this.sliders[key], this.settings);
-
-				}
+				this.instances[id] = new zRS_core(this.sliders[i], this.settings);
 
 			}
-
+			
 		} else {
 
-			this.core = new zRS_core(this.sliders, this.settings);
+			this.instances = new zRS_core(this.sliders, this.settings);
 
 		}
 

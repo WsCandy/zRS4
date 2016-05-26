@@ -13,4 +13,6 @@
 
 	});
 
+	console.log(slider);
+
 })(window);
