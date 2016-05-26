@@ -166,7 +166,7 @@ class zRS_util {
 
 		});
 
-		if(images.length === 0) {
+		if(images.length === 0 && promise) {
 
 			promise.resolve();
 
