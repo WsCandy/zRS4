@@ -6,8 +6,10 @@
 
 		speed: 500,
 		delay: 5000,
-		direction: 'reverse',
+		transition: 'slide',
+		// direction: 'reverse',
 		pager: '.zRS__pager',
+		visibleSlides: 2,
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
 		// keyboardControls: false
 

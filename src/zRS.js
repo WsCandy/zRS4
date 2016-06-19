@@ -29,7 +29,8 @@ class zRS {
 			speed: 1000,
 			slideBy: 1,
 			direction: 'forward',
-			keyboardControls: true
+			keyboardControls: true,
+			visibleSlides: 1
 
 		};
 
@@ -92,7 +93,7 @@ class zRS {
 	setObjects() {
 
 		if(this.sliders.length) {
-			
+
 			for(var i = 0, l = this.sliders.length; i < l; i++) {
 
 				let id = this.sliders[i].getAttribute('id') || i;
@@ -100,7 +101,7 @@ class zRS {
 				this.instances[id] = new zRS_core(this.sliders[i], this.settings);
 
 			}
-			
+
 		} else {
 
 			this.instances = new zRS_core(this.sliders, this.settings);
