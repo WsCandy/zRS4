@@ -259,13 +259,13 @@ class zRS_util {
 			var currTime = new Date().getTime(),
 				timeToCall = Math.max(0, 16 - (currTime - lastTime));
 
-			window.setTimeout(anim, timeToCall);
-
 			lastTime = currTime + timeToCall;
+
+			return setTimeout(anim, timeToCall);
 
 		} else {
 
-			requestAnimationFrame(anim);
+			return requestAnimationFrame(anim);
 
 		}
 

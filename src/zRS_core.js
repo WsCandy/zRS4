@@ -419,7 +419,7 @@ class zRS_core {
 
 		}).then(() => {
 
-			this.transition.handle(this.currentSlide, current, speed);
+			this.transition.handle(this.currentSlide, current, speed, steps);
 
 		});
 
