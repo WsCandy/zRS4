@@ -50,19 +50,18 @@ class zRS_slide {
 		let increment = ((1000 / 60) / speed) * this.distance;
 
 		this.remaining -= increment;
-		this.currentPos += increment;
+		this.remaining = Math.min(0, this.remaining);
 
-		if(this.direction !== 'forward') {
-
-			this.remaining = Math.min(0, this.remaining);
-			this.currentPos = Math.abs(this.currentPos) >= this.maxTransform ? Math.abs(this.currentPos) - this.maxTransform : this.currentPos;
-
-		} else {
-
-			this.remaining = Math.max(0, this.remaining);
-			this.currentPos = this.currentPos > 0 ? -Math.abs(this.maxTransform) : this.currentPos;
-
-		}
+		// this.currentPos = this.distance + (this.distance * (this.remaining / 100));
+		// this.currentPos = Math.abs(this.currentPos) >= this.maxTransform ? Math.abs(this.currentPos) - this.maxTransform : this.currentPos;
+		// if(this.direction !== 'forward') {
+		//
+		//
+		// } else {
+		//
+		// 	this.remaining = Math.max(0, this.remaining);
+		//
+		// }
 
 		this.positionInner();
 
@@ -73,7 +72,7 @@ class zRS_slide {
 		this.elements.inner.style.transform = `translate3d(${this.currentPos}%, 0, 0)`;
 
 	}
-	
+
 	animate(nextSlide, prevSlide, speed) {
 
 		this.animation = zRS_util.animationFrame(() => {
@@ -139,22 +138,12 @@ class zRS_slide {
 
 	handle(nextSlide, prevSlide, speed, steps) {
 
+		steps = steps * -1;
+
 		cancelAnimationFrame(this.animation);
 
-		if(steps >= 0) {
-
-			this.remaining -= 100;
-			this.direction = 'reverse';
-
-		} else {
-
-			this.remaining += 100;
-			this.direction = 'forward';
-
-		}
-
+		this.remaining += (100 * steps);
 		this.distance = this.remaining;
-
 		this.animate(nextSlide, prevSlide, speed);
 
 	}
