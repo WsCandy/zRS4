@@ -4,7 +4,7 @@
 
 	window.slider = new zRS(cont, {
 
-		speed: 500,
+		speed: 1000,
 		delay: 5000,
 		transition: 'slide',
 		// direction: 'reverse',

@@ -7,7 +7,7 @@ class zRS_slide {
 		this.elements = data.elements;
 		this.options = data.options;
 		this.events = data.events;
-		this.maxTransform = this.elements.slides.length * 100;
+		this.minTransform = -Math.abs(this.elements.slides.length * 100);
 		this.currentPos = 0;
 		this.remaining = 0;
 		this.distance = 0;
@@ -50,62 +50,27 @@ class zRS_slide {
 		let increment = ((1000 / 60) / speed) * this.distance;
 
 		this.remaining -= increment;
-		this.remaining = Math.min(0, this.remaining);
+		this.remaining = this.distance < 0 ? Math.min(0, this.remaining) : Math.max(0, this.remaining);
 
-		// this.currentPos = this.distance + (this.distance * (this.remaining / 100));
-		// this.currentPos = Math.abs(this.currentPos) >= this.maxTransform ? Math.abs(this.currentPos) - this.maxTransform : this.currentPos;
-		// if(this.direction !== 'forward') {
-		//
-		//
-		// } else {
-		//
-		// 	this.remaining = Math.max(0, this.remaining);
-		//
-		// }
+		if(this.remaining === 0) {
+
+			this.currentPos = Math.round(this.currentPos / 100) * 100;
+			this.positionInner();
+
+			return;
+
+		}
+
+		this.currentPos += increment;
+
+		if(this.options.wrapAround === true) {
+
+			this.currentPos = this.currentPos <= this.minTransform ? this.currentPos - this.minTransform : this.currentPos;
+			this.currentPos = this.currentPos > 0 ? this.currentPos + this.minTransform : this.currentPos;
+
+		}
 
 		this.positionInner();
-
-	}
-
-	positionInner() {
-
-		this.elements.inner.style.transform = `translate3d(${this.currentPos}%, 0, 0)`;
-
-	}
-
-	animate(nextSlide, prevSlide, speed) {
-
-		this.animation = zRS_util.animationFrame(() => {
-
-			this.calculatePosition(speed);
-			this.coordinateSlides(nextSlide);
-
-			if(this.remaining !== 0) {
-
-				this.animate(nextSlide, prevSlide, speed);
-
-				return;
-
-			}
-
-			this.events.after = zRS_util.createEvent('after', {
-
-				current: parseInt(nextSlide),
-				currentSlide: this.elements.slides[nextSlide],
-				prev: parseInt(prevSlide),
-				prevSlide: this.elements.slides[prevSlide]
-
-			});
-
-			zRS_util.dispatchEvent({
-
-				name: 'after',
-				event: this.events.after,
-				element: this.elements.slider
-
-			});
-
-		});
 
 	}
 
@@ -124,15 +89,60 @@ class zRS_slide {
 
 		}
 
-		if(Math.abs(this.currentPos) > 100) {
+		if(this.options.wrapAround === true) {
 
-			this.elements.slides[0].style.left = `${this.maxTransform}%`;
+			if(this.currentPos < -100) {
 
-		} else {
+				this.elements.slides[0].style.left = `${Math.abs(this.minTransform)}%`;
 
-			this.elements.slides[0].style.left = 0;
+			} else {
+
+				this.elements.slides[0].style.left = 0;
+
+			}
 
 		}
+
+	}
+
+	positionInner() {
+
+		this.elements.inner.style.transform = `translate3d(${this.currentPos}%, 0, 0)`;
+
+	}
+
+	animate(nextSlide, prevSlide, speed) {
+
+		this.animation = zRS_util.animationFrame(() => {
+
+			if(this.remaining === 0) {
+
+				this.events.after = zRS_util.createEvent('after', {
+
+					current: parseInt(nextSlide),
+					currentSlide: this.elements.slides[nextSlide],
+					prev: parseInt(prevSlide),
+					prevSlide: this.elements.slides[prevSlide]
+
+				});
+
+				zRS_util.dispatchEvent({
+
+					name: 'after',
+					event: this.events.after,
+					element: this.elements.slider
+
+				});
+
+				return;
+
+			}
+
+			this.calculatePosition(speed);
+			this.coordinateSlides(nextSlide);
+			this.animate(nextSlide, prevSlide, speed);
+
+		});
 
 	}
 
@@ -143,6 +153,7 @@ class zRS_slide {
 		cancelAnimationFrame(this.animation);
 
 		this.remaining += (100 * steps);
+		// this.goal = Math.round((this.remaining + this.currentPos) / 100 ) * 100;
 		this.distance = this.remaining;
 		this.animate(nextSlide, prevSlide, speed);
 

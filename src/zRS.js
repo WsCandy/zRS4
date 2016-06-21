@@ -30,7 +30,8 @@ class zRS {
 			slideBy: 1,
 			direction: 'forward',
 			keyboardControls: true,
-			visibleSlides: 1
+			visibleSlides: 1,
+			wrapAround: true
 
 		};
 
