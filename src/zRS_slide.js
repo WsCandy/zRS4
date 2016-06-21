@@ -153,7 +153,6 @@ class zRS_slide {
 		cancelAnimationFrame(this.animation);
 
 		this.remaining += (100 * steps);
-		// this.goal = Math.round((this.remaining + this.currentPos) / 100 ) * 100;
 		this.distance = this.remaining;
 		this.animate(nextSlide, prevSlide, speed);
 
