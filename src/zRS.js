@@ -28,6 +28,7 @@ class zRS {
 			delay: 5000,
 			speed: 1000,
 			slideBy: 1,
+			slideSpacing: 0,
 			direction: 'forward',
 			keyboardControls: true,
 			visibleSlides: 1,

@@ -7,7 +7,7 @@ class zRS_slide {
 		this.elements = data.elements;
 		this.options = data.options;
 		this.events = data.events;
-		this.minTransform = -Math.abs(this.elements.slides.length * (100 / this.options.visibleSlides));
+		this.minTransform = -Math.abs(this.elements.slides.length * ((100 / this.options.visibleSlides) + this.options.slideSpacing));
 		this.currentPos = 0;
 		this.remaining = 0;
 		this.distance = 0;
@@ -37,9 +37,9 @@ class zRS_slide {
 			}
 
 			element.style.top = 0;
-			element.style.left = `${(100 / this.options.visibleSlides) * i}%`;
+			element.style.left = `${((100 / this.options.visibleSlides) + this.options.slideSpacing) * i}%`;
 			element.style.zIndex = 1;
-			element.style.width = `${100 / this.options.visibleSlides}%`;
+			element.style.width = `${(100 / this.options.visibleSlides) - (this.options.visibleSlides > 1 ? this.options.slideSpacing : 0)}%`;
 
 		}
 
@@ -54,7 +54,9 @@ class zRS_slide {
 
 		if(this.remaining === 0) {
 
-			this.currentPos = Math.round(this.currentPos / (100 / this.options.visibleSlides)) * (100 / this.options.visibleSlides);
+			let round = Math.round(this.currentPos / ((100 / this.options.visibleSlides) + this.options.slideSpacing)) * ((100 / this.options.visibleSlides) +  this.options.slideSpacing);
+
+			this.currentPos = round;
 			this.positionInner();
 
 			return;
@@ -93,13 +95,13 @@ class zRS_slide {
 
 			for(let i = 0; i < this.options.visibleSlides; i++) {
 
-				if(Math.abs(this.currentPos) > (i + 1) * (100 / this.options.visibleSlides)) {
+				if(Math.abs(this.currentPos) > (i + 1) * ((100 / this.options.visibleSlides) + this.options.slideSpacing)) {
 
-					this.elements.slides[i].style.left = `${Math.abs(this.minTransform - ((100 / this.options.visibleSlides) * i))}%`;
+					this.elements.slides[i].style.left = `${Math.abs(this.minTransform - (((100 / this.options.visibleSlides) + this.options.slideSpacing) * i))}%`;
 
 				} else {
 
-					this.elements.slides[i].style.left = `${(i * (100 / this.options.visibleSlides))}%`;
+					this.elements.slides[i].style.left = `${(i * ((100 / this.options.visibleSlides) + this.options.slideSpacing))}%`;
 
 				}
 
@@ -156,7 +158,7 @@ class zRS_slide {
 
 		cancelAnimationFrame(this.animation);
 
-		this.remaining += ((100 / this.options.visibleSlides) * steps);
+		this.remaining += (((100 / this.options.visibleSlides) + this.options.slideSpacing) * steps);
 		this.distance = this.remaining;
 		this.animate(nextSlide, prevSlide, speed);
 
