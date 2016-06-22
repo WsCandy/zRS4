@@ -55,11 +55,11 @@ class zRS_core {
 		this.play();
 		this.bindings();
 
-		new Promise((resolve, reject) => {
+		for(let i = 0; i < this.options.visibleSlides; i++) {
 
-			zRS_util.loadImages(this.elements.slides[this.currentSlide], {resolve: resolve, reject: reject});
+			zRS_util.loadImages(this.elements.slides[i]);
 
-		});
+		}
 
 		zRS_util.dispatchEvent({
 
@@ -380,21 +380,31 @@ class zRS_core {
 
 	}
 
-	handleTransition(steps = 1, speed = this.options.speed) {
+	targetSlide(slide) {
 
-		let current = this.currentSlide;
+		let target = slide;
 
-		this.currentSlide += steps;
+		if(slide >= this.elements.slides.length) {
 
-		if(this.currentSlide >= this.elements.slides.length) {
+			target = (slide - this.elements.slides.length);
 
-			this.currentSlide -= this.elements.slides.length;
+		} else if(slide < 0) {
 
-		} else if(this.currentSlide < 0) {
-
-			this.currentSlide += this.elements.slides.length;
+			target = (slide + this.elements.slides.length);
 
 		}
+
+		return target;
+
+	}
+
+	handleTransition(steps = 1, speed = this.options.speed) {
+
+		let current = this.currentSlide,
+			promises = [];
+
+		this.currentSlide += steps;
+		this.currentSlide = this.targetSlide(this.currentSlide);
 
 		this.events.before = zRS_util.createEvent('before', {
 
@@ -413,11 +423,19 @@ class zRS_core {
 
 		});
 
-		new Promise((resolve, reject) => {
+		for(let i = 0; i < this.options.visibleSlides; i++) {
 
-			zRS_util.loadImages(this.elements.slides[this.currentSlide], {resolve: resolve, reject: reject});
+			let slideIndex = this.targetSlide(this.currentSlide + i);
 
-		}).then(() => {
+			promises[i] = new Promise((resolve, reject) => {
+
+				zRS_util.loadImages(this.elements.slides[slideIndex], {resolve: resolve, reject: reject});
+
+			});
+
+		}
+
+		Promise.all(promises).then(() => {
 
 			this.transition.handle(this.currentSlide, current, speed, steps);
 

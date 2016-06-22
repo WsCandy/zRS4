@@ -7,7 +7,7 @@ class zRS_slide {
 		this.elements = data.elements;
 		this.options = data.options;
 		this.events = data.events;
-		this.minTransform = -Math.abs(this.elements.slides.length * 100);
+		this.minTransform = -Math.abs(this.elements.slides.length * (100 / this.options.visibleSlides));
 		this.currentPos = 0;
 		this.remaining = 0;
 		this.distance = 0;
@@ -54,7 +54,7 @@ class zRS_slide {
 
 		if(this.remaining === 0) {
 
-			this.currentPos = Math.round(this.currentPos / 100) * 100;
+			this.currentPos = Math.round(this.currentPos / (100 / this.options.visibleSlides)) * (100 / this.options.visibleSlides);
 			this.positionInner();
 
 			return;
@@ -91,13 +91,17 @@ class zRS_slide {
 
 		if(this.options.wrapAround === true) {
 
-			if(this.currentPos < -100) {
+			for(let i = 0; i < this.options.visibleSlides; i++) {
 
-				this.elements.slides[0].style.left = `${Math.abs(this.minTransform)}%`;
+				if(Math.abs(this.currentPos) > (i + 1) * (100 / this.options.visibleSlides)) {
 
-			} else {
+					this.elements.slides[i].style.left = `${Math.abs(this.minTransform - ((100 / this.options.visibleSlides) * i))}%`;
 
-				this.elements.slides[0].style.left = 0;
+				} else {
+
+					this.elements.slides[i].style.left = `${(i * (100 / this.options.visibleSlides))}%`;
+
+				}
 
 			}
 
@@ -152,7 +156,7 @@ class zRS_slide {
 
 		cancelAnimationFrame(this.animation);
 
-		this.remaining += (100 * steps);
+		this.remaining += ((100 / this.options.visibleSlides) * steps);
 		this.distance = this.remaining;
 		this.animate(nextSlide, prevSlide, speed);
 
