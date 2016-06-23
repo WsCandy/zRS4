@@ -398,9 +398,9 @@ class zRS_core {
 
 	}
 
-	handleTransition(steps = 1, speed = this.options.speed) {
+	handleTransition(steps = null, speed = this.options.speed) {
 
-		steps = steps * this.options.slideBy;
+		steps = steps ? steps : this.options.slideBy;
 		
 		let current = this.currentSlide,
 			promises = [];
