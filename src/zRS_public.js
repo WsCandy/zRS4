@@ -42,6 +42,12 @@ class zRS_public {
 
 			return core.currentSlide;
 
+		};
+
+		this.updateVisible = (visible) => {
+
+			core.updateVisible(visible);
+
 		}
 
 	}

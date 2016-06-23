@@ -9,9 +9,9 @@
 		transition: 'slide',
 		// direction: 'reverse',
 		pager: '.zRS__pager',
-		visibleSlides: 1,
+		visibleSlides: 2,
 		slideSpacing: 1,
-		slideBy: 2,
+		slideBy: 1,
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
 		// keyboardControls: false
 

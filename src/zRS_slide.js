@@ -19,8 +19,9 @@ class zRS_slide {
 
 	setUp() {
 
-		this.elements.slider.style.overflow = 'hidden';
 		this.elements.inner.style.overflow = null;
+		this.elements.slider.style.overflow = 'hidden';
+		this.elements.inner.style.transform = 'translate3d(0%, 0, 0)';
 
 	}
 
@@ -33,6 +34,10 @@ class zRS_slide {
 			if(i !== 0) {
 
 				element.style.position = 'absolute';
+
+			} else {
+
+				element.style.position = 'relative';
 
 			}
 
@@ -62,7 +67,7 @@ class zRS_slide {
 
 		if(this.remaining === 0) {
 
-			this.currentPos = Math.round(this.currentPos / ((100 / this.options.visibleSlides) + this.options.slideSpacing)) * ((100 / this.options.visibleSlides) +  this.options.slideSpacing);
+			this.currentPos = Math.round(this.currentPos / ((100 / this.options.visibleSlides) + this.options.slideSpacing)) * ((100 / this.options.visibleSlides) + this.options.slideSpacing);
 			this.positionInner();
 
 			return;

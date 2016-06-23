@@ -5,16 +5,14 @@ class zRS_core {
 
 	constructor(element, options) {
 
-		var zRS_trans;
-
 		try {
 
-			zRS_trans = require(`./zRS_${options.transition}`).default;
+			this.zRS_trans = require(`./zRS_${options.transition}`).default;
 
 		} catch(error) {
 
 			zRS_util.log(`The transition '${options.transition}' doesn't exist, falling back to fade.`, `warn`);
-			zRS_trans = require(`./zRS_fade`).default;
+			this.zRS_trans = require(`./zRS_fade`).default;
 
 		}
 
@@ -44,7 +42,7 @@ class zRS_core {
 		this.setUpPager();
 		this.setUpControls();
 
-		this.transition = new zRS_trans({
+		this.transition = new this.zRS_trans({
 
 			events: this.events,
 			elements: this.elements,
@@ -232,6 +230,24 @@ class zRS_core {
 
 	}
 
+	resetPager() {
+
+		for(let i = 0, l = this.elements.anchors.length; i < l; i++) {
+
+			if(i !== 0) {
+
+				zRS_util.removeClass(this.elements.anchors[i], 'is-active');
+
+			} else {
+
+				zRS_util.addClass(this.elements.anchors[i], 'is-active');
+
+			}
+
+		}
+
+	}
+
 	styleElements() {
 
 		this.elements.inner.style.width = '100%';
@@ -323,6 +339,42 @@ class zRS_core {
 
 	}
 
+	updateVisible(visible = 1) {
+
+		if(visible > this.elements.slides.length) {
+
+			zRS_util.log('Cannot show more slides than total number of slides.', 'warn');
+			return;
+
+		}
+
+		if(this.options.visibleSlides === visible) {
+
+			return;
+
+		}
+
+		this.options.visibleSlides = visible;
+		this.currentSlide = 0;
+
+		this.resetPager();
+
+		this.transition = new this.zRS_trans({
+
+			events: this.events,
+			elements: this.elements,
+			options: this.options
+
+		});
+
+		for(let i = 0; i < visible; i++) {
+
+			zRS_util.loadImages(this.elements.slides[i]);
+
+		}
+
+	}
+
 	transTo(slide, speed = this.options.speed) {
 
 		let difference = slide - this.currentSlide;
@@ -401,7 +453,7 @@ class zRS_core {
 	handleTransition(steps = null, speed = this.options.speed) {
 
 		steps = steps ? steps : this.options.slideBy;
-		
+
 		let current = this.currentSlide,
 			promises = [];
 
