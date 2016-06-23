@@ -49,14 +49,20 @@ class zRS_slide {
 
 		let increment = ((1000 / 60) / speed) * this.distance;
 
+		increment = this.distance < 0 ? Math.max(increment, this.distance) : Math.min(increment, this.distance);
+
 		this.remaining -= increment;
 		this.remaining = this.distance < 0 ? Math.min(0, this.remaining) : Math.max(0, this.remaining);
 
+		if(increment === this.distance) {
+
+			this.currentPos += increment;
+
+		}
+
 		if(this.remaining === 0) {
 
-			let round = Math.round(this.currentPos / ((100 / this.options.visibleSlides) + this.options.slideSpacing)) * ((100 / this.options.visibleSlides) +  this.options.slideSpacing);
-
-			this.currentPos = round;
+			this.currentPos = Math.round(this.currentPos / ((100 / this.options.visibleSlides) + this.options.slideSpacing)) * ((100 / this.options.visibleSlides) +  this.options.slideSpacing);
 			this.positionInner();
 
 			return;

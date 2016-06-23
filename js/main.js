@@ -5,11 +5,11 @@
 	window.slider = new zRS(cont, {
 
 		speed: 500,
-		delay: 5000,
+		delay: 13000,
 		transition: 'slide',
 		// direction: 'reverse',
 		pager: '.zRS__pager',
-		visibleSlides: 2,
+		visibleSlides: 1,
 		slideSpacing: 1,
 		slideBy: 1,
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
