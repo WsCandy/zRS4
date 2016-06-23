@@ -76,7 +76,7 @@ class zRS_slide {
 
 		this.currentPos += increment;
 
-		if(this.options.wrapAround === true) {
+		if(this.options.infinite === true) {
 
 			this.currentPos = this.currentPos <= this.minTransform ? this.currentPos - this.minTransform : this.currentPos;
 			this.currentPos = this.currentPos > 0 ? this.currentPos + this.minTransform : this.currentPos;
@@ -102,7 +102,7 @@ class zRS_slide {
 
 		}
 
-		if(this.options.wrapAround === true) {
+		if(this.options.infinite === true) {
 
 			for(let i = 0; i < this.options.visibleSlides; i++) {
 
@@ -171,6 +171,7 @@ class zRS_slide {
 
 		this.remaining += (((100 / this.options.visibleSlides) + this.options.slideSpacing) * steps);
 		this.distance = this.remaining;
+		
 		this.animate(nextSlide, prevSlide, speed);
 
 	}

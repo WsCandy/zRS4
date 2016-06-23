@@ -18,6 +18,7 @@
 
 		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
+		infinite: false
 		// keyboardControls: false
 
 	});
