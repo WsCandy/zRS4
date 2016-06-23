@@ -20,6 +20,7 @@ class zRS_core {
 		this.timer = null;
 		this.events = {};
 		this.currentSlide = 0;
+		this.defaultVisible = this.options.visibleSlides;
 		this.elements = {
 
 			slider: element,
@@ -289,6 +290,31 @@ class zRS_core {
 			zRS_util.animationFrame(() => {
 
 				zRS_util.loadImages(this.elements.slides[this.currentSlide]);
+
+				if(typeof this.options.setVisibleSlides !== 'object') {
+
+					return;
+
+				}
+
+				for(let size in this.options.setVisibleSlides) {
+
+					if(this.options.setVisibleSlides.hasOwnProperty(size)) {
+
+						if(document.documentElement.clientWidth <= size) {
+
+							this.updateVisible(this.options.setVisibleSlides[size]);
+							return;
+
+						} else {
+
+							this.updateVisible(this.defaultVisible);
+
+						}
+
+					}
+
+				}
 
 			});
 

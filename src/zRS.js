@@ -32,6 +32,7 @@ class zRS {
 			direction: 'forward',
 			keyboardControls: true,
 			visibleSlides: 1,
+			setVisibleSlides: null,
 			wrapAround: true
 
 		};
