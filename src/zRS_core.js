@@ -143,7 +143,11 @@ class zRS_core {
 
 		}
 
-		this.toggleControlClasses();
+		if(this.options.infinite === false) {
+
+			this.toggleControlClasses();
+
+		}
 
 	}
 
@@ -515,7 +519,7 @@ class zRS_core {
 		this.currentSlide += steps;
 		this.currentSlide = this.targetSlide(this.currentSlide);
 
-		if(this.options.controls.length !== 0) {
+		if(this.options.controls.length !== 0 && this.options.infinite === false) {
 
 			this.toggleControlClasses();
 
