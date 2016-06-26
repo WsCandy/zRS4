@@ -170,8 +170,24 @@ class zRS_slide {
 		cancelAnimationFrame(this.animation);
 
 		this.remaining += (((100 / this.options.visibleSlides) + this.options.slideSpacing) * steps);
+		this.target = Math.round((this.currentPos + this.remaining) / ((100 / this.options.visibleSlides) + this.options.slideSpacing)) * ((100 / this.options.visibleSlides) + this.options.slideSpacing);
+
+		if(this.options.infinite !== true) {
+
+			if(this.target < (this.minTransform + (100 / this.options.visibleSlides))) {
+
+				this.remaining -= this.minTransform;
+
+			} else if(this.target > 0) {
+
+				this.remaining += this.minTransform;
+
+			}
+
+		}
+
 		this.distance = this.remaining;
-		
+
 		this.animate(nextSlide, prevSlide, speed);
 
 	}

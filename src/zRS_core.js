@@ -59,7 +59,7 @@ class zRS_core {
 			zRS_util.loadImages(this.elements.slides[i]);
 
 		}
-
+		
 		zRS_util.dispatchEvent({
 
 			name: 'load',
