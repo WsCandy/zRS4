@@ -39,6 +39,12 @@ class zRS_util {
 
 	static addClass(element, className) {
 
+		if(!element) {
+
+			return;
+
+		}
+
 		if(element.classList) {
 
 			element.classList.add(className);
@@ -52,6 +58,12 @@ class zRS_util {
 	}
 
 	static removeClass(element, className) {
+
+		if(!element) {
+
+			return;
+
+		}
 
 		if(element.classList) {
 
@@ -79,7 +91,7 @@ class zRS_util {
 
 				case '#' :
 
-					return parent.getElementById(element.substr(1));
+					return document.getElementById(element.substr(1));
 
 				default:
 

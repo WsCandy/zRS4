@@ -59,7 +59,7 @@ class zRS_core {
 			zRS_util.loadImages(this.elements.slides[i]);
 
 		}
-		
+
 		zRS_util.dispatchEvent({
 
 			name: 'load',
@@ -140,6 +140,35 @@ class zRS_core {
 				this.handleTransition(step);
 
 			});
+
+		}
+
+		this.toggleControlClasses();
+
+	}
+
+	toggleControlClasses() {
+
+		let back = this.elements.controls[1] && this.elements.controls[1].length ? this.elements.controls[1][0] : this.elements.controls[1],
+			next = this.elements.controls[0] && this.elements.controls[0].length ? this.elements.controls[0][0] : this.elements.controls[0];
+
+		if(this.currentSlide === (this.elements.slides.length - 1)) {
+
+			zRS_util.addClass(next, 'zRS--inactive');
+
+		} else {
+
+			zRS_util.removeClass(next, 'zRS--inactive');
+
+		}
+
+		if(this.currentSlide === 0) {
+
+			zRS_util.addClass(back, 'zRS--inactive');
+
+		} else {
+
+			zRS_util.removeClass(back, 'zRS--inactive');
 
 		}
 
@@ -485,6 +514,12 @@ class zRS_core {
 
 		this.currentSlide += steps;
 		this.currentSlide = this.targetSlide(this.currentSlide);
+
+		if(this.options.controls.length !== 0) {
+
+			this.toggleControlClasses();
+
+		}
 
 		this.events.before = zRS_util.createEvent('before', {
 

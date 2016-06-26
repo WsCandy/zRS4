@@ -187,7 +187,6 @@ class zRS_slide {
 		}
 
 		this.distance = this.remaining;
-
 		this.animate(nextSlide, prevSlide, speed);
 
 	}
