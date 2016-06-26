@@ -22,7 +22,7 @@ class zRS_slide {
 
 		this.elements.inner.style.overflow = null;
 		this.elements.slider.style.overflow = 'hidden';
-		this.elements.inner.style.transform = 'translate3d(0%, 0, 0)';
+		this.elements.inner.style.transform = 'translateX(0%)';
 
 	}
 
@@ -69,7 +69,7 @@ class zRS_slide {
 		if(this.remaining === 0) {
 
 			this.currentPos = Math.round(this.currentPos / this.slideWidth) * this.slideWidth;
-			this.positionInner();
+			this.positionInner(true);
 
 			return;
 
@@ -123,9 +123,18 @@ class zRS_slide {
 
 	}
 
-	positionInner() {
+	positionInner(tX = false) {
 
-		this.elements.inner.style.transform = `translate3d(${this.currentPos}%, 0, 0)`;
+		if(tX === false) {
+
+			this.elements.inner.style.transform = `translate3d(${this.currentPos}%, 0, 0)`;
+
+		} else {
+
+			this.elements.inner.style.transform = `translateX(${this.currentPos}%)`;
+
+		}
+
 
 	}
 
