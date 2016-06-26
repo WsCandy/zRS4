@@ -7,7 +7,8 @@ class zRS_slide {
 		this.elements = data.elements;
 		this.options = data.options;
 		this.events = data.events;
-		this.minTransform = -Math.abs(this.elements.slides.length * ((100 / this.options.visibleSlides) + this.options.slideSpacing));
+		this.slideWidth = (100 / this.options.visibleSlides) + (this.options.slideSpacing / (Math.max((this.options.visibleSlides - 1), 1)));
+		this.minTransform = -Math.abs(this.elements.slides.length * this.slideWidth);
 		this.currentPos = 0;
 		this.remaining = 0;
 		this.distance = 0;
@@ -42,7 +43,7 @@ class zRS_slide {
 			}
 
 			element.style.top = 0;
-			element.style.left = `${((100 / this.options.visibleSlides) + this.options.slideSpacing) * i}%`;
+			element.style.left = `${ this.slideWidth * i}%`;
 			element.style.zIndex = 1;
 			element.style.width = `${(100 / this.options.visibleSlides) - (this.options.visibleSlides > 1 ? this.options.slideSpacing : 0)}%`;
 
@@ -67,7 +68,7 @@ class zRS_slide {
 
 		if(this.remaining === 0) {
 
-			this.currentPos = Math.round(this.currentPos / ((100 / this.options.visibleSlides) + this.options.slideSpacing)) * ((100 / this.options.visibleSlides) + this.options.slideSpacing);
+			this.currentPos = Math.round(this.currentPos / this.slideWidth) * this.slideWidth;
 			this.positionInner();
 
 			return;
@@ -106,13 +107,13 @@ class zRS_slide {
 
 			for(let i = 0; i < this.options.visibleSlides; i++) {
 
-				if(Math.abs(this.currentPos) > (i + 1) * ((100 / this.options.visibleSlides) + this.options.slideSpacing)) {
+				if(Math.abs(this.currentPos) > (i + 1) * this.slideWidth) {
 
-					this.elements.slides[i].style.left = `${Math.abs(this.minTransform - (((100 / this.options.visibleSlides) + this.options.slideSpacing) * i))}%`;
+					this.elements.slides[i].style.left = `${Math.abs(this.minTransform - (this.slideWidth * i))}%`;
 
 				} else {
 
-					this.elements.slides[i].style.left = `${(i * ((100 / this.options.visibleSlides) + this.options.slideSpacing))}%`;
+					this.elements.slides[i].style.left = `${i * this.slideWidth}%`;
 
 				}
 
@@ -169,12 +170,12 @@ class zRS_slide {
 
 		cancelAnimationFrame(this.animation);
 
-		this.remaining += (((100 / this.options.visibleSlides) + this.options.slideSpacing) * steps);
-		this.target = Math.round((this.currentPos + this.remaining) / ((100 / this.options.visibleSlides) + this.options.slideSpacing)) * ((100 / this.options.visibleSlides) + this.options.slideSpacing);
+		this.remaining += this.slideWidth * steps;
+		this.target = Math.round((this.currentPos + this.remaining) / this.slideWidth) * this.slideWidth;
 
 		if(this.options.infinite !== true) {
 
-			if(this.target < (this.minTransform + (100 / this.options.visibleSlides))) {
+			if(Math.floor(this.target) < Math.floor(this.minTransform + this.slideWidth)) {
 
 				this.remaining -= this.minTransform;
 
