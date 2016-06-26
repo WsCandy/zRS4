@@ -542,15 +542,29 @@ class zRS_core {
 
 		});
 
+		if(this.options.transition !== 'fade') {
+
+			for(let i = 0; i < this.currentSlide; i++) {
+
+				promises.push(new Promise((resolve, reject) => {
+
+					zRS_util.loadImages(this.elements.slides[i], {resolve: resolve, reject: reject});
+
+				}));
+
+			}
+
+		}
+
 		for(let i = 0; i < this.options.visibleSlides; i++) {
 
 			let slideIndex = this.targetSlide(this.currentSlide + i);
 
-			promises[i] = new Promise((resolve, reject) => {
+			promises.push(new Promise((resolve, reject) => {
 
 				zRS_util.loadImages(this.elements.slides[slideIndex], {resolve: resolve, reject: reject});
 
-			});
+			}));
 
 		}
 
