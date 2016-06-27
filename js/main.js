@@ -4,8 +4,8 @@
 
 	window.slider = new zRS(cont, {
 
-		speed: 500,
-		delay: 6000,
+		speed: 750,
+		delay: 5000,
 		transition: 'slide',
 		// direction: 'reverse',
 		pager: '.zRS__pager',
@@ -18,7 +18,7 @@
 
 		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
-		infinite: true
+		infinite: false
 		// keyboardControls: false
 
 	});

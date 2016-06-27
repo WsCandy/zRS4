@@ -12,6 +12,7 @@ class zRS_slide {
 		this.currentPos = 0;
 		this.remaining = 0;
 		this.distance = 0;
+		this.buffer = 0;
 
 		this.setUp();
 		this.styleSlides();
@@ -53,7 +54,7 @@ class zRS_slide {
 
 	calculatePosition(speed) {
 
-		let increment = ((1000 / 60) / speed) * this.distance;
+		let increment = (((1000 / 60) * (this.remaining * 2.5)) / speed) - (this.buffer / (speed / 1000));
 
 		increment = this.distance < 0 ? Math.max(increment, this.distance) : Math.min(increment, this.distance);
 
@@ -176,6 +177,8 @@ class zRS_slide {
 	handle(nextSlide, prevSlide, speed, steps) {
 
 		steps = steps * -1;
+
+		this.buffer = steps < 0 ? 0.2 : -0.2;
 
 		cancelAnimationFrame(this.animation);
 
