@@ -54,6 +54,8 @@ class zRS_core {
 		this.play();
 		this.bindings();
 
+		this.setVisibleSlides();
+
 		for(let i = 0; i < this.options.visibleSlides; i++) {
 
 			zRS_util.loadImages(this.elements.slides[i]);
@@ -324,30 +326,7 @@ class zRS_core {
 
 				zRS_util.loadImages(this.elements.slides[this.currentSlide]);
 
-				if(typeof this.options.setVisibleSlides !== 'object') {
-
-					return;
-
-				}
-
-				for(let size in this.options.setVisibleSlides) {
-
-					if(this.options.setVisibleSlides.hasOwnProperty(size)) {
-
-						if(document.documentElement.clientWidth <= size) {
-
-							this.updateVisible(this.options.setVisibleSlides[size]);
-							return;
-
-						} else {
-
-							this.updateVisible(this.defaultVisible);
-
-						}
-
-					}
-
-				}
+				this.setVisibleSlides();
 
 			});
 
@@ -373,6 +352,35 @@ class zRS_core {
 				}
 
 			});
+
+		}
+
+	}
+
+	setVisibleSlides() {
+
+		if(typeof this.options.setVisibleSlides !== 'object') {
+
+			return;
+
+		}
+
+		for(let size in this.options.setVisibleSlides) {
+
+			if(this.options.setVisibleSlides.hasOwnProperty(size)) {
+
+				if(document.documentElement.clientWidth <= size) {
+
+					this.updateVisible(this.options.setVisibleSlides[size]);
+					return;
+
+				} else {
+
+					this.updateVisible(this.defaultVisible);
+
+				}
+
+			}
 
 		}
 

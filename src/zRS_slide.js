@@ -54,7 +54,9 @@ class zRS_slide {
 
 	calculatePosition(speed) {
 
-		let increment = (((1000 / 60) * (this.remaining * 2.5)) / speed) - (this.buffer / (speed / 1000));
+		// let increment = (((1000 / 60) / speed) * ((this.remaining - this.buffer) * 5));
+
+		let increment = ((1000 / 60) / speed) * this.distance;
 
 		increment = this.distance < 0 ? Math.max(increment, this.distance) : Math.min(increment, this.distance);
 
@@ -135,7 +137,6 @@ class zRS_slide {
 			this.elements.inner.style.transform = `translateX(${this.currentPos}%)`;
 
 		}
-
 
 	}
 
