@@ -18,7 +18,7 @@
 
 		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
-		infinite: false
+		infinite: true
 		// keyboardControls: false
 
 	});

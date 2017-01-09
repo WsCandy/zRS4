@@ -10,9 +10,11 @@ class zRS_slide {
 		this.slideWidth = (100 / this.options.visibleSlides) + (this.options.slideSpacing / (Math.max((this.options.visibleSlides - 1), 1)));
 		this.minTransform = -Math.abs(this.elements.slides.length * this.slideWidth);
 		this.currentPos = 0;
+		this.startPos = 0;
 		this.remaining = 0;
 		this.distance = 0;
-		this.buffer = 0;
+		this.target = 0;
+		this.startTime = Date.now();
 
 		this.setUp();
 		this.styleSlides();
@@ -54,31 +56,8 @@ class zRS_slide {
 
 	calculatePosition(speed) {
 
-		// let increment = (((1000 / 60) / speed) * ((this.remaining - this.buffer) * 5));
-
-		let increment = ((1000 / 60) / speed) * this.distance;
-
-		increment = this.distance < 0 ? Math.max(increment, this.distance) : Math.min(increment, this.distance);
-
-		this.remaining -= increment;
-		this.remaining = this.distance < 0 ? Math.min(0, this.remaining) : Math.max(0, this.remaining);
-
-		if(increment === this.distance) {
-
-			this.currentPos += increment;
-
-		}
-
-		if(this.remaining === 0) {
-
-			this.currentPos = Math.round(this.currentPos / this.slideWidth) * this.slideWidth;
-			this.positionInner(true);
-
-			return;
-
-		}
-
-		this.currentPos += increment;
+		this.currentPos = zRS_slide.easeOut(Date.now() - this.startTime, this.startPos, this.distance, speed);
+		this.remaining = Math.round((this.startPos + this.distance - this.currentPos) * 1000) / 1000;
 
 		if(this.options.infinite === true) {
 
@@ -88,6 +67,15 @@ class zRS_slide {
 		}
 
 		this.positionInner();
+
+	}
+
+	static easeOut(time, start, change, duration) {
+
+		let ts = (time /= duration) * time,
+			tc = ts * time;
+
+		return start + change * (tc + -3 * ts + 3 * time);
 
 	}
 
@@ -179,8 +167,6 @@ class zRS_slide {
 
 		steps = steps * -1;
 
-		this.buffer = steps < 0 ? 0.2 : -0.2;
-
 		cancelAnimationFrame(this.animation);
 
 		this.remaining += this.slideWidth * steps;
@@ -201,6 +187,9 @@ class zRS_slide {
 		}
 
 		this.distance = this.remaining;
+		this.startPos = this.currentPos;
+
+		this.startTime = Date.now();
 		this.animate(nextSlide, prevSlide, speed);
 
 	}
