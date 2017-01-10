@@ -33,7 +33,9 @@ class zRS {
 			keyboardControls: true,
 			visibleSlides: 1,
 			setVisibleSlides: null,
-			infinite: true
+			infinite: true,
+			verbose: false,
+			drag: true
 
 		};
 

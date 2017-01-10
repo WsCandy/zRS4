@@ -1,4 +1,5 @@
 import zRS_util from './zRS_util';
+import zRS_touch from './zRS_touch';
 import zRS_public from './zRS_public';
 
 class zRS_core {
@@ -11,7 +12,7 @@ class zRS_core {
 
 		} catch(error) {
 
-			zRS_util.log(`The transition '${options.transition}' doesn't exist, falling back to fade.`, `warn`);
+			zRS_util.log(`The transition '${options.transition}' doesn't exist, falling back to fade.`, `warn`, this.options.verbose);
 			this.zRS_trans = require(`./zRS_fade`).default;
 
 		}
@@ -81,7 +82,7 @@ class zRS_core {
 
 		if(!this.elements.inner) {
 
-			zRS_util.log(`Cannot find ${this.options.inner} inner element, stopping initialisation`, 'error');
+			zRS_util.log(`Cannot find ${this.options.inner} inner element, stopping initialisation`, 'error', this.options.verbose);
 
 			return false;
 
@@ -97,7 +98,7 @@ class zRS_core {
 
 		if(this.elements.inner.children.length <= 0) {
 
-			zRS_util.log(`Cannot find any slides, stopping initialisation`, 'error');
+			zRS_util.log(`Cannot find any slides, stopping initialisation`, 'error', this.options.verbose);
 
 			return false;
 
@@ -123,7 +124,7 @@ class zRS_core {
 
 			if(!this.elements.controls[i]) {
 
-				zRS_util.log(`Cannot find control ${this.options.controls[i]}, please double check your reference.`, 'warn');
+				zRS_util.log(`Cannot find control ${this.options.controls[i]}, please double check your reference.`, 'warn', this.options.verbose);
 
 				continue;
 
@@ -133,8 +134,10 @@ class zRS_core {
 
 			control.addEventListener('click', (e) => {
 
+				e.stopPropagation();
+
 				let forwardControl = this.elements.controls[0].length ? this.elements.controls[0][0] : this.elements.controls[0],
-					step = e.target === forwardControl ? 1 : -1;
+					step = e.target === forwardControl ? this.options.slideBy : -this.options.slideBy;
 
 				e.preventDefault();
 
@@ -190,7 +193,7 @@ class zRS_core {
 
 		if(!this.elements.pager) {
 
-			zRS_util.log(`Cannot find pager container ${this.options.pager}, please double check your reference.`, 'warn');
+			zRS_util.log(`Cannot find pager container ${this.options.pager}, please double check your reference.`, 'warn', this.options.verbose);
 
 			return;
 
@@ -230,7 +233,7 @@ class zRS_core {
 
 			if(pager.children.length !== this.elements.slides.length) {
 
-				zRS_util.log(`Please make sure your pager contains ${this.elements.slides.length} children to use customer pager elements.`, 'warn');
+				zRS_util.log(`Please make sure your pager contains ${this.elements.slides.length} children to use customer pager elements.`, 'warn', this.options.verbose);
 
 				return;
 
@@ -307,6 +310,8 @@ class zRS_core {
 	}
 
 	bindings() {
+
+		new zRS_touch(this);
 
 		window.addEventListener('blur', () => {
 
@@ -386,7 +391,7 @@ class zRS_core {
 
 	}
 
-	play() {
+	play(emit = true) {
 
 		if(this.elements.slides.length <= 1) {
 
@@ -410,7 +415,7 @@ class zRS_core {
 
 		if(visible > this.elements.slides.length) {
 
-			zRS_util.log('Cannot show more slides than total number of slides.', 'warn');
+			zRS_util.log('Cannot show more slides than total number of slides.', 'warn', this.options.verbose);
 			return;
 
 		}
@@ -448,7 +453,7 @@ class zRS_core {
 
 		if(!this.elements.slides[slide]) {
 
-			zRS_util.log(`Slide ${slide} doesn't exist, please amend the method call.`, 'warn');
+			zRS_util.log(`Slide ${slide} doesn't exist, please amend the method call.`, 'warn', this.options.verbose);
 
 			return;
 

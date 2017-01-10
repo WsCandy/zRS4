@@ -2,9 +2,13 @@ var lastTime = 0;
 
 class zRS_util {
 
-	static log(message, type = `log`) {
+	static log(message, type = `log`, verbose = false) {
 
-		console[type](`[zRS - ${zRS.version()}]: ${message}`);
+		if(verbose === true) {
+
+			console[type](`[zRS - ${zRS.version()}]: ${message}`);
+
+		}
 
 	}
 

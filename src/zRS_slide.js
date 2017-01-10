@@ -46,7 +46,7 @@ class zRS_slide {
 			}
 
 			element.style.top = 0;
-			element.style.left = `${ this.slideWidth * i}%`;
+			element.style.left = `${this.slideWidth * i}%`;
 			element.style.zIndex = 1;
 			element.style.width = `${(100 / this.options.visibleSlides) - (this.options.visibleSlides > 1 ? this.options.slideSpacing : 0)}%`;
 
@@ -63,6 +63,15 @@ class zRS_slide {
 
 			this.currentPos = this.currentPos <= this.minTransform ? this.currentPos - this.minTransform : this.currentPos;
 			this.currentPos = this.currentPos > 0 ? this.currentPos + this.minTransform : this.currentPos;
+
+		}
+
+		if(this.remaining === 0) {
+
+			this.currentPos = Math.round(this.currentPos * 100) / 100;
+			this.positionInner(true);
+
+			return;
 
 		}
 
@@ -191,6 +200,18 @@ class zRS_slide {
 
 		this.startTime = Date.now();
 		this.animate(nextSlide, prevSlide, speed);
+
+	}
+
+	touchMove(e) {
+
+		console.log("Moving");
+
+	}
+
+	touchEnd(e) {
+
+		console.log("Ending");
 
 	}
 

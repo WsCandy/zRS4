@@ -7,21 +7,29 @@
 		speed: 750,
 		delay: 5000,
 		transition: 'slide',
-		// direction: 'reverse',
+		//direction: 'reverse',
 		pager: '.zRS__pager',
 		visibleSlides: 2,
 		slideSpacing: 0.5,
-		slideBy: 1,
+		slideBy: 2,
 		setVisibleSlides: {
 
 			500: 1
 
 		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
-		infinite: true
-		// keyboardControls: false
+		infinite: true,
+		verbose: true,
+		//drag: false
+		//keyboardControls: false
 
 	});
+
+	//cont.addEventListener('after', function(e) {
+	//
+	//	console.log(e.detail)
+	//
+	//});
 
 	console.log(slider);
 
