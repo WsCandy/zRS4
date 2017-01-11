@@ -90,19 +90,6 @@ class zRS_slide {
 
 	coordinateSlides(nextSlide) {
 
-		for(let i = 0, l = this.elements.slides.length; i < l; i++) {
-
-			if(this.elements.slides[i] !== this.elements.slides[nextSlide]) {
-
-				this.elements.slides[i].style.position = 'absolute';
-				continue;
-
-			}
-
-			this.elements.slides[i].style.position = 'relative';
-
-		}
-
 		if(this.options.infinite === true) {
 
 			for(let i = 0; i < this.options.visibleSlides; i++) {
@@ -118,6 +105,25 @@ class zRS_slide {
 				}
 
 			}
+
+		}
+
+		if (!nextSlide) {
+
+			return;
+
+		}
+
+		for(let i = 0, l = this.elements.slides.length; i < l; i++) {
+
+			if(this.elements.slides[i] !== this.elements.slides[nextSlide]) {
+
+				this.elements.slides[i].style.position = 'absolute';
+				continue;
+
+			}
+
+			this.elements.slides[i].style.position = 'relative';
 
 		}
 
@@ -172,6 +178,28 @@ class zRS_slide {
 
 	}
 
+	slideByPosition() {
+
+		return Math.abs(Math.round(this.currentPos / this.slideWidth));
+
+	}
+
+	normaliseTarget(target) {
+
+		if(target >= this.elements.slides.length) {
+
+			target = (target - this.elements.slides.length);
+
+		} else if(target < 0) {
+
+			target = (target + this.elements.slides.length);
+
+		}
+
+		return target
+
+	}
+
 	handle(nextSlide, prevSlide, speed, steps) {
 
 		steps = steps * -1;
@@ -187,7 +215,7 @@ class zRS_slide {
 
 				this.remaining -= this.minTransform;
 
-			} else if(this.target > 0) {
+			} else if(this.target >= 0) {
 
 				this.remaining += this.minTransform;
 
@@ -203,15 +231,41 @@ class zRS_slide {
 
 	}
 
-	touchMove(e) {
+	touchStart(e) {
 
-		console.log("Moving");
+		this.startPos = this.currentPos;
+
+	}
+
+	touchMove(e, percent) {
+
+		this.currentPos = this.startPos - percent;
+
+		if(this.currentPos < this.minTransform) {
+
+			this.currentPos -= this.minTransform;
+
+		} else if(this.currentPos >= 0) {
+
+			this.currentPos += this.minTransform;
+
+		}
+
+		const slideIndex = this.slideByPosition();
+		const loadSlide = this.normaliseTarget(slideIndex + (percent > 0 ? this.options.visibleSlides : -1));
+
+		zRS_util.loadImages(this.elements.slides[loadSlide], null);
+
+		this.coordinateSlides();
+		this.positionInner();
 
 	}
 
 	touchEnd(e) {
 
 		console.log("Ending");
+
+		this.positionInner(true);
 
 	}
 

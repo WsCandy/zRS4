@@ -11,16 +11,16 @@ class zRS_touch {
 		this.active = false;
 		this.moved = false;
 		this.startPos = 0;
+		this.initialDirection = '';
+		this.buffer = 0.025;
 
-		if(!this.core.transition.touchMove || !this.core.transition.touchEnd) {
+		if(!this.core.transition.touchMove || !this.core.transition.touchEnd || !this.core.transition.touchStart) {
 
-			zRS_util.log('The active transition is missing touch handlers, is this intended? Touch is disabled.', 'warn', this.core.options.verbose);
+			zRS_util.log('The active transition is missing touch handlers, is this intended? Touch is now disabled.', 'warn', this.core.options.verbose);
 
 			return;
 
 		}
-
-		console.log(core);
 
 		this.bindings();
 		this.setScrolling();
@@ -48,9 +48,68 @@ class zRS_touch {
 	activate(e) {
 
 		e.preventDefault();
-		this.active = true;
 
+		this.active = true;
 		this.startPos = e.pageX;
+
+		this.core.transition.touchStart(e);
+
+		console.log("Start");
+
+	}
+
+	move(e) {
+
+		if(this.scrolling === true || this.active === false) {
+
+			return;
+
+		}
+
+		let percent = 0;
+		let moved = this.startPos - e.pageX;
+		let perFor = ((this.core.elements.slider.clientWidth * this.buffer) + moved) / this.core.elements.slider.clientWidth * 100;
+		let perBac = ((-this.core.elements.slider.clientWidth * this.buffer) + moved) / this.core.elements.slider.clientWidth * 100;
+
+		if(moved < 0 && this.moved === false) {
+
+			percent = perFor;
+			this.initialDirection = 'forward';
+
+		} else if(moved > 0 && this.moved === false) {
+
+			percent = perBac;
+			this.initialDirection = 'back';
+
+		} else {
+
+			if(this.initialDirection === 'forward') {
+
+				percent = perFor;
+
+			} else {
+
+				percent = perBac;
+
+			}
+
+		}
+
+		if(Math.abs(moved) < this.core.elements.slider.clientWidth * this.buffer && this.moved === false) {
+
+			return;
+
+		}
+
+		if(this.moved === false) {
+
+			zRS_util.addClass(this.core.elements.slider, 'zRS--active');
+			this.core.pause();
+
+		}
+
+		this.moved = true;
+		this.core.transition.touchMove(e, percent);
 
 	}
 
@@ -69,34 +128,6 @@ class zRS_touch {
 
 		this.core.transition.touchEnd(e);
 		this.core.play();
-
-	}
-
-	move(e) {
-
-		if(this.scrolling === true || this.active === false) {
-
-			return;
-
-		}
-
-		let moved = this.startPos - e.pageX;
-
-		if(Math.abs(moved) < 20) {
-
-			return;
-
-		}
-
-		if(this.moved === false) {
-
-			zRS_util.addClass(this.core.elements.slider, 'zRS--active');
-			this.core.pause();
-
-		}
-
-		this.moved = true;
-		this.core.transition.touchMove(e);
 
 	}
 

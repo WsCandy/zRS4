@@ -9,7 +9,7 @@
 		transition: 'slide',
 		//direction: 'reverse',
 		pager: '.zRS__pager',
-		visibleSlides: 2,
+		visibleSlides: 1,
 		slideSpacing: 0.5,
 		slideBy: 2,
 		setVisibleSlides: {

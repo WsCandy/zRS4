@@ -132,7 +132,7 @@ class zRS_core {
 
 			control = this.elements.controls[i].length ? this.elements.controls[i][0] : this.elements.controls[i];
 
-			control.addEventListener('click', (e) => {
+			control.addEventListener('mousedown', (e) => {
 
 				e.stopPropagation();
 
@@ -220,8 +220,9 @@ class zRS_core {
 
 				pager.appendChild(anchor);
 
-				anchor.addEventListener('click', (e) => {
+				anchor.addEventListener('mousedown', (e) => {
 
+					e.stopPropagation();
 					e.preventDefault();
 					this.transTo(i);
 
