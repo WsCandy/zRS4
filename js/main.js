@@ -9,9 +9,9 @@
 		transition: 'slide',
 		//direction: 'reverse',
 		pager: '.zRS__pager',
-		visibleSlides: 1,
+		visibleSlides: 2,
 		slideSpacing: 0.5,
-		slideBy: 2,
+		slideBy: 1,
 		setVisibleSlides: {
 
 			500: 1
@@ -25,12 +25,16 @@
 
 	});
 
-	//cont.addEventListener('after', function(e) {
-	//
-	//	console.log(e.detail)
-	//
-	//});
+	cont.addEventListener('before', function(e) {
 
-	console.log(slider);
+		console.log(e.detail.target);
+
+	});
+
+	cont.addEventListener('after', function(e) {
+
+		console.log(e.detail.current);
+
+	});
 
 })(window);

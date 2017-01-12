@@ -11,8 +11,13 @@ class zRS_touch {
 		this.active = false;
 		this.moved = false;
 		this.startPos = 0;
+		this.lastPos = 0;
+		this.currentPos = 0;
 		this.initialDirection = '';
 		this.buffer = 0.025;
+		this.startTime = 0;
+		this.lastTime = 0;
+		this.velocity = 0;
 
 		if(!this.core.transition.touchMove || !this.core.transition.touchEnd || !this.core.transition.touchStart) {
 
@@ -47,14 +52,10 @@ class zRS_touch {
 
 	activate(e) {
 
-		e.preventDefault();
-
 		this.active = true;
-		this.startPos = e.pageX;
-
+		this.startPos = this.currentPos = e.pageX;
 		this.core.transition.touchStart(e);
-
-		console.log("Start");
+		this.startTime = this.lastTime = Date.now();
 
 	}
 
@@ -66,10 +67,19 @@ class zRS_touch {
 
 		}
 
+		e.preventDefault();
+
 		let percent = 0;
 		let moved = this.startPos - e.pageX;
 		let perFor = ((this.core.elements.slider.clientWidth * this.buffer) + moved) / this.core.elements.slider.clientWidth * 100;
 		let perBac = ((-this.core.elements.slider.clientWidth * this.buffer) + moved) / this.core.elements.slider.clientWidth * 100;
+		this.currentPos = e.pageX;
+
+		if(Math.abs(moved) < this.core.elements.slider.clientWidth * this.buffer && this.moved === false) {
+
+			return;
+
+		}
 
 		if(moved < 0 && this.moved === false) {
 
@@ -83,21 +93,7 @@ class zRS_touch {
 
 		} else {
 
-			if(this.initialDirection === 'forward') {
-
-				percent = perFor;
-
-			} else {
-
-				percent = perBac;
-
-			}
-
-		}
-
-		if(Math.abs(moved) < this.core.elements.slider.clientWidth * this.buffer && this.moved === false) {
-
-			return;
+			percent = this.initialDirection === 'forward' ? perFor : perBac;
 
 		}
 
@@ -109,6 +105,16 @@ class zRS_touch {
 		}
 
 		this.moved = true;
+
+		const distance = this.currentPos - this.lastPos;
+		const time = Date.now() - this.lastTime;
+		const velocity = distance / time;
+
+		this.velocity = velocity === 0 ? this.velocity : velocity;
+
+		this.lastPos = e.pageX;
+		this.lastTime = Date.now();
+
 		this.core.transition.touchMove(e, percent);
 
 	}
@@ -123,10 +129,23 @@ class zRS_touch {
 
 		}
 
+		const distance = this.startPos - e.pageX;
+		const time = Date.now() - this.startTime;
+		this.velocity -= distance / time;
+
+		let momentum = (10 * this.velocity) * -1;
+
+		if(Date.now() - this.lastTime > 100) {
+
+			momentum = 0;
+
+		}
+
 		this.active = this.moved = false;
+
 		zRS_util.removeClass(this.core.elements.slider, 'zRS--active');
 
-		this.core.transition.touchEnd(e);
+		this.core.transition.touchEnd(e, momentum);
 		this.core.play();
 
 	}

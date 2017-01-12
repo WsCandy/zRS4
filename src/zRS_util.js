@@ -1,4 +1,4 @@
-var lastTime = 0;
+let lastTime = 0;
 
 class zRS_util {
 
@@ -41,41 +41,77 @@ class zRS_util {
 
 	}
 
-	static addClass(element, className) {
+	static addClass(elements = null, className) {
 
-		if(!element) {
+		if(elements === null) {
 
 			return;
 
 		}
 
-		if(element.classList) {
+		let add = function(element, className) {
 
-			element.classList.add(className);
+			if(element.classList) {
+
+				element.classList.add(className);
+
+			} else {
+
+				element.className += ` ${className}`;
+
+			}
+
+		};
+
+		if(typeof elements.length === 'undefined') {
+
+			add(elements, className);
 
 		} else {
 
-			element.className += ` ${className}`;
+			for(let i = 0, l = elements.length; i < l; i++) {
+
+				add(elements[i], className);
+
+			}
 
 		}
 
 	}
 
-	static removeClass(element, className) {
+	static removeClass(elements = null, className) {
 
-		if(!element) {
+		if(elements === null) {
 
 			return;
 
 		}
 
-		if(element.classList) {
+		let remove = function(element, className) {
 
-			element.classList.remove(className);
+			if(element.classList) {
+
+				element.classList.remove(className);
+
+			} else {
+
+				element.className = elements.className.replace(new RegExp(`(^|\\b)${className.split(' ').join('|')}(\\b|$)`, `gi`), ' ').trim();
+
+			}
+
+		};
+
+		if(typeof elements.length === 'undefined') {
+
+			remove(elements, className);
 
 		} else {
 
-			element.className = element.className.replace(new RegExp(`(^|\\b)${className.split(' ').join('|')}(\\b|$)`, `gi`), ' ').trim();
+			for(let i = 0, l = elements.length; i < l; i++) {
+
+				remove(elements[i], className);
+
+			}
 
 		}
 
@@ -272,18 +308,30 @@ class zRS_util {
 
 		if(!window.requestAnimationFrame) {
 			
-			var currTime = new Date().getTime(),
-				timeToCall = Math.max(0, 16 - (currTime - lastTime));
+			const currTime = new Date().getTime(),
+				  timeToCall = Math.max(0, 16 - (currTime - lastTime));
 
 			lastTime = currTime + timeToCall;
 
 			return setTimeout(anim, timeToCall);
 
-		} else {
+		}
 
-			return requestAnimationFrame(anim);
+		return requestAnimationFrame(anim);
+
+	}
+
+	static cancelAnimationFrame(anim) {
+
+		if(!window.requestAnimationFrame) {
+
+			clearTimeout(anim);
+
+			return;
 
 		}
+
+		cancelAnimationFrame(anim);
 
 	}
 

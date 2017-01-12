@@ -14,6 +14,7 @@ class zRS_slide {
 		this.remaining = 0;
 		this.distance = 0;
 		this.target = 0;
+		this.startSlide = 0;
 		this.startTime = Date.now();
 
 		this.setUp();
@@ -56,18 +57,14 @@ class zRS_slide {
 
 	calculatePosition(speed) {
 
-		this.currentPos = zRS_slide.easeOut(Date.now() - this.startTime, this.startPos, this.distance, speed);
+		this.currentPos = Math.round(zRS_slide.easeOut(Date.now() - this.startTime, this.startPos, this.distance, speed) * 1000) / 1000;
 		this.remaining = Math.round((this.startPos + this.distance - this.currentPos) * 1000) / 1000;
 
-		if(this.options.infinite === true) {
+		this.currentPos = this.fixInfinitePosition();
 
-			this.currentPos = this.currentPos <= this.minTransform ? this.currentPos - this.minTransform : this.currentPos;
-			this.currentPos = this.currentPos > 0 ? this.currentPos + this.minTransform : this.currentPos;
+		if(Math.floor(this.remaining * 100) / 100 === 0) {
 
-		}
-
-		if(this.remaining === 0) {
-
+			this.remaining = 0;
 			this.currentPos = Math.round(this.currentPos * 100) / 100;
 			this.positionInner(true);
 
@@ -76,6 +73,29 @@ class zRS_slide {
 		}
 
 		this.positionInner();
+
+	}
+
+	fixInfinitePosition(position = null) {
+
+		position = position ? position : this.currentPos;
+
+		if(this.options.infinite === true) {
+
+			let over = Math.abs(Math.round(position / this.minTransform)) + 1;
+
+			do {
+
+				position <= this.minTransform ? position -= this.minTransform : null;
+				position > 0 ? position += this.minTransform : null;
+
+				over--
+
+			} while (over >= 0);
+
+		}
+
+		return position;
 
 	}
 
@@ -178,7 +198,13 @@ class zRS_slide {
 
 	}
 
-	slideByPosition() {
+	slideByPosition(position = null) {
+
+		if(position) {
+
+			return Math.abs(Math.round(position / this.slideWidth));
+
+		}
 
 		return Math.abs(Math.round(this.currentPos / this.slideWidth));
 
@@ -186,15 +212,23 @@ class zRS_slide {
 
 	normaliseTarget(target) {
 
-		if(target >= this.elements.slides.length) {
+		let over = Math.round(target / this.elements.slides.length);
 
-			target = (target - this.elements.slides.length);
+		do {
 
-		} else if(target < 0) {
+			if(target >= this.elements.slides.length) {
 
-			target = (target + this.elements.slides.length);
+				target = (target - this.elements.slides.length);
 
-		}
+			} else if(target < 0) {
+
+				target = (target + this.elements.slides.length);
+
+			}
+
+			over--;
+
+		} while (over >= 0);
 
 		return target
 
@@ -215,7 +249,7 @@ class zRS_slide {
 
 				this.remaining -= this.minTransform;
 
-			} else if(this.target >= 0) {
+			} else if(this.target > 0) {
 
 				this.remaining += this.minTransform;
 
@@ -233,7 +267,10 @@ class zRS_slide {
 
 	touchStart(e) {
 
+		zRS_util.cancelAnimationFrame(this.animation);
+
 		this.startPos = this.currentPos;
+		this.startSlide = this.normaliseTarget(this.slideByPosition());
 
 	}
 
@@ -241,11 +278,11 @@ class zRS_slide {
 
 		this.currentPos = this.startPos - percent;
 
-		if(this.currentPos < this.minTransform) {
+		if(this.currentPos < this.minTransform && this.options.infinite === true) {
 
 			this.currentPos -= this.minTransform;
 
-		} else if(this.currentPos >= 0) {
+		} else if(this.currentPos >= 0 && this.options.infinite === true) {
 
 			this.currentPos += this.minTransform;
 
@@ -261,11 +298,38 @@ class zRS_slide {
 
 	}
 
-	touchEnd(e) {
+	touchEnd(e, momentum) {
 
-		console.log("Ending");
+		//Math.round(momentum / this.slideWidth) * this.slideWidth
 
-		this.positionInner(true);
+		this.remaining -= momentum;
+
+		this.distance = this.remaining;
+		this.startPos = this.currentPos;
+
+		let landingPoint = this.fixInfinitePosition(this.startPos + this.distance);
+
+		const target = this.normaliseTarget(this.slideByPosition(landingPoint));
+
+		this.startTime = Date.now();
+		this.animate(target, this.startSlide, this.options.speed);
+
+		this.events.before = zRS_util.createEvent('before', {
+
+			current: parseInt(this.startSlide),
+			currentSlide: this.elements.slides[this.startSlide],
+			target: parseInt(target),
+			targetSlide: this.elements.slides[target]
+
+		});
+
+		zRS_util.dispatchEvent({
+
+			name: 'before',
+			event: this.events.before,
+			element: this.elements.slider
+
+		});
 
 	}
 

@@ -261,13 +261,6 @@ class zRS_core {
 
 		}
 
-		this.elements.slider.addEventListener('before', (e) => {
-
-			zRS_util.removeClass(this.elements.anchors[e.detail.current], 'is-active');
-			zRS_util.addClass(this.elements.anchors[e.detail.target], 'is-active');
-
-		});
-
 	}
 
 	resetPager() {
@@ -335,6 +328,21 @@ class zRS_core {
 				this.setVisibleSlides();
 
 			});
+
+		});
+
+		this.elements.slider.addEventListener('before', (e) => {
+
+			this.currentSlide = e.detail.target;
+
+			zRS_util.removeClass(this.elements.anchors[e.detail.current], 'is-active');
+			zRS_util.addClass(this.elements.anchors[e.detail.target], 'is-active');
+
+			if(this.options.controls.length !== 0 && this.options.infinite === false) {
+
+				this.toggleControlClasses();
+
+			}
 
 		});
 
@@ -528,23 +536,17 @@ class zRS_core {
 		steps = steps ? steps : this.options.slideBy;
 
 		let current = this.currentSlide,
-			promises = [];
+			promises = [],
+			target = current + steps;
 
-		this.currentSlide += steps;
-		this.currentSlide = this.targetSlide(this.currentSlide);
-
-		if(this.options.controls.length !== 0 && this.options.infinite === false) {
-
-			this.toggleControlClasses();
-
-		}
+		target = this.targetSlide(target);
 
 		this.events.before = zRS_util.createEvent('before', {
 
 			current: parseInt(current),
 			currentSlide: this.elements.slides[current],
-			target: parseInt(this.currentSlide),
-			targetSlide: this.elements.slides[this.currentSlide]
+			target: parseInt(target),
+			targetSlide: this.elements.slides[target]
 
 		});
 
@@ -558,7 +560,7 @@ class zRS_core {
 
 		if(this.options.transition !== 'fade') {
 
-			for(let i = 0; i < this.currentSlide; i++) {
+			for(let i = 0; i < target; i++) {
 
 				promises.push(new Promise((resolve, reject) => {
 
@@ -572,7 +574,7 @@ class zRS_core {
 
 		for(let i = 0; i < this.options.visibleSlides; i++) {
 
-			let slideIndex = this.targetSlide(this.currentSlide + i);
+			let slideIndex = this.targetSlide(target + i);
 
 			promises.push(new Promise((resolve, reject) => {
 
