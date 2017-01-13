@@ -121,7 +121,7 @@ class zRS_touch {
 
 	deactivate(e) {
 
-		if(this.active === false || this.moved === false) {
+		if(this.active === false) {
 
 			this.active = false;
 
