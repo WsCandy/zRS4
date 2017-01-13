@@ -133,7 +133,7 @@ class zRS_touch {
 		const time = Date.now() - this.startTime;
 		this.velocity -= distance / time;
 
-		let momentum = (10 * this.velocity) * -1;
+		let momentum = (7 * this.velocity) * -1;
 
 		if(Date.now() - this.lastTime > 100) {
 

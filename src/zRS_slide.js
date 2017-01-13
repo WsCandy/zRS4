@@ -241,15 +241,16 @@ class zRS_slide {
 		cancelAnimationFrame(this.animation);
 
 		this.remaining += this.slideWidth * steps;
-		this.target = Math.round((this.currentPos + this.remaining) / this.slideWidth) * this.slideWidth;
+		let targetPos = this.currentPos + this.remaining;
+		this.target = this.normaliseTarget(this.slideByPosition(targetPos));
 
 		if(this.options.infinite !== true) {
 
-			if(Math.floor(this.target) < Math.floor(this.minTransform + this.slideWidth)) {
+			if(Math.floor(targetPos) < Math.floor(this.minTransform + this.slideWidth)) {
 
 				this.remaining -= this.minTransform;
 
-			} else if(this.target > 0) {
+			} else if(targetPos > 0) {
 
 				this.remaining += this.minTransform;
 
@@ -300,26 +301,41 @@ class zRS_slide {
 
 	touchEnd(e, momentum) {
 
-		//Math.round(momentum / this.slideWidth) * this.slideWidth
+		this.startSlide = this.startSlide === this.target ? this.startSlide : this.target;
 
 		this.remaining -= momentum;
-
 		this.distance = this.remaining;
 		this.startPos = this.currentPos;
 
 		let landingPoint = this.fixInfinitePosition(this.startPos + this.distance);
 
-		const target = this.normaliseTarget(this.slideByPosition(landingPoint));
+		this.target = this.normaliseTarget(this.slideByPosition(landingPoint));
+
+		if(this.options.freeStyle === false) {
+
+			let slidePos = -Math.abs(this.target * this.slideWidth);
+
+			this.remaining += (slidePos - landingPoint);
+
+			if(this.target === 0 && -Math.abs((slidePos - landingPoint) + this.slideWidth) < this.minTransform) {
+
+				this.remaining += this.minTransform
+
+			}
+
+			this.distance = this.remaining;
+
+		}
 
 		this.startTime = Date.now();
-		this.animate(target, this.startSlide, this.options.speed);
+		this.animate(this.target, this.startSlide, this.options.speed);
 
 		this.events.before = zRS_util.createEvent('before', {
 
 			current: parseInt(this.startSlide),
 			currentSlide: this.elements.slides[this.startSlide],
-			target: parseInt(target),
-			targetSlide: this.elements.slides[target]
+			target: parseInt(this.target),
+			targetSlide: this.elements.slides[this.target]
 
 		});
 
