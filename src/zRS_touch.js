@@ -52,6 +52,11 @@ class zRS_touch {
 
 	activate(e) {
 
+		if(e.which === 3) {
+			e.preventDefault();
+			return;
+		}
+
 		this.active = true;
 		this.startPos = this.currentPos = e.pageX;
 		this.core.transition.touchStart(e);
@@ -133,7 +138,7 @@ class zRS_touch {
 		const time = Date.now() - this.startTime;
 		this.velocity -= distance / time;
 
-		let momentum = (7 * this.velocity) * -1;
+		let momentum = (8 * this.velocity) * -1;
 
 		if(Date.now() - this.lastTime > 100) {
 

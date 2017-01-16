@@ -18,7 +18,7 @@
 
 		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
-		infinite: true,
+		//infinite: false,
 		verbose: true,
 		//freeStyle: true
 		//drag: false
@@ -26,16 +26,16 @@
 
 	});
 
-	cont.addEventListener('before', function(e) {
-
-		console.log(e.detail);
-
-	});
-
-	cont.addEventListener('after', function(e) {
-
-		console.log(e.detail);
-
-	});
+	//cont.addEventListener('before', function(e) {
+	//
+	//	console.log(e.detail);
+	//
+	//});
+	//
+	//cont.addEventListener('after', function(e) {
+	//
+	//	console.log(e.detail);
+	//
+	//});
 
 })(window);
