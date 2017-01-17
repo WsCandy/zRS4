@@ -14,7 +14,7 @@ class zRS_util {
 
 	static createEvent(name, detail = {}) {
 
-		var event;
+		let event = null;
 
 		if(document.createEvent) {
 

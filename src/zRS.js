@@ -30,6 +30,7 @@ class zRS {
 			slideBy: 1,
 			slideSpacing: 0,
 			direction: 'forward',
+			alignment: 'left',
 			keyboardControls: true,
 			visibleSlides: 1,
 			setVisibleSlides: null,
@@ -102,7 +103,7 @@ class zRS {
 
 		if(this.sliders.length) {
 
-			for(var i = 0, l = this.sliders.length; i < l; i++) {
+			for(let i = 0, l = this.sliders.length; i < l; i++) {
 
 				let id = this.sliders[i].getAttribute('id') || i;
 
@@ -121,3 +122,5 @@ class zRS {
 }
 
 window.zRS = zRS;
+
+export default zRS;

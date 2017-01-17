@@ -8,7 +8,7 @@ class zRS_slide {
 		this.options = data.options;
 		this.events = data.events;
 		this.slideWidth = (100 / this.options.visibleSlides) + (this.options.slideSpacing / (Math.max((this.options.visibleSlides - 1), 1)));
-		this.minTransform = -Math.abs(this.elements.slides.length * this.slideWidth);
+		this.minTransform = -Math.abs((this.elements.slides.length - (this.options.infinite ? 0 : 1)) * this.slideWidth);
 		this.landingPoint = 0;
 		this.currentPos = 0;
 		this.startPos = 0;
@@ -19,11 +19,13 @@ class zRS_slide {
 		this.startSlide = 0;
 		this.startTime = Date.now();
 
-		if(this.options.infinite === false) {
+		if(this.options.alignment === 'center') {
 
-			this.minTransform = this.minTransform + (this.slideWidth * this.options.visibleSlides);
+			this.currentPos += ((this.slideWidth * 0.5) * (this.options.visibleSlides - 1));
 
 		}
+
+		this.currentPos = this.fixInfinitePosition(this.currentPos);
 
 		this.setUp();
 		this.styleSlides();
@@ -35,6 +37,7 @@ class zRS_slide {
 		this.elements.inner.style.overflow = null;
 		this.elements.slider.style.overflow = 'hidden';
 		this.elements.inner.style.transform = 'translateX(0%)';
+		this.positionInner(true);
 
 	}
 
@@ -60,6 +63,8 @@ class zRS_slide {
 			element.style.width = `${(100 / this.options.visibleSlides) - (this.options.visibleSlides > 1 ? this.options.slideSpacing : 0)}%`;
 
 		}
+
+		this.coordinateSlides(0);
 
 	}
 
@@ -247,6 +252,12 @@ class zRS_slide {
 		this.distance = this.remaining;
 		this.startPos = this.currentPos;
 
+		if(this.options.alignment === 'center') {
+
+			this.distance -= ((this.slideWidth * 0.5) * (this.options.visibleSlides - 1));
+
+		}
+
 		if(this.options.infinite === true) {
 
 			this.landingPoint = this.fixInfinitePosition(this.startPos + this.distance);
@@ -275,7 +286,7 @@ class zRS_slide {
 
 				this.target = 0;
 
-			} else if(this.landingPoint < this.minTransform) {
+			} else if (this.landingPoint < this.minTransform) {
 
 				this.target = this.elements.slides.length - 1;
 
@@ -324,16 +335,23 @@ class zRS_slide {
 	touchMove(e, percent, lastPercent) {
 
 		let ratio = 1;
+		let pos = this.currentPos;
 
-		if(this.currentPos > (this.slideWidth * this.options.visibleSlides) / 2 && this.options.infinite === false) {
+		if(this.options.alignment === 'center') {
 
-			ratio = Math.max(0, 1 - (this.currentPos / 95));
+			pos += (this.slideWidth * 0.5);
 
 		}
 
-		if(this.currentPos < -(this.slideWidth * (this.elements.slides.length -1)) && this.options.infinite === false) {
+		if(this.currentPos > (this.slideWidth * this.options.visibleSlides) / 2 && this.options.infinite === false) {
 
-			ratio = Math.max(0, 1 + (this.currentPos - this.minTransform) / 95);
+			ratio = Math.max(0, 1 - (pos / 95));
+
+		}
+
+		if(this.currentPos < -(this.slideWidth * (this.elements.slides.length - 1)) && this.options.infinite === false) {
+
+			ratio = Math.max(0, 1 + (pos - (this.minTransform + ((this.options.visibleSlides - 1) * this.slideWidth))) / 95);
 
 		}
 

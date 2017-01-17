@@ -2,6 +2,12 @@
 
 	var cont = document.getElementById('zRS');
 
+	cont.addEventListener('load', function(e) {
+
+		console.log("slider loaded");
+
+	});
+
 	window.slider = new zRS(cont, {
 
 		speed: 750,
@@ -18,7 +24,8 @@
 
 		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
-		infinite: false,
+		alignment: 'center',
+		//infinite: false,
 		verbose: true,
 		//freeStyle: true
 		//drag: false
@@ -26,11 +33,6 @@
 
 	});
 
-	//cont.addEventListener('before', function(e) {
-	//
-	//	console.log(e.detail);
-	//
-	//});
 	//
 	//cont.addEventListener('after', function(e) {
 	//
