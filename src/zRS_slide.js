@@ -15,6 +15,7 @@ class zRS_slide {
 		this.remaining = 0;
 		this.distance = 0;
 		this.target = 0;
+		this.increment = 0;
 		this.startSlide = 0;
 		this.startTime = Date.now();
 
@@ -63,18 +64,6 @@ class zRS_slide {
 	}
 
 	calculatePosition(speed) {
-
-		//if((this.currentPos > 0 || this.currentPos < this.minTransform) && (this.flip === false && this.options.infinite === false)) {
-		//
-		//	this.flip = true;
-		//
-		//	this.remaining *= -1;
-		//
-		//	this.startPos = this.currentPos;
-		//	this.distance = (this.remaining / 3);
-		//	this.startTime = Date.now();
-		//
-		//}
 
 		this.currentPos = Math.round(zRS_slide.easeOut(Date.now() - this.startTime, this.startPos, this.distance, speed) * 1000) / 1000;
 		this.remaining = Math.round((this.startPos + this.distance - this.currentPos) * 1000) / 1000;
@@ -332,9 +321,24 @@ class zRS_slide {
 
 	}
 
-	touchMove(e, percent) {
+	touchMove(e, percent, lastPercent) {
 
-		this.currentPos = this.startPos - percent;
+		let ratio = 1;
+
+		if(this.currentPos > (this.slideWidth * this.options.visibleSlides) / 2 && this.options.infinite === false) {
+
+			ratio = Math.max(0, 1 - (this.currentPos / 95));
+
+		}
+
+		if(this.currentPos < -(this.slideWidth * (this.elements.slides.length -1)) && this.options.infinite === false) {
+
+			ratio = Math.max(0, 1 + (this.currentPos - this.minTransform) / 95);
+
+		}
+
+		this.increment = (percent - lastPercent) * ratio;
+		this.currentPos -= this.increment;
 
 		if(this.options.infinite === true) {
 

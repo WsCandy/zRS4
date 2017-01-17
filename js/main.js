@@ -20,7 +20,7 @@
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
 		infinite: false,
 		verbose: true,
-		freeStyle: false
+		//freeStyle: true
 		//drag: false
 		//keyboardControls: false
 

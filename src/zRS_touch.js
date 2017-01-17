@@ -13,6 +13,7 @@ class zRS_touch {
 		this.startPos = 0;
 		this.lastPos = 0;
 		this.currentPos = 0;
+		this.lastPercent = 0;
 		this.initialDirection = '';
 		this.buffer = 0.025;
 		this.startTime = 0;
@@ -59,12 +60,15 @@ class zRS_touch {
 
 		this.active = true;
 		this.startPos = this.currentPos = e.pageX;
+		this.lastPercent = 0;
 		this.core.transition.touchStart(e);
 		this.startTime = this.lastTime = Date.now();
 
 	}
 
 	move(e) {
+
+		let moved = this.startPos - e.pageX;
 
 		if(this.scrolling === true || this.active === false) {
 
@@ -75,7 +79,6 @@ class zRS_touch {
 		e.preventDefault();
 
 		let percent = 0;
-		let moved = this.startPos - e.pageX;
 		let perFor = ((this.core.elements.slider.clientWidth * this.buffer) + moved) / this.core.elements.slider.clientWidth * 100;
 		let perBac = ((-this.core.elements.slider.clientWidth * this.buffer) + moved) / this.core.elements.slider.clientWidth * 100;
 		this.currentPos = e.pageX;
@@ -120,7 +123,8 @@ class zRS_touch {
 		this.lastPos = e.pageX;
 		this.lastTime = Date.now();
 
-		this.core.transition.touchMove(e, percent);
+		this.core.transition.touchMove(e, percent, this.lastPercent);
+		this.lastPercent = percent;
 
 	}
 
