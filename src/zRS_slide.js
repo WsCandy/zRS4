@@ -373,9 +373,9 @@ class zRS_slide {
 		}
 
 		const slideIndex = this.slideByPosition();
-		const loadSlide = this.normaliseTarget(slideIndex + (percent > 0 ? this.options.visibleSlides : -1));
+		const loadSlide = this.normaliseTarget(slideIndex);
 
-		zRS_util.loadImages(this.elements.slides[loadSlide], null);
+		zRS_util.loadImages(this.elements.slides[Math.floor(loadSlide)], null);
 
 		this.coordinateSlides();
 		this.positionInner();
