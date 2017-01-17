@@ -97,7 +97,7 @@ class zRS_slide {
 
 	fixInfinitePosition(position = null) {
 
-		position = position ? position : this.currentPos;
+		position = position != null ? position : this.currentPos;
 
 		if(this.options.infinite === true) {
 
@@ -106,11 +106,11 @@ class zRS_slide {
 			do {
 
 				position <= this.minTransform ? position -= this.minTransform : null;
-				position > 0 ? position += this.minTransform : null;
+				position >= 0 ? position += this.minTransform : null;
 
 				over--
 
-			} while (over > 0);
+			} while (over >= 0);
 
 		}
 
@@ -219,7 +219,7 @@ class zRS_slide {
 
 	slideByPosition(position = null) {
 
-		if(position) {
+		if(position !== null) {
 
 			return Math.abs(Math.round(position / this.slideWidth));
 
@@ -253,7 +253,7 @@ class zRS_slide {
 
 	}
 
-	calculateLandingPoint() {
+	calculateLandingPoint(snap = false) {
 
 		this.distance = this.remaining;
 		this.startPos = this.currentPos;
@@ -264,13 +264,11 @@ class zRS_slide {
 
 			this.target = this.normaliseTarget(this.slideByPosition(this.landingPoint));
 
-			if(this.options.freeStyle === false) {
+			if(this.options.freeStyle === false || snap === true) {
 
 				let slidePos = -Math.abs(this.target * this.slideWidth);
 
 				this.remaining += (slidePos - this.landingPoint);
-
-				console.log(this.target);
 
 				if(this.target === 0 && -Math.abs((slidePos - this.landingPoint) + this.slideWidth) <= this.minTransform) {
 
@@ -298,7 +296,7 @@ class zRS_slide {
 
 			}
 
-			if(this.target === 0 || this.target === this.elements.slides.length - 1 || this.options.freeStyle === false) {
+			if(this.target === 0 || this.target === this.elements.slides.length - 1 || this.options.freeStyle === false || snap === true) {
 
 				let slidePos = -Math.abs(this.target * this.slideWidth);
 
@@ -318,7 +316,7 @@ class zRS_slide {
 
 		this.remaining += this.slideWidth * steps;
 
-		this.calculateLandingPoint();
+		this.calculateLandingPoint(true);
 
 		this.startTime = Date.now();
 		this.animate(nextSlide, prevSlide, speed);

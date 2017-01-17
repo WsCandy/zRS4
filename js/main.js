@@ -18,9 +18,9 @@
 
 		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
-		//infinite: false,
+		infinite: false,
 		verbose: true,
-		//freeStyle: true
+		freeStyle: false
 		//drag: false
 		//keyboardControls: false
 
