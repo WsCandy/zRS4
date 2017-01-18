@@ -2,9 +2,9 @@
 
 	var cont = document.getElementById('zRS');
 
-	cont.addEventListener('load', function(e) {
+	cont.addEventListener('imgLoad', function(e) {
 
-		console.log("slider loaded");
+		console.log(e.detail);
 
 	});
 
@@ -24,7 +24,7 @@
 
 		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
-		alignment: 0.5,
+		//alignment: 0.5,
 		//infinite: false,
 		verbose: true,
 		//freeStyle: true

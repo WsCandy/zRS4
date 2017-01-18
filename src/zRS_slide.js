@@ -6,7 +6,7 @@ class zRS_slide {
 
 		this.elements = data.elements;
 		this.options = data.options;
-		this.events = data.events;
+		this.lazy = data.lazy;
 		this.slideWidth = (100 / this.options.visibleSlides) + (this.options.slideSpacing / (Math.max((this.options.visibleSlides - 1), 1)));
 		this.minTransform = -Math.abs((this.elements.slides.length - (this.options.infinite ? 0 : 1)) * this.slideWidth);
 		this.landingPoint = 0;
@@ -177,7 +177,7 @@ class zRS_slide {
 
 			if(this.remaining === 0) {
 
-				this.events.after = zRS_util.createEvent('after', {
+				let event = zRS_util.createEvent('after', {
 
 					current: parseInt(nextSlide),
 					currentSlide: this.elements.slides[nextSlide],
@@ -189,7 +189,7 @@ class zRS_slide {
 				zRS_util.dispatchEvent({
 
 					name: 'after',
-					event: this.events.after,
+					event: event,
 					element: this.elements.slider
 
 				});
@@ -362,7 +362,7 @@ class zRS_slide {
 		const slideIndex = this.slideByPosition();
 		const loadSlide = this.normaliseTarget(slideIndex);
 
-		zRS_util.loadImages(this.elements.slides[Math.floor(loadSlide)], null);
+		this.lazy.loadImages(this.elements.slides[Math.floor(loadSlide)], null);
 
 		this.coordinateSlides();
 		this.positionInner();
@@ -378,7 +378,7 @@ class zRS_slide {
 		this.startTime = Date.now();
 		this.animate(this.target, this.startSlide, this.options.speed);
 
-		this.events.before = zRS_util.createEvent('before', {
+		let event = zRS_util.createEvent('before', {
 
 			current: parseInt(this.startSlide),
 			currentSlide: this.elements.slides[this.startSlide],
@@ -390,7 +390,7 @@ class zRS_slide {
 		zRS_util.dispatchEvent({
 
 			name: 'before',
-			event: this.events.before,
+			event: event,
 			element: this.elements.slider
 
 		});

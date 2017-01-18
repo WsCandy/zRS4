@@ -1,6 +1,7 @@
 import zRS_util from './zRS_util';
 import zRS_touch from './zRS_touch';
 import zRS_public from './zRS_public';
+import zRS_lazy from './zRS_lazy';
 
 class zRS_core {
 
@@ -44,11 +45,18 @@ class zRS_core {
 		this.setUpPager();
 		this.setUpControls();
 
+		this.lazy = new zRS_lazy({
+
+			options: this.options,
+			elements: this.elements
+
+		});
+
 		this.transition = new this.zRS_trans({
 
-			events: this.events,
 			elements: this.elements,
-			options: this.options
+			options: this.options,
+			lazy: this.lazy
 
 		});
 
@@ -59,7 +67,7 @@ class zRS_core {
 
 		for(let i = 0; i < this.options.visibleSlides; i++) {
 
-			zRS_util.loadImages(this.elements.slides[i]);
+			this.lazy.loadImages(this.elements.slides[i]);
 
 		}
 
@@ -442,7 +450,6 @@ class zRS_core {
 
 		this.transition = new this.zRS_trans({
 
-			events: this.events,
 			elements: this.elements,
 			options: this.options
 

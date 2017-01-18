@@ -6,7 +6,7 @@ class zRS_fade {
 
 		this.elements = data.elements;
 		this.options = data.options;
-		this.events = data.events;
+		this.lazy = data.lazy;
 		this.animations = {};
 
 		this.styleSlides();
@@ -60,7 +60,7 @@ class zRS_fade {
 
 			this.elements.slides[prevSlide].style.opacity = 0;
 
-			this.events.after = zRS_util.createEvent('after', {
+			let event = zRS_util.createEvent('after', {
 
 				current : parseInt(key),
 				currentSlide : this.elements.slides[key],
@@ -72,7 +72,7 @@ class zRS_fade {
 			zRS_util.dispatchEvent({
 
 				name: 'after',
-				event: this.events.after,
+				event: event,
 				element: this.elements.slider
 
 			});
