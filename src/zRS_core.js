@@ -331,7 +331,7 @@ class zRS_core {
 
 			zRS_util.animationFrame(() => {
 
-				zRS_util.loadImages(this.elements.slides[this.currentSlide]);
+				this.lazy.loadImages(this.elements.slides[this.currentSlide]);
 
 				this.setVisibleSlides();
 
@@ -457,7 +457,7 @@ class zRS_core {
 
 		for(let i = 0; i < visible; i++) {
 
-			zRS_util.loadImages(this.elements.slides[i]);
+			this.lazy.loadImages(this.elements.slides[i]);
 
 		}
 
@@ -571,7 +571,7 @@ class zRS_core {
 
 				promises.push(new Promise((resolve, reject) => {
 
-					zRS_util.loadImages(this.elements.slides[i], {resolve: resolve, reject: reject});
+					this.lazy.loadImages(this.elements.slides[i], {resolve: resolve, reject: reject});
 
 				}));
 
@@ -585,7 +585,7 @@ class zRS_core {
 
 			promises.push(new Promise((resolve, reject) => {
 
-				zRS_util.loadImages(this.elements.slides[slideIndex], {resolve: resolve, reject: reject});
+				this.lazy.loadImages(this.elements.slides[slideIndex], {resolve: resolve, reject: reject});
 
 			}));
 
