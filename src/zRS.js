@@ -127,6 +127,17 @@ class zRS {
 
 		}
 
+		if(typeof this.settings.alignment !== 'number') {
+
+			zRS_util.log('Alignment setting needs to be either an int or a string. Transition will not function correctly until rectified.', 'error', this.settings.verbose);
+
+			return;
+
+		}
+
+		this.settings.alignment = Math.min(this.settings.alignment, 1);
+		this.settings.alignment = Math.max(this.settings.alignment, 0);
+
 	}
 
 	setObjects() {

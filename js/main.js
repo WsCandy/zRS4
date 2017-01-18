@@ -24,7 +24,7 @@
 
 		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
-		alignment: 'left',
+		alignment: 0.5,
 		//infinite: false,
 		verbose: true,
 		//freeStyle: true
