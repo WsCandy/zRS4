@@ -19,12 +19,7 @@ class zRS_slide {
 		this.startSlide = 0;
 		this.startTime = Date.now();
 
-		if(this.options.alignment === 'center') {
-
-			this.currentPos += ((this.slideWidth * 0.5) * (this.options.visibleSlides - 1));
-
-		}
-
+		this.currentPos += ((this.slideWidth * this.options.alignment) * (this.options.visibleSlides - 1));
 		this.currentPos = this.fixInfinitePosition(this.currentPos);
 
 		this.setUp();
@@ -252,11 +247,7 @@ class zRS_slide {
 		this.distance = this.remaining;
 		this.startPos = this.currentPos;
 
-		if(this.options.alignment === 'center') {
-
-			this.distance -= ((this.slideWidth * 0.5) * (this.options.visibleSlides - 1));
-
-		}
+		this.distance -= ((this.slideWidth * this.options.alignment) * (this.options.visibleSlides - 1));
 
 		if(this.options.infinite === true) {
 
@@ -337,11 +328,7 @@ class zRS_slide {
 		let ratio = 1;
 		let pos = this.currentPos;
 
-		if(this.options.alignment === 'center') {
-
-			pos += (this.slideWidth * 0.5);
-
-		}
+		pos += (this.slideWidth * this.options.alignment);
 
 		if(this.currentPos > (this.slideWidth * this.options.visibleSlides) / 2 && this.options.infinite === false) {
 

@@ -30,7 +30,7 @@ class zRS {
 			slideBy: 1,
 			slideSpacing: 0,
 			direction: 'forward',
-			alignment: 'left',
+			alignment: 0,
 			keyboardControls: true,
 			visibleSlides: 1,
 			setVisibleSlides: null,
@@ -89,13 +89,43 @@ class zRS {
 
 		}
 
+		this.manipulateOptions();
+
+	}
+
+	manipulateOptions() {
+
 		if(this.settings.direction === 'reverse') {
 
 			this.settings.slideBy = -Math.abs(this.settings.slideBy);
 
 		}
 
-		
+		if(typeof this.settings.alignment === 'string') {
+
+			switch (this.settings.alignment) {
+
+				case 'right' :
+
+					this.settings.alignment = 1;
+
+					break;
+
+				case 'center' :
+
+					this.settings.alignment = 0.5;
+
+					break;
+
+				default :
+
+					this.settings.alignment = 0;
+
+					break;
+
+			}
+
+		}
 
 	}
 
