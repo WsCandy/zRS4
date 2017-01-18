@@ -65,11 +65,7 @@ class zRS_core {
 
 		this.setVisibleSlides();
 
-		for(let i = 0; i < this.options.visibleSlides; i++) {
-
-			this.lazy.loadImages(this.elements.slides[i]);
-
-		}
+		this.loadInitialSlides();
 
 		zRS_util.dispatchEvent({
 
@@ -374,6 +370,62 @@ class zRS_core {
 				}
 
 			});
+
+		}
+
+	}
+
+	loadInitialSlides() {
+
+		if(this.options.transition === 'fade') {
+
+			this.lazy.loadImages(this.elements.slides[0]);
+
+			return;
+
+		}
+
+		if(this.options.alignment !== 0 && this.options.alignment !== 1) {
+
+			this.lazy.loadImages(this.elements.slides[0]);
+
+			let slidesPerSide = Math.floor(this.options.visibleSlides / 2);
+
+			for(let i = 0, b = 0, l = slidesPerSide; i < l; i++, b--) {
+
+				this.lazy.loadImages(this.elements.slides[this.targetSlide(i + 1)]);
+
+				if(this.options.infinite === false) {
+
+					break;
+
+				}
+
+				this.lazy.loadImages(this.elements.slides[this.targetSlide(b - 1)]);
+
+			}
+
+		} else if(this.options.alignment === 0) {
+
+			for(let i = 0, l = this.options.visibleSlides; i < l; i++) {
+
+				this.lazy.loadImages(this.elements.slides[this.targetSlide(i)]);
+
+			}
+
+		} else {
+
+			for(let i = 0, l = -this.options.visibleSlides; i > l; i--) {
+
+				if(i < 0 && this.options.infinite === false) {
+
+					break;
+
+				}
+
+				this.lazy.loadImages(this.elements.slides[this.targetSlide(i)]);
+
+			}
 
 		}
 

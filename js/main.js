@@ -24,10 +24,10 @@
 
 		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
-		//alignment: 0.5,
-		//infinite: false,
+		alignment: 1,
+		infinite: false,
 		verbose: true,
-		//freeStyle: true
+		freeStyle: true
 		//drag: false
 		//keyboardControls: false
 

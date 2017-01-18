@@ -208,13 +208,21 @@ class zRS_slide {
 
 	slideByPosition(position = null) {
 
-		if(position !== null) {
+		position = position === null ? this.currentPos : position;
 
-			return Math.abs(Math.round(position / this.slideWidth));
+		//if(position >= 0 && this.options.infinite === false) {
+		//
+		//	return 0;
+		//
+		//}
+		//
+		//if(position < this.minTransform && this.options.infinite === false) {
+		//
+		//	return this.elements.slides.length - 1;
+		//
+		//}
 
-		}
-
-		return Math.abs(Math.round(this.currentPos / this.slideWidth));
+		return Math.abs(Math.round(position / this.slideWidth));
 
 	}
 
@@ -226,11 +234,11 @@ class zRS_slide {
 
 			if(target >= this.elements.slides.length) {
 
-				target = (target - this.elements.slides.length);
+				target = this.options.infinite === true ? (target - this.elements.slides.length) : this.elements.slides.length -1;
 
 			} else if(target < 0) {
 
-				target = (target + this.elements.slides.length);
+				target = this.options.infinite === true ? (target + this.elements.slides.length) : 0;
 
 			}
 
@@ -359,11 +367,25 @@ class zRS_slide {
 
 		}
 
-		const slideIndex = this.slideByPosition();
-		const loadSlide = this.normaliseTarget(slideIndex);
+		const slideIndex = this.slideByPosition(this.currentPos - (this.slideWidth * this.options.alignment));
+
+		let loadSlide = this.normaliseTarget(slideIndex);
+
+		if(percent < 0) {
+
+			loadSlide -= 1;
+
+		} else {
+
+			loadSlide = slideIndex + (this.options.visibleSlides - Math.floor(this.options.alignment));
+
+		}
+
+		loadSlide = this.normaliseTarget(loadSlide);
+
+		console.log(loadSlide);
 
 		this.lazy.loadImages(this.elements.slides[Math.floor(loadSlide)], null);
-
 		this.coordinateSlides();
 		this.positionInner();
 

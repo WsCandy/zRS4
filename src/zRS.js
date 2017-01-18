@@ -101,6 +101,12 @@ class zRS {
 
 		}
 
+		if(this.settings.transition === 'fade') {
+
+			this.settings.visibleSlides = 1;
+
+		}
+
 		if(typeof this.settings.alignment === 'string') {
 
 			switch (this.settings.alignment) {
