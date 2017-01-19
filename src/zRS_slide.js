@@ -336,15 +336,13 @@ class zRS_slide {
 		let ratio = 1;
 		let pos = this.currentPos;
 
-		pos += (this.slideWidth * this.options.alignment);
-
-		if(this.currentPos > (this.slideWidth * this.options.visibleSlides) / 2 && this.options.infinite === false) {
+		if(this.currentPos > ((this.slideWidth * this.options.visibleSlides) + this.slideWidth * this.options.alignment) / 2 && this.options.infinite === false) {
 
 			ratio = Math.max(0, 1 - (pos / 95));
 
 		}
 
-		if(this.currentPos < -(this.slideWidth * (this.elements.slides.length - 1)) && this.options.infinite === false) {
+		if(this.currentPos < -(this.slideWidth * (this.elements.slides.length - 1) - this.slideWidth * this.options.alignment) && this.options.infinite === false) {
 
 			ratio = Math.max(0, 1 + (pos - (this.minTransform + ((this.options.visibleSlides - 1) * this.slideWidth))) / 95);
 
