@@ -11,14 +11,14 @@
 		pager: '.zRS__pager',
 		visibleSlides: 2,
 		slideSpacing: 0,
-		slideBy: 1,
+		slideBy: -2,
 		setVisibleSlides: {
 
 			500: 1
 
 		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
-		alignment: 0,
+		alignment: 0.5,
 		infinite: false,
 		verbose: true,
 		freeStyle: true

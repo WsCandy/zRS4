@@ -210,18 +210,6 @@ class zRS_slide {
 
 		position = position === null ? this.currentPos : position;
 
-		//if(position >= 0 && this.options.infinite === false) {
-		//
-		//	return 0;
-		//
-		//}
-		//
-		//if(position < this.minTransform && this.options.infinite === false) {
-		//
-		//	return this.elements.slides.length - 1;
-		//
-		//}
-
 		return Math.abs(Math.round(position / this.slideWidth));
 
 	}
@@ -234,11 +222,11 @@ class zRS_slide {
 
 			if(target >= this.elements.slides.length) {
 
-				target = this.options.infinite === true ? (target - this.elements.slides.length) : this.elements.slides.length -1;
+				target -= this.elements.slides.length;
 
 			} else if(target < 0) {
 
-				target = this.options.infinite === true ? (target + this.elements.slides.length) : 0;
+				target += this.elements.slides.length
 
 			}
 
@@ -250,7 +238,7 @@ class zRS_slide {
 
 	}
 
-	calculateLandingPoint(snap = false) {
+	calculateLandingPoint(snap = false, rewind = false) {
 
 		this.distance = this.remaining;
 		this.startPos = this.currentPos;
@@ -280,22 +268,23 @@ class zRS_slide {
 		} else {
 
 			this.landingPoint = this.startPos + this.distance;
+			this.target = this.normaliseTarget(this.slideByPosition(this.landingPoint));
 
-			if(this.landingPoint > 0) {
+			if(this.landingPoint > 0 && rewind === false) {
 
 				this.target = 0;
 
-			} else if (this.landingPoint < this.minTransform) {
+			} else if (this.landingPoint < this.minTransform && rewind === false) {
 
 				this.target = this.elements.slides.length - 1;
 
-			} else {
-
-				this.target = this.slideByPosition(this.landingPoint);
-
 			}
 
-			if(this.target === 0 || this.target === this.elements.slides.length - 1 || this.options.freeStyle === false || snap === true) {
+			if(rewind === true && this.landingPoint > 0) {
+
+				this.remaining += (this.minTransform - this.slideWidth);
+
+			} else if(this.target === 0 || this.target === this.elements.slides.length - 1 || this.options.freeStyle === false || snap === true) {
 
 				let slidePos = -Math.abs(this.target * this.slideWidth);
 
@@ -315,8 +304,7 @@ class zRS_slide {
 
 		this.remaining += this.slideWidth * steps;
 
-		this.calculateLandingPoint(true);
-
+		this.calculateLandingPoint(true, true);
 		this.startTime = Date.now();
 		this.animate(nextSlide, prevSlide, speed);
 
