@@ -26,7 +26,7 @@ class zRS {
 			controls: [],
 			pager: null,
 			delay: 5000,
-			speed: 1000,
+			speed: 750,
 			slideBy: 1,
 			slideSpacing: 0,
 			direction: 'forward',
@@ -37,7 +37,8 @@ class zRS {
 			drag: true,
 			infinite: true,
 			verbose: false,
-			freeStyle: false
+			freeStyle: false,
+			friction: 0.15
 
 		};
 

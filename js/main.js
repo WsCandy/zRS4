@@ -9,19 +9,20 @@
 		transition: 'slide',
 		//direction: 'reverse',
 		pager: '.zRS__pager',
-		visibleSlides: 2,
+		visibleSlides: 1,
 		slideSpacing: 0,
-		slideBy: -2,
+		slideBy: 1,
 		setVisibleSlides: {
 
 			500: 1
 
 		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
-		alignment: 0.5,
+		alignment: 0,
 		infinite: false,
 		verbose: true,
-		freeStyle: true
+		friction: 0.37,
+		freeStyle: false
 		//drag: false
 		//keyboardControls: false
 

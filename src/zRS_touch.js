@@ -19,6 +19,7 @@ class zRS_touch {
 		this.startTime = 0;
 		this.lastTime = 0;
 		this.velocity = 0;
+		this.friction = core.options.friction;
 
 		if(!this.core.transition.touchMove || !this.core.transition.touchEnd || !this.core.transition.touchStart) {
 
@@ -49,9 +50,27 @@ class zRS_touch {
 			this.deactivate(e)
 		});
 
+		this.core.elements.slider.addEventListener('touchstart', (e) => {
+			this.activate(e);
+		});
+
+		document.addEventListener('touchmove', (e) => {
+			this.move(e);
+		});
+
+		document.addEventListener('touchend', (e) => {
+			this.deactivate(e);
+		});
+
+		document.addEventListener('touchcancel', (e) => {
+			this.deactivate(e);
+		});
+
 	}
 
 	activate(e) {
+
+		let posX = typeof e.pageX === 'undefined' ? e.touches[0].pageX : e.pageX;
 
 		if(e.which === 3) {
 			e.preventDefault();
@@ -59,7 +78,7 @@ class zRS_touch {
 		}
 
 		this.active = true;
-		this.startPos = this.currentPos = e.pageX;
+		this.startPos = this.currentPos = posX;
 		this.lastPercent = 0;
 		this.core.transition.touchStart(e);
 		this.startTime = this.lastTime = Date.now();
@@ -68,7 +87,9 @@ class zRS_touch {
 
 	move(e) {
 
-		let moved = this.startPos - e.pageX;
+		let posX = typeof e.pageX === 'undefined' ? e.touches[0].pageX : e.pageX;
+
+		let moved = this.startPos - posX;
 
 		if(this.scrolling === true || this.active === false) {
 
@@ -76,18 +97,24 @@ class zRS_touch {
 
 		}
 
-		e.preventDefault();
-
 		let percent = 0;
 		let perFor = ((this.core.elements.slider.clientWidth * this.buffer) + moved) / this.core.elements.slider.clientWidth * 100;
 		let perBac = ((-this.core.elements.slider.clientWidth * this.buffer) + moved) / this.core.elements.slider.clientWidth * 100;
-		this.currentPos = e.pageX;
+		this.currentPos = posX;
+
+		if(!this.isTouch) {
+
+			e.preventDefault();
+
+		}
 
 		if(Math.abs(moved) < this.core.elements.slider.clientWidth * this.buffer && this.moved === false) {
 
 			return;
 
 		}
+
+		e.preventDefault();
 
 		if(moved < 0 && this.moved === false) {
 
@@ -120,7 +147,7 @@ class zRS_touch {
 
 		this.velocity = velocity === 0 ? this.velocity : velocity;
 
-		this.lastPos = e.pageX;
+		this.lastPos = posX;
 		this.lastTime = Date.now();
 
 		this.core.transition.touchMove(e, percent, this.lastPercent);
@@ -130,6 +157,8 @@ class zRS_touch {
 
 	deactivate(e) {
 
+		let posX = typeof e.pageX === 'undefined' ? e.touches[0].pageX : e.pageX;
+
 		if(this.active === false) {
 
 			this.active = false;
@@ -138,23 +167,25 @@ class zRS_touch {
 
 		}
 
-		const distance = this.startPos - e.pageX;
+		const distance = (this.startPos - posX) / this.core.elements.slider.clientWidth;
 		const time = Date.now() - this.startTime;
-		this.velocity -= distance / time;
+		const velocity = distance / time;
+		const acceleration = (velocity - this.velocity);
 
-		let momentum = (8 * this.velocity) * -1;
+		let stoppingDistance = (Math.pow(acceleration, 2)) / (2 * (this.friction));
 
-		if(Date.now() - this.lastTime > 100) {
+		if(distance < 0) {
 
-			momentum = 0;
+			stoppingDistance *= -1;
 
 		}
-
+		
+		this.velocity = velocity;
 		this.active = this.moved = false;
 
 		zRS_util.removeClass(this.core.elements.slider, 'zRS--active');
 
-		this.core.transition.touchEnd(e, momentum);
+		this.core.transition.touchEnd(e, stoppingDistance);
 		this.core.play();
 
 	}

@@ -18,6 +18,7 @@ class zRS_slide {
 		this.increment = 0;
 		this.startSlide = 0;
 		this.startTime = Date.now();
+		this.isTouch = ("ontouchstart" in document.documentElement);
 
 		this.currentPos += ((this.slideWidth * this.options.alignment) * (this.options.visibleSlides - 1));
 		this.currentPos = this.fixInfinitePosition(this.currentPos);
@@ -33,6 +34,31 @@ class zRS_slide {
 		this.elements.slider.style.overflow = 'hidden';
 		this.elements.inner.style.transform = 'translateX(0%)';
 		this.positionInner(true);
+
+		this.elements.slider.addEventListener('after', (e) => {
+
+			new Promise((resolve, reject) => {
+
+				this.lazy.loadImages(e.detail.currentSlide, { resolve, reject });
+
+			}).then(() => {
+
+				for(let i = 0, l = this.elements.slides.length; i < l; i++) {
+
+					if(this.elements.slides[i] !== e.detail.currentSlide) {
+
+						this.elements.slides[i].style.position = 'absolute';
+						continue;
+
+					}
+
+					this.elements.slides[i].style.position = 'relative';
+
+				}
+
+			});
+
+		});
 
 	}
 
@@ -133,25 +159,6 @@ class zRS_slide {
 				}
 
 			}
-
-		}
-
-		if (!nextSlide) {
-
-			return;
-
-		}
-
-		for(let i = 0, l = this.elements.slides.length; i < l; i++) {
-
-			if(this.elements.slides[i] !== this.elements.slides[nextSlide]) {
-
-				this.elements.slides[i].style.position = 'absolute';
-				continue;
-
-			}
-
-			this.elements.slides[i].style.position = 'relative';
 
 		}
 
@@ -353,54 +360,19 @@ class zRS_slide {
 
 		}
 
-		const slideIndex = this.slideByPosition(this.currentPos - (this.slideWidth * this.options.alignment));
-
-		let loadSlide = this.normaliseTarget(slideIndex);
-
-		if(percent < 0) {
-
-			loadSlide -= 1;
-
-		} else {
-
-			loadSlide = slideIndex + (this.options.visibleSlides - Math.floor(this.options.alignment));
-
-		}
-
-		loadSlide = this.normaliseTarget(loadSlide);
-
-		this.lazy.loadImages(this.elements.slides[Math.floor(loadSlide)], null);
 		this.coordinateSlides();
 		this.positionInner();
 
 	}
 
-	touchEnd(e, momentum) {
+	touchEnd(e, stoppingDistance) {
 
 		this.startSlide = this.startSlide === this.target ? this.startSlide : this.target;
-		this.remaining -= momentum;
+		this.remaining -= stoppingDistance;
 
 		this.calculateLandingPoint();
 		this.startTime = Date.now();
-		this.animate(this.target, this.startSlide, this.options.speed);
-
-		if(this.startSlide === this.target) {
-
-			for(let i = 0; i < this.elements.slides.length; i++) {
-
-				this.lazy.loadImages(this.elements.slides[i], null);
-
-			}
-
-		} else {
-
-			for(let i = this.startSlide; i < (this.target + 1); i++) {
-
-				this.lazy.loadImages(this.elements.slides[i], null);
-
-			}
-
-		}
+		this.animate(this.target, this.startSlide, 450);
 
 		let event = zRS_util.createEvent('before', {
 
