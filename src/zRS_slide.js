@@ -381,8 +381,6 @@ class zRS_slide {
 
 		loadSlide = this.normaliseTarget(loadSlide);
 
-		console.log(loadSlide);
-
 		this.lazy.loadImages(this.elements.slides[Math.floor(loadSlide)], null);
 		this.coordinateSlides();
 		this.positionInner();
@@ -397,6 +395,24 @@ class zRS_slide {
 		this.calculateLandingPoint();
 		this.startTime = Date.now();
 		this.animate(this.target, this.startSlide, this.options.speed);
+
+		if(this.startSlide === this.target) {
+
+			for(let i = 0; i < this.elements.slides.length; i++) {
+
+				this.lazy.loadImages(this.elements.slides[i], null);
+
+			}
+
+		} else {
+
+			for(let i = this.startSlide; i < (this.target + 1); i++) {
+
+				this.lazy.loadImages(this.elements.slides[i], null);
+
+			}
+
+		}
 
 		let event = zRS_util.createEvent('before', {
 

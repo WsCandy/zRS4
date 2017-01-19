@@ -2,12 +2,6 @@
 
 	var cont = document.getElementById('zRS');
 
-	cont.addEventListener('imgLoad', function(e) {
-
-		console.log(e.detail);
-
-	});
-
 	window.slider = new zRS(cont, {
 
 		speed: 750,
@@ -24,7 +18,7 @@
 
 		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
-		alignment: 1,
+		alignment: 0,
 		infinite: false,
 		verbose: true,
 		freeStyle: true

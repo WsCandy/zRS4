@@ -619,7 +619,7 @@ class zRS_core {
 
 		if(this.options.transition !== 'fade') {
 
-			for(let i = 0; i < target; i++) {
+			for(let i = current; i < target; i++) {
 
 				promises.push(new Promise((resolve, reject) => {
 
