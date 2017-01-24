@@ -18,6 +18,7 @@ class zRS_touch {
 		this.buffer = 0.025;
 		this.startTime = 0;
 		this.lastTime = 0;
+		this.dragging = false;
 		this.velocity = 0;
 		this.friction = core.options.friction;
 
@@ -70,7 +71,24 @@ class zRS_touch {
 
 		this.core.elements.slider.addEventListener('after', (e) => {
 			this.core.play();
+			this.dragging = false;
 		});
+
+		const links = this.core.elements.inner.querySelectorAll('a');
+
+		for(let i = 0, l = links.length; i < l; i++) {
+
+			links[i].addEventListener('click', (e) => {
+
+				if(this.dragging === true) {
+
+					e.preventDefault();
+
+				}
+
+			});
+
+		}
 
 	}
 
@@ -146,7 +164,7 @@ class zRS_touch {
 
 		}
 
-		this.moved = true;
+		this.moved = this.dragging = true;
 
 		const distance = this.currentPos - this.lastPos;
 		const time = Date.now() - this.lastTime;
