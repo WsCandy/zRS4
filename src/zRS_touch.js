@@ -50,6 +50,7 @@ class zRS_touch {
 		if(!this.isTouch && this.core.options.drag === true) {
 			this.core.elements.slider.addEventListener('mousedown', (e) => {
 
+				e.preventDefault();
 				this.activate(e);
 
 				this.core.elements.slider.style.cursor = 'grabbing';
