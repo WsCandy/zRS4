@@ -43,9 +43,18 @@ class zRS_touch {
 
 	bindings() {
 
+		this.core.elements.slider.style.cursor = 'move';
+		this.core.elements.slider.style.cursor = 'grab';
+		this.core.elements.slider.style.cursor = '-webkit-grab';
+
 		if(!this.isTouch && this.core.options.drag === true) {
 			this.core.elements.slider.addEventListener('mousedown', (e) => {
+
 				this.activate(e);
+
+				this.core.elements.slider.style.cursor = 'grabbing';
+				this.core.elements.slider.style.cursor = '-webkit-grabbing';
+
 			});
 		}
 
@@ -54,7 +63,13 @@ class zRS_touch {
 		});
 
 		document.addEventListener('mouseup', (e) => {
-			this.deactivate(e)
+
+			this.deactivate(e);
+
+			this.core.elements.slider.style.cursor = 'move';
+			this.core.elements.slider.style.cursor = 'grab';
+			this.core.elements.slider.style.cursor = '-webkit-grab';
+
 		});
 
 		this.core.elements.slider.addEventListener('touchstart', (e) => {
