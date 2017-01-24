@@ -51,12 +51,14 @@ class zRS_touch {
 			this.core.elements.slider.addEventListener('mousedown', (e) => {
 
 				e.preventDefault();
+
 				this.activate(e);
 
 				this.core.elements.slider.style.cursor = 'grabbing';
 				this.core.elements.slider.style.cursor = '-webkit-grabbing';
 
 			});
+
 		}
 
 		document.addEventListener('mousemove', (e) => {

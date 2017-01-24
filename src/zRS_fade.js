@@ -83,8 +83,6 @@ class zRS_fade {
 
 	handle(nextSlide, prevSlide, speed) {
 
-		console.log(nextSlide, prevSlide);
-
 		for(let i = 0, l = this.elements.slides.length; i < l; i++) {
 
 			let element = this.elements.slides[i];

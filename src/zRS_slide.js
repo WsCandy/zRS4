@@ -207,6 +207,18 @@ class zRS_slide {
 
 			}
 
+			if(speed === 0) {
+
+				this.currentPos = this.currentPos + this.distance;
+				this.remaining = 0;
+				this.positionInner(true);
+				this.coordinateSlides();
+				this.animate(nextSlide, prevSlide, speed);
+
+				return;
+
+			}
+
 			this.calculatePosition(speed);
 			this.coordinateSlides();
 			this.animate(nextSlide, prevSlide, speed);
@@ -247,7 +259,7 @@ class zRS_slide {
 
 	}
 
-	calculateLandingPoint(snap = false, rewind = false) {
+	calculateLandingPoint(snap = false, rewind = false, target = null) {
 
 		this.distance = this.remaining;
 		this.startPos = this.currentPos;
@@ -258,7 +270,7 @@ class zRS_slide {
 
 			this.landingPoint = this.fixInfinitePosition(this.startPos + this.distance);
 
-			this.target = this.normaliseTarget(this.slideByPosition(this.landingPoint));
+			this.target = target === null ? this.normaliseTarget(this.slideByPosition(this.landingPoint)) : target;
 
 			if(this.options.freeStyle === false || snap === true) {
 
@@ -277,7 +289,8 @@ class zRS_slide {
 		} else {
 
 			this.landingPoint = this.startPos + this.distance;
-			this.target = this.normaliseTarget(this.slideByPosition(this.landingPoint));
+
+			this.target = target === null ? this.normaliseTarget(this.slideByPosition(this.landingPoint)) : target;
 
 			if(this.landingPoint > 0 && rewind === false) {
 
@@ -289,11 +302,7 @@ class zRS_slide {
 
 			}
 
-			if(rewind === true && this.landingPoint > 0) {
-
-				this.remaining += (this.minTransform - this.slideWidth);
-
-			} else if(this.target === 0 || this.target === this.elements.slides.length - 1 || this.options.freeStyle === false || snap === true) {
+			if(this.target === 0 || this.target === this.elements.slides.length - 1 || this.options.freeStyle === false || snap === true) {
 
 				let slidePos = -Math.abs(this.target * this.slideWidth);
 
@@ -313,8 +322,9 @@ class zRS_slide {
 
 		this.remaining += this.slideWidth * steps;
 
-		this.calculateLandingPoint(true, true);
+		this.calculateLandingPoint(true, true, nextSlide);
 		this.startTime = Date.now();
+
 		this.animate(nextSlide, prevSlide, speed);
 
 	}
