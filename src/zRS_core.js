@@ -136,9 +136,13 @@ class zRS_core {
 
 			control = this.elements.controls[i].length ? this.elements.controls[i][0] : this.elements.controls[i];
 
-			control.addEventListener('click', (e) => {
+			control.addEventListener('mousedown', (e) => {
 
 				e.stopPropagation();
+
+			});
+
+			control.addEventListener('click', (e) => {
 
 				let forwardControl = this.elements.controls[0].length ? this.elements.controls[0][0] : this.elements.controls[0],
 					step = e.target === forwardControl ? this.options.slideBy : -this.options.slideBy;
@@ -224,9 +228,14 @@ class zRS_core {
 
 				pager.appendChild(anchor);
 
-				anchor.addEventListener('click', (e) => {
+				anchor.addEventListener('mousedown', (e) => {
 
 					e.stopPropagation();
+
+				});
+
+				anchor.addEventListener('click', (e) => {
+
 					e.preventDefault();
 					this.transTo(i);
 
@@ -253,6 +262,12 @@ class zRS_core {
 				}
 
 				this.elements.anchors.push(pager.children[i]);
+
+				pager.children[i].addEventListener('mousedown', (e) => {
+
+					e.stopPropagation();
+
+				});
 
 				pager.children[i].addEventListener('click', (e) => {
 
