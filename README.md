@@ -364,6 +364,8 @@ All events are fired on the container element, so you need to listen to this ele
 
 Further details on all the events can be found below.
 
+---
+
 #### Play Event
 
 The `play` event will fire every time the slider starts to resume it's normal automated cycle. (This includes when the window is re-focused as the slider pauses when the window isn't active).
@@ -375,8 +377,8 @@ The `play` event will fire every time the slider starts to resume it's normal au
         console.log('Slider playing!');
         
     });
-
----
+    
+---    
 
 #### Pause Event
 
@@ -389,8 +391,8 @@ The `pause` event will fire every time the slider is paused from it's normal aut
         console.log('Slider paused');
         
     });
-
----
+    
+ ---
 
 #### Load Event
 
@@ -424,6 +426,8 @@ The `before` event will fire as a transition starts, this event passes through d
         console.log('Before slider transtiion!', e.detail);
         
     });
+    
+---
 
 #### After Event
 
@@ -444,6 +448,7 @@ The `after` event will fire after a transition finishes, this event passes throu
         
     });
     
+---
     
 #### Image Load Event
 
