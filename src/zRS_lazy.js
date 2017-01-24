@@ -123,18 +123,16 @@ class zRS_lazy {
 
 			}
 
-			let event = zRS_util.createEvent('imgLoad', {
-
-				element: data.image,
-				slide: data.slide,
-				loadTime: Date.now() - startTime
-
-			});
-
 			zRS_util.dispatchEvent({
 
 				name: 'imgLoad',
-				event: event,
+				event: zRS_util.createEvent('imgLoad', {
+
+					element: data.image,
+					slide: data.slide,
+					loadTime: Date.now() - startTime
+
+				}),
 				element: this.elements.slider
 
 			});

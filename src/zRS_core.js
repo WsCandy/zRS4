@@ -136,7 +136,7 @@ class zRS_core {
 
 			control = this.elements.controls[i].length ? this.elements.controls[i][0] : this.elements.controls[i];
 
-			control.addEventListener('mousedown', (e) => {
+			control.addEventListener('click', (e) => {
 
 				e.stopPropagation();
 
@@ -224,7 +224,7 @@ class zRS_core {
 
 				pager.appendChild(anchor);
 
-				anchor.addEventListener('mousedown', (e) => {
+				anchor.addEventListener('click', (e) => {
 
 					e.stopPropagation();
 					e.preventDefault();
@@ -460,7 +460,7 @@ class zRS_core {
 
 	}
 
-	play(emit = true) {
+	play() {
 
 		if(this.elements.slides.length <= 1) {
 
@@ -600,23 +600,6 @@ class zRS_core {
 
 		target = this.targetSlide(target);
 
-		this.events.before = zRS_util.createEvent('before', {
-
-			current: parseInt(current),
-			currentSlide: this.elements.slides[current],
-			target: parseInt(target),
-			targetSlide: this.elements.slides[target]
-
-		});
-
-		zRS_util.dispatchEvent({
-
-			name: 'before',
-			event: this.events.before,
-			element: this.elements.slider
-
-		});
-
 		if(this.options.transition !== 'fade') {
 
 			for(let i = current; i < target; i++) {
@@ -646,6 +629,21 @@ class zRS_core {
 		Promise.all(promises).then(() => {
 
 			this.transition.handle(this.currentSlide, current, speed, steps);
+
+		});
+
+		zRS_util.dispatchEvent({
+
+			name: 'before',
+			event: zRS_util.createEvent('before', {
+
+				current: parseInt(current),
+				currentSlide: this.elements.slides[current],
+				target: parseInt(target),
+				targetSlide: this.elements.slides[target]
+
+			}),
+			element: this.elements.slider
 
 		});
 

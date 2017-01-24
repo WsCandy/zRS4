@@ -19,6 +19,7 @@ class zRS_slide {
 		this.startSlide = 0;
 		this.startTime = Date.now();
 		this.isTouch = ("ontouchstart" in document.documentElement);
+		this.animationFrame =  typeof window.requestAnimationFrame !== 'undefined';
 
 		this.currentPos += ((this.slideWidth * this.options.alignment) * (this.options.visibleSlides - 1));
 		this.currentPos = this.fixInfinitePosition(this.currentPos);
@@ -30,9 +31,8 @@ class zRS_slide {
 
 	setUp() {
 
-		this.elements.inner.style.overflow = null;
+		this.elements.inner.style.overflow = 'visible';
 		this.elements.slider.style.overflow = 'hidden';
-		this.elements.inner.style.transform = 'translateX(0%)';
 		this.positionInner(true);
 
 		this.elements.slider.addEventListener('after', (e) => {
@@ -85,7 +85,7 @@ class zRS_slide {
 
 		}
 
-		this.coordinateSlides(0);
+		this.coordinateSlides();
 
 	}
 
@@ -96,7 +96,7 @@ class zRS_slide {
 
 		this.currentPos = this.fixInfinitePosition();
 
-		if(Math.floor(this.remaining * 100) / 100 === 0) {
+		if(Math.round(this.remaining * 10) / 10 === 0) {
 
 			this.remaining = 0;
 			this.currentPos = Math.round(this.currentPos * 100) / 100;
@@ -142,7 +142,7 @@ class zRS_slide {
 
 	}
 
-	coordinateSlides(nextSlide) {
+	coordinateSlides() {
 
 		if(this.options.infinite === true) {
 
@@ -176,27 +176,29 @@ class zRS_slide {
 
 		}
 
+		this.elements.inner.style.msTransform = `translateX(${this.currentPos}%)`;
+
 	}
 
 	animate(nextSlide, prevSlide, speed) {
+
+		zRS_util.cancelAnimationFrame(this.animation);
 
 		this.animation = zRS_util.animationFrame(() => {
 
 			if(this.remaining === 0) {
 
-				let event = zRS_util.createEvent('after', {
-
-					current: parseInt(nextSlide),
-					currentSlide: this.elements.slides[nextSlide],
-					prev: parseInt(prevSlide),
-					prevSlide: this.elements.slides[prevSlide]
-
-				});
-
 				zRS_util.dispatchEvent({
 
 					name: 'after',
-					event: event,
+					event: zRS_util.createEvent('after', {
+
+						current: parseInt(nextSlide),
+						currentSlide: this.elements.slides[nextSlide],
+						prev: parseInt(prevSlide),
+						prevSlide: this.elements.slides[prevSlide]
+
+					}),
 					element: this.elements.slider
 
 				});
@@ -206,7 +208,7 @@ class zRS_slide {
 			}
 
 			this.calculatePosition(speed);
-			this.coordinateSlides(nextSlide);
+			this.coordinateSlides();
 			this.animate(nextSlide, prevSlide, speed);
 
 		});
@@ -365,28 +367,27 @@ class zRS_slide {
 
 	}
 
-	touchEnd(e, stoppingDistance) {
+	touchEnd(e, stoppingDistance, stoppingTime) {
 
 		this.startSlide = this.startSlide === this.target ? this.startSlide : this.target;
+
 		this.remaining -= stoppingDistance;
 
 		this.calculateLandingPoint();
 		this.startTime = Date.now();
-		this.animate(this.target, this.startSlide, 450);
-
-		let event = zRS_util.createEvent('before', {
-
-			current: parseInt(this.startSlide),
-			currentSlide: this.elements.slides[this.startSlide],
-			target: parseInt(this.target),
-			targetSlide: this.elements.slides[this.target]
-
-		});
+		this.animate(this.target, this.startSlide, stoppingTime);
 
 		zRS_util.dispatchEvent({
 
 			name: 'before',
-			event: event,
+			event: zRS_util.createEvent('before', {
+
+				current: parseInt(this.startSlide),
+				currentSlide: this.elements.slides[this.startSlide],
+				target: parseInt(this.target),
+				targetSlide: this.elements.slides[this.target]
+
+			}),
 			element: this.elements.slider
 
 		});

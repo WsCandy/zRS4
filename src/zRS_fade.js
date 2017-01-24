@@ -60,7 +60,7 @@ class zRS_fade {
 
 			this.elements.slides[prevSlide].style.opacity = 0;
 
-			let event = zRS_util.createEvent('after', {
+			this.event = zRS_util.createEvent('after', {
 
 				current : parseInt(key),
 				currentSlide : this.elements.slides[key],
@@ -72,7 +72,7 @@ class zRS_fade {
 			zRS_util.dispatchEvent({
 
 				name: 'after',
-				event: event,
+				event: this.event,
 				element: this.elements.slider
 
 			});
@@ -82,6 +82,8 @@ class zRS_fade {
 	}
 
 	handle(nextSlide, prevSlide, speed) {
+
+		console.log(nextSlide, prevSlide);
 
 		for(let i = 0, l = this.elements.slides.length; i < l; i++) {
 
@@ -99,7 +101,6 @@ class zRS_fade {
 
 				element.style.zIndex = 2;
 				element.style.position = 'relative';
-
 				this.animate(i, element, 0, prevSlide, speed);
 
 				continue;

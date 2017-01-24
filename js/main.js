@@ -18,11 +18,11 @@
 
 		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
-		alignment: 0,
-		infinite: false,
+		alignment: 0.5,
+		//infinite: false,
 		verbose: true,
-		friction: 0.37,
-		freeStyle: false
+		//freeStyle: true,
+		// friction: 0.1
 		//drag: false
 		//keyboardControls: false
 

@@ -29,6 +29,12 @@ class zRS_touch {
 
 		}
 
+		if(!window.requestAnimationFrame) {
+
+			return;
+
+		}
+
 		this.bindings();
 		this.setScrolling();
 
@@ -62,8 +68,8 @@ class zRS_touch {
 			this.deactivate(e);
 		});
 
-		document.addEventListener('touchcancel', (e) => {
-			this.deactivate(e);
+		this.core.elements.slider.addEventListener('after', (e) => {
+			this.core.play();
 		});
 
 	}
@@ -78,8 +84,9 @@ class zRS_touch {
 		}
 
 		this.active = true;
-		this.startPos = this.currentPos = posX;
+		this.startPos = this.currentPos = this.lastPos = posX;
 		this.lastPercent = 0;
+		this.velocity = 0;
 		this.core.transition.touchStart(e);
 		this.startTime = this.lastTime = Date.now();
 
@@ -147,6 +154,9 @@ class zRS_touch {
 
 		this.velocity = velocity === 0 ? this.velocity : velocity;
 
+		this.velocity /= this.core.elements.slider.clientWidth;
+		this.velocity *= 100;
+
 		this.lastPos = posX;
 		this.lastTime = Date.now();
 
@@ -157,37 +167,48 @@ class zRS_touch {
 
 	deactivate(e) {
 
-		let posX = typeof e.pageX === 'undefined' ? e.touches[0].pageX : e.pageX;
+		if(this.active === false || this.lastPos === this.startPos) {
 
-		if(this.active === false) {
-
-			this.active = false;
+			this.active = this.moved = false;
+			this.core.transition.touchEnd(e, 0, 300);
 
 			return;
 
 		}
 
-		const distance = (this.startPos - posX) / this.core.elements.slider.clientWidth;
-		const time = Date.now() - this.startTime;
-		const velocity = distance / time;
-		const acceleration = (velocity - this.velocity);
+		let time = Date.now() - this.startTime;
 
-		let stoppingDistance = (Math.pow(acceleration, 2)) / (2 * (this.friction));
+		let distance = (this.startPos / this.core.elements.slider.clientWidth) - (this.lastPos / this.core.elements.slider.clientWidth);
+			distance *= 100;
+
+		let averageSpeed = distance / time;
+			averageSpeed *= 100;
+
+		let stoppingDistance = (Math.pow(this.velocity, 2)) / (2 * (this.friction));
+			stoppingDistance *= 100;
+
+		if(distance < 35) {
+
+			stoppingDistance += (Math.abs(averageSpeed) * 1.65);
+
+		}
 
 		if(distance < 0) {
 
 			stoppingDistance *= -1;
 
 		}
-		
-		this.velocity = velocity;
+
+		let stoppingTime = Math.abs((2 * stoppingDistance) / this.velocity);
+			stoppingTime = Math.max(300, stoppingTime);
+			stoppingTime = Math.round(stoppingTime);
+			stoppingTime = Math.min(stoppingTime, this.core.options.speed);
+
 		this.active = this.moved = false;
 
 		zRS_util.removeClass(this.core.elements.slider, 'zRS--active');
 
-		this.core.transition.touchEnd(e, stoppingDistance);
-		this.core.play();
-
+		this.core.transition.touchEnd(e, stoppingDistance, stoppingTime);
 	}
 
 	setScrolling() {

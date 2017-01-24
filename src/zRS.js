@@ -38,7 +38,7 @@ class zRS {
 			infinite: true,
 			verbose: false,
 			freeStyle: false,
-			friction: 0.15
+			friction: 0.35
 
 		};
 
