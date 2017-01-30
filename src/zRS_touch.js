@@ -30,12 +30,6 @@ class zRS_touch {
 
 		}
 
-		if(!window.requestAnimationFrame) {
-
-			return;
-
-		}
-
 		this.bindings();
 		this.setScrolling();
 
@@ -185,7 +179,7 @@ class zRS_touch {
 		this.moved = this.dragging = true;
 
 		const distance = this.currentPos - this.lastPos;
-		const time = Date.now() - this.lastTime;
+		const time = Math.max(1, Date.now() - this.lastTime);
 		const velocity = distance / time;
 
 		this.velocity = velocity === 0 ? this.velocity : velocity;
