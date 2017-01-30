@@ -29,6 +29,7 @@ node_modules
 # cache
 floe/app/cache
 .idea/
+.DS_Store
 
 # gulp generated files
 
