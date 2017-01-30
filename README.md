@@ -1,7 +1,7 @@
 zRS - v4.0.0
 =====
 
-zRS is a responsive javascript slider that can be implemented onto your webpages.
+zRS is a responsive javascript slider that can be implemented onto your web pages. It is backwards compatable to IE9.
 
 Initialisation
 ---
@@ -10,7 +10,7 @@ To initialise a slider simply use the following code:
 
 	var slider = new zRS('#slider', {
     
-        //options
+        ...options
     
     });
     
@@ -20,7 +20,7 @@ Initialisation will accept either an element object or a string, for example:
 
     var slider = new zRS(element, {
     
-        //options
+        ...options
     
     });
     
@@ -89,7 +89,15 @@ Here is a list of all the available options and their default values:
     speed: 1000,
     slideBy: 1,
     direction: 'forward',
-    keyboardControls: true
+    keyboardControls: true,
+    alignment: 0,
+    visibleSlides: 1,
+    setVisibleSlides: null,
+    drag: true,
+    infinite: true,
+    verbose: false,
+    freeStyle: false,
+    friction: 0.35
     
 Further details on each option can be found below.
 
@@ -97,7 +105,7 @@ Further details on each option can be found below.
 
 The transition option allows you to switch between a number of supported transitions. 
 
-**Supported Options:** `'fade'`
+**Supported Options:** `'fade', 'slide'`
 
 **Default Value:** `'fade'`
 
@@ -232,12 +240,114 @@ Turn keyboard controls on or off. When they're enabled then you can navigate usi
 
 ---
 
+#### Alignment _(string | float)_
+
+The align option allows you to align the slides along the x axis. It accepts a number between `0 - 1` or a one of the following strings: `'left'` `'center'` `'right'`
+
+**Default Value** `0`
+
+**Example**
+
+    alignment: 0.5,
+    alignment: 'center'
+
+---
+
+#### Visible Slides _(float)_
+
+The visible slides option allows you to set the amount of slides visible in the container at any one time. This option accepts decimal places to show less of the slides that are not the current slide. This option is only supported with the `slide` transition currently.
+
+**Default Value** `1.0`
+
+**Example**
+
+    visibleSlides: 1.5
+    
+---
+
+#### Set Visible Slides _({int: int})_
+
+Set visible slides allows you to alter the amount of visible slides depending on the current width of the browser window. For example on desktop you may have `3` visible slides, however on mobile you may only want `1`. The key is the width of the window in px and the value is the amount of visible slides. If the window is larger than the highest key then it will use your `visibleSlides` value.
+
+**Default Value** `null`
+
+**Example**
+
+    setVisibleSlides: {
+    
+    	600: 2,
+    	400: 1.5
+    
+    }
+    
+---
+
+#### Drag _(bool)_
+
+The drag option allows you to turn off the dragging functionality for `slide` on desktop browsers.
+
+**Default Value** `true`
+
+**Example**
+
+    drag: false
+    
+---
+
+#### Infinite _(bool)_
+
+The infinite option will change the way the `slide` transition functions. By default the slider will loop infinitely. To turn this off simply set this option to false.
+
+**Default Value** `true`
+
+**Example**
+
+    infinite: false
+    
+---
+
+#### Verbose _(bool)_
+
+zRS comes with a bunch of warnings and information that can help you debug why the slider may not be behaving as you're expecting. By setting this option to `true` you will see logs in your console that will point you in the right direction.
+
+**Default Value** `false`
+
+**Example**
+
+    verbose: true
+    
+---
+
+#### Free Style _(bool)_
+
+By default the `slide` transition will snap to the nearest slide, to disable this functionality simple set this option to `true`
+
+**Default Value** `false`
+
+**Example**
+
+    freeStyle: true
+    
+---
+
+#### Friction _(float)_
+
+The friction option determins two things, how easy it is to flick to the next slide and how far/long the slider will take to slow down once it's been flicked. Increase or decrease the friction as you see fit to get the feeling you're after.
+ 
+ **Default Value** `0.35`
+ 
+ **Example**
+ 
+    friction: 0.5
+    
+ ---
+
 Events
 ------
 
 zRS fires numerous events while it's running, you can hook into these events to further customise how your application interacts with zRS and add extra functionality.
 
-**Supported Events:** `play`, `pause`, `load`, `before`, `after`.
+**Supported Events:** `play`, `pause`, `load`, `before`, `after`, `imgLoad`.
 
 All events are fired on the container element, so you need to listen to this element for the events.
 
@@ -254,6 +364,8 @@ All events are fired on the container element, so you need to listen to this ele
 
 Further details on all the events can be found below.
 
+---
+
 #### Play Event
 
 The `play` event will fire every time the slider starts to resume it's normal automated cycle. (This includes when the window is re-focused as the slider pauses when the window isn't active).
@@ -265,8 +377,8 @@ The `play` event will fire every time the slider starts to resume it's normal au
         console.log('Slider playing!');
         
     });
-
----
+    
+---    
 
 #### Pause Event
 
@@ -279,8 +391,8 @@ The `pause` event will fire every time the slider is paused from it's normal aut
         console.log('Slider paused');
         
     });
-
----
+    
+ ---
 
 #### Load Event
 
@@ -314,6 +426,8 @@ The `before` event will fire as a transition starts, this event passes through d
         console.log('Before slider transtiion!', e.detail);
         
     });
+    
+---
 
 #### After Event
 
@@ -331,6 +445,26 @@ The `after` event will fire after a transition finishes, this event passes throu
     element.addEventListener('after', function(e) {
         
         console.log('After slider transtiion!', e.detail);
+        
+    });
+    
+---
+    
+#### Image Load Event
+
+The `imgLoad` event will fire after an image has been lazy loaded in by zRS. This event passes through data including, the image element loaded, the slide and the load time. This event can easily be used to animate in lazy loaded images.
+
+**Data**
+
+- `e.detail.element` _(element object)_
+- `e.detail.slide` _(element object)_ 
+- `e.detail.loadTime` _(int)_
+
+**Example:** 
+
+    element.addEventListener('imgLoad', function(e) {
+        
+        console.log('Image Loaded!', e.detail);
         
     });
 

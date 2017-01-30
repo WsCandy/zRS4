@@ -4,15 +4,35 @@
 
 	window.slider = new zRS(cont, {
 
-		speed: 500,
+		speed: 750,
 		delay: 5000,
-		direction: 'reverse',
+		transition: 'slide',
+		//direction: 'reverse',
 		pager: '.zRS__pager',
+		visibleSlides: 2,
+		slideSpacing: 0,
+		slideBy: 1,
+		setVisibleSlides: {
+
+			500: 1
+
+		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
-		// keyboardControls: false
+		alignment: 0.5,
+		infinite: false,
+		verbose: true,
+		//freeStyle: true,
+		// friction: 0.1
+		//drag: false
+		//keyboardControls: false
 
 	});
 
-	console.log(slider);
+	//
+	//cont.addEventListener('after', function(e) {
+	//
+	//	console.log(e.detail);
+	//
+	//});
 
 })(window);

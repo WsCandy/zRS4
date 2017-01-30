@@ -1,20 +1,20 @@
 import zRS_util from './zRS_util';
+import zRS_touch from './zRS_touch';
 import zRS_public from './zRS_public';
+import zRS_lazy from './zRS_lazy';
 
 class zRS_core {
 
 	constructor(element, options) {
 
-		var zRS_trans;
-
 		try {
 
-			zRS_trans = require(`./zRS_${options.transition}`).default;
+			this.zRS_trans = require(`./zRS_${options.transition}`).default;
 
 		} catch(error) {
 
-			zRS_util.log(`The transition '${options.transition}' doesn't exist, falling back to fade.`, `warn`);
-			zRS_trans = require(`./zRS_fade`).default;
+			zRS_util.log(`The transition '${options.transition}' doesn't exist, falling back to fade.`, `warn`, this.options.verbose);
+			this.zRS_trans = require(`./zRS_fade`).default;
 
 		}
 
@@ -22,6 +22,7 @@ class zRS_core {
 		this.timer = null;
 		this.events = {};
 		this.currentSlide = 0;
+		this.defaultVisible = this.options.visibleSlides;
 		this.elements = {
 
 			slider: element,
@@ -44,22 +45,27 @@ class zRS_core {
 		this.setUpPager();
 		this.setUpControls();
 
-		this.transition = new zRS_trans({
+		this.lazy = new zRS_lazy({
 
-			events: this.events,
+			options: this.options,
+			elements: this.elements
+
+		});
+
+		this.transition = new this.zRS_trans({
+
 			elements: this.elements,
-			options: this.options
+			options: this.options,
+			lazy: this.lazy
 
 		});
 
 		this.play();
 		this.bindings();
 
-		new Promise((resolve, reject) => {
+		this.setVisibleSlides();
 
-			zRS_util.loadImages(this.elements.slides[this.currentSlide], {resolve: resolve, reject: reject});
-
-		});
+		this.loadInitialSlides();
 
 		zRS_util.dispatchEvent({
 
@@ -80,7 +86,7 @@ class zRS_core {
 
 		if(!this.elements.inner) {
 
-			zRS_util.log(`Cannot find ${this.options.inner} inner element, stopping initialisation`, 'error');
+			zRS_util.log(`Cannot find ${this.options.inner} inner element, stopping initialisation`, 'error', this.options.verbose);
 
 			return false;
 
@@ -96,7 +102,7 @@ class zRS_core {
 
 		if(this.elements.inner.children.length <= 0) {
 
-			zRS_util.log(`Cannot find any slides, stopping initialisation`, 'error');
+			zRS_util.log(`Cannot find any slides, stopping initialisation`, 'error', this.options.verbose);
 
 			return false;
 
@@ -122,7 +128,7 @@ class zRS_core {
 
 			if(!this.elements.controls[i]) {
 
-				zRS_util.log(`Cannot find control ${this.options.controls[i]}, please double check your reference.`, 'warn');
+				zRS_util.log(`Cannot find control ${this.options.controls[i]}, please double check your reference.`, 'warn', this.options.verbose);
 
 				continue;
 
@@ -130,10 +136,16 @@ class zRS_core {
 
 			control = this.elements.controls[i].length ? this.elements.controls[i][0] : this.elements.controls[i];
 
+			control.addEventListener('mousedown', (e) => {
+
+				e.stopPropagation();
+
+			});
+
 			control.addEventListener('click', (e) => {
 
 				let forwardControl = this.elements.controls[0].length ? this.elements.controls[0][0] : this.elements.controls[0],
-					step = e.target === forwardControl ? 1 : -1;
+					step = e.target === forwardControl ? this.options.slideBy : -this.options.slideBy;
 
 				e.preventDefault();
 
@@ -141,6 +153,39 @@ class zRS_core {
 				this.handleTransition(step);
 
 			});
+
+		}
+
+		if(this.options.infinite === false) {
+
+			this.toggleControlClasses();
+
+		}
+
+	}
+
+	toggleControlClasses() {
+
+		let back = this.elements.controls[1] && this.elements.controls[1].length ? this.elements.controls[1][0] : this.elements.controls[1],
+			next = this.elements.controls[0] && this.elements.controls[0].length ? this.elements.controls[0][0] : this.elements.controls[0];
+
+		if(this.currentSlide === (this.elements.slides.length - 1)) {
+
+			zRS_util.addClass(next, 'zRS--inactive');
+
+		} else {
+
+			zRS_util.removeClass(next, 'zRS--inactive');
+
+		}
+
+		if(this.currentSlide === 0) {
+
+			zRS_util.addClass(back, 'zRS--inactive');
+
+		} else {
+
+			zRS_util.removeClass(back, 'zRS--inactive');
 
 		}
 
@@ -156,7 +201,7 @@ class zRS_core {
 
 		if(!this.elements.pager) {
 
-			zRS_util.log(`Cannot find pager container ${this.options.pager}, please double check your reference.`, 'warn');
+			zRS_util.log(`Cannot find pager container ${this.options.pager}, please double check your reference.`, 'warn', this.options.verbose);
 
 			return;
 
@@ -183,6 +228,12 @@ class zRS_core {
 
 				pager.appendChild(anchor);
 
+				anchor.addEventListener('mousedown', (e) => {
+
+					e.stopPropagation();
+
+				});
+
 				anchor.addEventListener('click', (e) => {
 
 					e.preventDefault();
@@ -196,7 +247,7 @@ class zRS_core {
 
 			if(pager.children.length !== this.elements.slides.length) {
 
-				zRS_util.log(`Please make sure your pager contains ${this.elements.slides.length} children to use customer pager elements.`, 'warn');
+				zRS_util.log(`Please make sure your pager contains ${this.elements.slides.length} children to use customer pager elements.`, 'warn', this.options.verbose);
 
 				return;
 
@@ -212,6 +263,12 @@ class zRS_core {
 
 				this.elements.anchors.push(pager.children[i]);
 
+				pager.children[i].addEventListener('mousedown', (e) => {
+
+					e.stopPropagation();
+
+				});
+
 				pager.children[i].addEventListener('click', (e) => {
 
 					e.preventDefault();
@@ -223,12 +280,23 @@ class zRS_core {
 
 		}
 
-		this.elements.slider.addEventListener('before', (e) => {
+	}
 
-			zRS_util.removeClass(this.elements.anchors[e.detail.current], 'is-active');
-			zRS_util.addClass(this.elements.anchors[e.detail.target], 'is-active');
+	resetPager() {
 
-		});
+		for(let i = 0, l = this.elements.anchors.length; i < l; i++) {
+
+			if(i !== 0) {
+
+				zRS_util.removeClass(this.elements.anchors[i], 'is-active');
+
+			} else {
+
+				zRS_util.addClass(this.elements.anchors[i], 'is-active');
+
+			}
+
+		}
 
 	}
 
@@ -256,6 +324,8 @@ class zRS_core {
 
 	bindings() {
 
+		new zRS_touch(this);
+
 		window.addEventListener('blur', () => {
 
 			this.pause();
@@ -272,9 +342,26 @@ class zRS_core {
 
 			zRS_util.animationFrame(() => {
 
-				zRS_util.loadImages(this.elements.slides[this.currentSlide]);
+				this.lazy.loadImages(this.elements.slides[this.currentSlide]);
+
+				this.setVisibleSlides();
 
 			});
+
+		});
+
+		this.elements.slider.addEventListener('before', (e) => {
+
+			this.currentSlide = e.detail.target;
+
+			zRS_util.removeClass(this.elements.anchors[e.detail.current], 'is-active');
+			zRS_util.addClass(this.elements.anchors[e.detail.target], 'is-active');
+
+			if(this.options.controls.length !== 0 && this.options.infinite === false) {
+
+				this.toggleControlClasses();
+
+			}
 
 		});
 
@@ -303,6 +390,91 @@ class zRS_core {
 
 	}
 
+	loadInitialSlides() {
+
+		if(this.options.transition === 'fade') {
+
+			this.lazy.loadImages(this.elements.slides[0]);
+
+			return;
+
+		}
+
+		if(this.options.alignment !== 0 && this.options.alignment !== 1) {
+
+			this.lazy.loadImages(this.elements.slides[0]);
+
+			let slidesPerSide = Math.floor(this.options.visibleSlides / 2);
+
+			for(let i = 0, b = 0, l = slidesPerSide; i < l; i++, b--) {
+
+				this.lazy.loadImages(this.elements.slides[this.targetSlide(i + 1)]);
+
+				if(this.options.infinite === false) {
+
+					break;
+
+				}
+
+				this.lazy.loadImages(this.elements.slides[this.targetSlide(b - 1)]);
+
+			}
+
+		} else if(this.options.alignment === 0) {
+
+			for(let i = 0, l = this.options.visibleSlides; i < l; i++) {
+
+				this.lazy.loadImages(this.elements.slides[this.targetSlide(i)]);
+
+			}
+
+		} else {
+
+			for(let i = 0, l = -this.options.visibleSlides; i > l; i--) {
+
+				if(i < 0 && this.options.infinite === false) {
+
+					break;
+
+				}
+
+				this.lazy.loadImages(this.elements.slides[this.targetSlide(i)]);
+
+			}
+
+		}
+
+	}
+
+	setVisibleSlides() {
+
+		if(typeof this.options.setVisibleSlides !== 'object') {
+
+			return;
+
+		}
+
+		for(let size in this.options.setVisibleSlides) {
+
+			if(this.options.setVisibleSlides.hasOwnProperty(size)) {
+
+				if(document.documentElement.clientWidth <= size) {
+
+					this.updateVisible(this.options.setVisibleSlides[size]);
+					return;
+
+				} else {
+
+					this.updateVisible(this.defaultVisible);
+
+				}
+
+			}
+
+		}
+
+	}
+
 	play() {
 
 		if(this.elements.slides.length <= 1) {
@@ -323,13 +495,48 @@ class zRS_core {
 
 	}
 
+	updateVisible(visible = 1) {
+
+		if(visible > this.elements.slides.length) {
+
+			zRS_util.log('Cannot show more slides than total number of slides.', 'warn', this.options.verbose);
+			return;
+
+		}
+
+		if(this.options.visibleSlides === visible) {
+
+			return;
+
+		}
+
+		this.options.visibleSlides = visible;
+		this.currentSlide = 0;
+
+		this.resetPager();
+
+		this.transition = new this.zRS_trans({
+
+			elements: this.elements,
+			options: this.options
+
+		});
+
+		for(let i = 0; i < visible; i++) {
+
+			this.lazy.loadImages(this.elements.slides[i]);
+
+		}
+
+	}
+
 	transTo(slide, speed = this.options.speed) {
 
 		let difference = slide - this.currentSlide;
 
 		if(!this.elements.slides[slide]) {
 
-			zRS_util.log(`Slide ${slide} doesn't exist, please amend the method call.`, 'warn');
+			zRS_util.log(`Slide ${slide} doesn't exist, please amend the method call.`, 'warn', this.options.verbose);
 
 			return;
 
@@ -380,46 +587,78 @@ class zRS_core {
 
 	}
 
-	handleTransition(steps = 1, speed = this.options.speed) {
+	targetSlide(slide) {
 
-		let current = this.currentSlide;
+		let target = slide;
 
-		this.currentSlide += steps;
+		if(slide >= this.elements.slides.length) {
 
-		if(this.currentSlide >= this.elements.slides.length) {
+			target = (slide - this.elements.slides.length);
 
-			this.currentSlide -= this.elements.slides.length;
+		} else if(slide < 0) {
 
-		} else if(this.currentSlide < 0) {
-
-			this.currentSlide += this.elements.slides.length;
+			target = (slide + this.elements.slides.length);
 
 		}
 
-		this.events.before = zRS_util.createEvent('before', {
+		return target;
 
-			current: parseInt(current),
-			currentSlide: this.elements.slides[current],
-			target: parseInt(this.currentSlide),
-			targetSlide: this.elements.slides[this.currentSlide]
+	}
+
+	handleTransition(steps = null, speed = this.options.speed) {
+
+		steps = steps ? steps : this.options.slideBy;
+
+		let current = this.currentSlide,
+			promises = [],
+			target = current + steps;
+
+		target = this.targetSlide(target);
+
+		if(this.options.transition !== 'fade') {
+
+			for(let i = current; i < target; i++) {
+
+				promises.push(new Promise((resolve, reject) => {
+
+					this.lazy.loadImages(this.elements.slides[i], {resolve: resolve, reject: reject});
+
+				}));
+
+			}
+
+		}
+
+		for(let i = 0; i < this.options.visibleSlides; i++) {
+
+			let slideIndex = this.targetSlide(target + i);
+
+			promises.push(new Promise((resolve, reject) => {
+
+				this.lazy.loadImages(this.elements.slides[slideIndex], {resolve: resolve, reject: reject});
+
+			}));
+
+		}
+
+		Promise.all(promises).then(() => {
+
+			this.transition.handle(this.currentSlide, current, speed, steps);
 
 		});
 
 		zRS_util.dispatchEvent({
 
 			name: 'before',
-			event: this.events.before,
+			event: zRS_util.createEvent('before', {
+
+				current: parseInt(current),
+				currentSlide: this.elements.slides[current],
+				target: parseInt(target),
+				targetSlide: this.elements.slides[target]
+
+			}),
 			element: this.elements.slider
-
-		});
-
-		new Promise((resolve, reject) => {
-
-			zRS_util.loadImages(this.elements.slides[this.currentSlide], {resolve: resolve, reject: reject});
-
-		}).then(() => {
-
-			this.transition.handle(this.currentSlide, current, speed);
 
 		});
 

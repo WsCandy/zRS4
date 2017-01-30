@@ -1,16 +1,20 @@
-var lastTime = 0;
+let lastTime = 0;
 
 class zRS_util {
 
-	static log(message, type = `log`) {
+	static log(message, type = `log`, verbose = false) {
 
-		console[type](`[zRS - ${zRS.version()}]: ${message}`);
+		if(verbose === true) {
+
+			console[type](`[zRS - ${zRS.version()}]: ${message}`);
+
+		}
 
 	}
 
 	static createEvent(name, detail = {}) {
 
-		var event;
+		let event = null;
 
 		if(document.createEvent) {
 
@@ -37,29 +41,77 @@ class zRS_util {
 
 	}
 
-	static addClass(element, className) {
+	static addClass(elements = null, className) {
 
-		if(element.classList) {
+		if(elements === null) {
 
-			element.classList.add(className);
+			return;
+
+		}
+
+		let add = function(element, className) {
+
+			if(element.classList) {
+
+				element.classList.add(className);
+
+			} else {
+
+				element.className += ` ${className}`;
+
+			}
+
+		};
+
+		if(typeof elements.length === 'undefined') {
+
+			add(elements, className);
 
 		} else {
 
-			element.className += ` ${className}`;
+			for(let i = 0, l = elements.length; i < l; i++) {
+
+				add(elements[i], className);
+
+			}
 
 		}
 
 	}
 
-	static removeClass(element, className) {
+	static removeClass(elements = null, className) {
 
-		if(element.classList) {
+		if(elements === null) {
 
-			element.classList.remove(className);
+			return;
+
+		}
+
+		let remove = function(element, className) {
+
+			if(element.classList) {
+
+				element.classList.remove(className);
+
+			} else {
+
+				element.className = elements.className.replace(new RegExp(`(^|\\b)${className.split(' ').join('|')}(\\b|$)`, `gi`), ' ').trim();
+
+			}
+
+		};
+
+		if(typeof elements.length === 'undefined') {
+
+			remove(elements, className);
 
 		} else {
 
-			element.className = element.className.replace(new RegExp(`(^|\\b)${className.split(' ').join('|')}(\\b|$)`, `gi`), ' ').trim();
+			for(let i = 0, l = elements.length; i < l; i++) {
+
+				remove(elements[i], className);
+
+			}
 
 		}
 
@@ -79,7 +131,7 @@ class zRS_util {
 
 				case '#' :
 
-					return parent.getElementById(element.substr(1));
+					return document.getElementById(element.substr(1));
 
 				default:
 
@@ -99,175 +151,34 @@ class zRS_util {
 
 	}
 
-	static loadImages(slide, promise) {
+	static animationFrame(anim) {
 
-		let images = [],
-			promises = [],
-			children = slide.querySelectorAll('*');
+		if(!window.requestAnimationFrame) {
+			
+			const currTime = new Date().getTime(),
+				  timeToCall = Math.max(0, 16 - (currTime - lastTime));
 
-		if(slide.hasAttribute('zRS-srcset') || slide.hasAttribute('zRS-src')) {
+			lastTime = currTime + timeToCall;
 
-			images.push(slide);
-
-		}
-
-		for(let i = 0, l = children.length; i < l; i++) {
-
-			if(children[i].hasAttribute('zRS-srcset') || children[i].hasAttribute('zRS-src')) {
-
-				images.push(children[i]);
-
-			}
+			return setTimeout(anim, timeToCall);
 
 		}
 
-		for(let i = 0, l = images.length; i < l; i++) {
-
-			let src;
-
-			promises[i] = new Promise((resolve, reject) => {
-
-				if(images[i].hasAttribute('zRS-srcset')) {
-
-					src = this.determineSize(images[i], images[i].getAttribute('zRS-srcset'));
-
-					this.determineSize(images[i], images[i].getAttribute('zRS-srcset'));
-
-				} else {
-
-					src = images[i].getAttribute('zRS-src');
-
-				}
-
-				this.swapSrc({
-
-					image: images[i],
-					src: src,
-					promise: {
-
-						resolve: resolve,
-						reject: reject
-
-					}
-
-				});
-
-			});
-
-		}
-
-		Promise.all(promises).then(() => {
-
-			if(promise) {
-
-				promise.resolve();
-
-			}
-
-		});
-
-		if(images.length === 0 && promise) {
-
-			promise.resolve();
-
-		}
+		return requestAnimationFrame(anim);
 
 	}
 
-	static swapSrc(data) {
+	static cancelAnimationFrame(anim) {
 
-		let img;
+		if(!window.requestAnimationFrame) {
 
-		if(data.src === data.image.getAttribute(`src`) || `url("${data.src}")` === data.image.style.backgroundImage) {
-
-			if(data.promise) {
-
-				data.promise.resolve();
-
-			}
+			clearTimeout(anim);
 
 			return;
 
 		}
 
-		img = new Image();
-
-		img.addEventListener('load', () => {
-
-			if(data.image.nodeName !== 'IMG') {
-
-				data.image.style.backgroundImage = `url("${data.src}")`;
-
-			} else {
-
-				data.image.src = data.src;
-
-			}
-
-			if(data.promise) {
-
-				data.promise.resolve();
-
-			}
-
-		});
-
-		img.src = data.src;
-
-	};
-
-	static determineSize(element, srcset) {
-
-		let src = [null, 0],
-			largest;
-
-		srcset = srcset.split(', ');
-		largest = srcset[0].split(' ');
-
-		for(let image of srcset) {
-
-			image = image.split(' ');
-
-			if(parseInt(image[1]) > parseInt(largest[1])) {
-
-				largest = image;
-
-			}
-
-			if(element.clientWidth <= parseInt(image[1])) {
-
-				src = image;
-
-			}
-
-		}
-
-		if(src[0] === null) {
-
-			src = largest;
-
-		}
-
-		return src[0];
-
-	}
-
-	static animationFrame(anim) {
-
-		if(!window.requestAnimationFrame) {
-			
-			var currTime = new Date().getTime(),
-				timeToCall = Math.max(0, 16 - (currTime - lastTime));
-
-			window.setTimeout(anim, timeToCall);
-
-			lastTime = currTime + timeToCall;
-
-		} else {
-
-			requestAnimationFrame(anim);
-
-		}
+		cancelAnimationFrame(anim);
 
 	}
 
