@@ -1,3 +1,5 @@
+//@flow
+
 'use strict';
 
 require('core-js/es6/symbol');
@@ -168,7 +170,5 @@ class zRS {
 	}
 
 }
-
-window.zRS = zRS;
 
 export default zRS;
