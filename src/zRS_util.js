@@ -184,6 +184,22 @@ class zRS_util {
 
 	}
 
+	static targetSlide(slide, total) {
+		let target = slide;
+
+		if(slide >= total) {
+
+			target = (slide - total);
+
+		} else if(slide < 0) {
+
+			target = (slide + total);
+
+		}
+
+		return target;
+	}
+
 }
 
 export default zRS_util;

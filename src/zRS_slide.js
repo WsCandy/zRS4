@@ -1,4 +1,5 @@
 import zRS_util from './zRS_util';
+import Promise from 'core-js/es6/promise';
 
 class zRS_slide {
 
@@ -45,11 +46,21 @@ class zRS_slide {
 
 		this.elements.slider.addEventListener('after', (e) => {
 
-			new Promise((resolve, reject) => {
+			let promises = [];
 
-				this.lazy.loadImages(e.detail.currentSlide, { resolve, reject });
+			for(let i = 0; i < this.visible; i++) {
 
-			}).then(() => {
+				let slideIndex = zRS_util.targetSlide(e.detail.current + i, this.elements.slides.length);
+
+				promises.push(new Promise((resolve, reject) => {
+
+					this.lazy.loadImages(this.elements.slides[slideIndex], {resolve: resolve, reject: reject});
+
+				}));
+
+			}
+
+			Promise.all(promises).then(() => {
 
 				for(let i = 0, l = this.elements.slides.length; i < l; i++) {
 

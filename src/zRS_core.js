@@ -138,9 +138,13 @@ class zRS_core {
 			control = this.elements.controls[i].length ? this.elements.controls[i][0] : this.elements.controls[i];
 
 			control.addEventListener('mousedown', (e) => {
-
+				e.preventDefault();
 				e.stopPropagation();
+			});
 
+			control.addEventListener('mouseup', (e) => {
+				e.preventDefault();
+				e.stopPropagation();
 			});
 
 			control.addEventListener('click', (e) => {
@@ -417,7 +421,7 @@ class zRS_core {
 
 			for(let i = 0, b = 0, l = slidesPerSide; i < l; i++, b--) {
 
-				this.lazy.loadImages(this.elements.slides[this.targetSlide(i + 1)]);
+				this.lazy.loadImages(this.elements.slides[zRS_util.targetSlide(i + 1, this.elements.slides.length)]);
 
 				if(this.options.infinite === false) {
 
@@ -425,7 +429,7 @@ class zRS_core {
 
 				}
 
-				this.lazy.loadImages(this.elements.slides[this.targetSlide(b - 1)]);
+				this.lazy.loadImages(this.elements.slides[zRS_util.targetSlide(b - 1, this.elements.slides.length)]);
 
 			}
 
@@ -433,7 +437,7 @@ class zRS_core {
 
 			for(let i = 0, l = this.options.visibleSlides; i < l; i++) {
 
-				this.lazy.loadImages(this.elements.slides[this.targetSlide(i)]);
+				this.lazy.loadImages(this.elements.slides[zRS_util.targetSlide(i, this.elements.slides.length)]);
 
 			}
 
@@ -447,7 +451,7 @@ class zRS_core {
 
 				}
 
-				this.lazy.loadImages(this.elements.slides[this.targetSlide(i)]);
+				this.lazy.loadImages(this.elements.slides[zRS_util.targetSlide(i, this.elements.slides.length)]);
 
 			}
 
@@ -589,24 +593,6 @@ class zRS_core {
 
 	}
 
-	targetSlide(slide) {
-
-		let target = slide;
-
-		if(slide >= this.elements.slides.length) {
-
-			target = (slide - this.elements.slides.length);
-
-		} else if(slide < 0) {
-
-			target = (slide + this.elements.slides.length);
-
-		}
-
-		return target;
-
-	}
-
 	handleTransition(steps = null, speed = this.options.speed) {
 
 		steps = steps !== null ? steps : this.options.slideBy;
@@ -615,7 +601,7 @@ class zRS_core {
 			promises = [],
 			target = current + steps;
 
-		target = this.targetSlide(target);
+		target = zRS_util.targetSlide(target, this.elements.slides.length);
 
 		if(this.options.transition !== 'fade') {
 
@@ -633,7 +619,7 @@ class zRS_core {
 
 		for(let i = 0; i < this.options.visibleSlides; i++) {
 
-			let slideIndex = this.targetSlide(target + i);
+			let slideIndex = zRS_util.targetSlide(target + i, this.elements.slides.length);
 
 			promises.push(new Promise((resolve, reject) => {
 

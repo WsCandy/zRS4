@@ -52,7 +52,6 @@ class zRS_touch {
 				this.core.elements.slider.style.cursor = '-webkit-grabbing';
 
 			});
-
 		}
 
 		document.addEventListener('mousemove', (e) => {
@@ -89,17 +88,11 @@ class zRS_touch {
 		const links = this.core.elements.inner.querySelectorAll('a');
 
 		for(let i = 0, l = links.length; i < l; i++) {
-
 			links[i].addEventListener('click', (e) => {
-
 				if(this.dragging === true) {
-
 					e.preventDefault();
-
 				}
-
 			});
-
 		}
 
 	}
