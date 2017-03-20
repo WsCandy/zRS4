@@ -19,7 +19,7 @@
 		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
 		//alignment: 0.5,
-		infinite: false,
+		//infinite: false,
 		verbose: true,
 		//freeStyle: true,
 		// friction: 0.1

@@ -188,6 +188,8 @@ class zRS_slide {
 
 			if(this.remaining === 0) {
 
+				this.animation = null;
+
 				zRS_util.dispatchEvent({
 
 					name: 'after',

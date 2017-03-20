@@ -329,11 +329,19 @@ class zRS_core {
 
 		window.addEventListener('blur', () => {
 
+			if(this.transition.animation) {
+				zRS_util.cancelAnimationFrame(this.transition.animation);
+			}
+
 			this.pause();
 
 		});
 
 		window.addEventListener('focus', () => {
+
+			if(this.transition.animation) {
+				this.handleTransition(0);
+			}
 
 			this.play();
 
@@ -544,9 +552,7 @@ class zRS_core {
 		}
 
 		if(difference === 0) {
-
 			return;
-
 		}
 
 		this.resetTimer();
@@ -608,7 +614,7 @@ class zRS_core {
 
 	handleTransition(steps = null, speed = this.options.speed) {
 
-		steps = steps ? steps : this.options.slideBy;
+		steps = steps !== null ? steps : this.options.slideBy;
 
 		let current = this.currentSlide,
 			promises = [],
