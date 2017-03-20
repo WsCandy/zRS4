@@ -7,8 +7,8 @@ class zRS_slide {
 		this.elements = data.elements;
 		this.options = data.options;
 		this.lazy = data.lazy;
-		this.slideWidth = (100 / this.options.visibleSlides) + (this.options.slideSpacing / (Math.max((this.options.visibleSlides - 1), 1)));
-		this.minTransform = -Math.abs((this.elements.slides.length - (this.options.infinite ? 0 : 1)) * this.slideWidth);
+		this.visible = this.options.visibleSlides;
+		this.setSlideWidth();
 		this.landingPoint = 0;
 		this.currentPos = 0;
 		this.startPos = 0;
@@ -21,8 +21,7 @@ class zRS_slide {
 		this.isTouch = ("ontouchstart" in document.documentElement);
 		this.animationFrame =  typeof window.requestAnimationFrame !== 'undefined';
 
-		this.currentPos += ((this.slideWidth * this.options.alignment) * (this.options.visibleSlides - 1));
-		this.currentPos = this.fixInfinitePosition(this.currentPos);
+		this.setStartPos();
 
 		this.setUp();
 		this.styleSlides();
@@ -33,7 +32,16 @@ class zRS_slide {
 
 		this.elements.inner.style.overflow = 'visible';
 		this.elements.slider.style.overflow = 'hidden';
+		this.setSlideWidth();
 		this.positionInner(true);
+
+		this.elements.slider.addEventListener('visibleSlides', (e) => {
+			this.visible = e.detail.visible;
+			this.setSlideWidth();
+			this.setStartPos();
+			this.positionInner(true);
+			this.styleSlides();
+		});
 
 		this.elements.slider.addEventListener('after', (e) => {
 
@@ -62,6 +70,16 @@ class zRS_slide {
 
 	}
 
+	setSlideWidth() {
+		this.slideWidth = (100 / this.visible) + (this.options.slideSpacing / (Math.max((this.visible - 1), 1)));
+		this.minTransform = -Math.abs((this.elements.slides.length - (this.options.infinite ? 0 : 1)) * this.slideWidth);
+	}
+
+	setStartPos() {
+		this.currentPos = ((this.slideWidth * this.options.alignment) * (this.visible - 1));
+		this.currentPos = this.fixInfinitePosition(this.currentPos);
+	}
+
 	styleSlides() {
 
 		for(let i = 0, l = this.elements.slides.length; i < l; i++) {
@@ -81,7 +99,7 @@ class zRS_slide {
 			element.style.top = 0;
 			element.style.left = `${this.slideWidth * i}%`;
 			element.style.zIndex = 1;
-			element.style.width = `${(100 / this.options.visibleSlides) - (this.options.visibleSlides > 1 ? this.options.slideSpacing : 0)}%`;
+			element.style.width = `${(100 / this.visible) - (this.visible > 1 ? this.options.slideSpacing : 0)}%`;
 
 		}
 

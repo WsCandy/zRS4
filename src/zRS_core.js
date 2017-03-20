@@ -457,10 +457,8 @@ class zRS_core {
 
 	setVisibleSlides() {
 
-		if(typeof this.options.setVisibleSlides !== 'object') {
-
+		if(typeof this.options.setVisibleSlides !== 'object' || typeof this.transition.visible === 'undefined') {
 			return;
-
 		}
 
 		for(let size in this.options.setVisibleSlides) {
@@ -507,16 +505,12 @@ class zRS_core {
 	updateVisible(visible = 1) {
 
 		if(visible > this.elements.slides.length) {
-
 			zRS_util.log('Cannot show more slides than total number of slides.', 'warn', this.options.verbose);
 			return;
-
 		}
 
 		if(this.options.visibleSlides === visible) {
-
 			return;
-
 		}
 
 		this.options.visibleSlides = visible;
@@ -524,11 +518,12 @@ class zRS_core {
 
 		this.resetPager();
 
-		this.transition = new this.zRS_trans({
-
-			elements: this.elements,
-			options: this.options
-
+		zRS_util.dispatchEvent({
+			name: 'visibleSlides',
+			event: zRS_util.createEvent('visibleSlides', {
+				visible: visible
+			}),
+			element: this.elements.slider
 		});
 
 		for(let i = 0; i < visible; i++) {
