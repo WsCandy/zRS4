@@ -469,6 +469,22 @@ The `imgLoad` event will fire after an image has been lazy loaded in by zRS. Thi
         console.log('Image Loaded!', e.detail);
         
     });
+    
+#### Visible Slides Event
+    
+The `visibleSlides` event will fire after the slider has been updated with new amount of visible slides
+    
+**Data**
+    
+- `e.detail.visible` _(int)_
+    
+**Example:** 
+    
+    element.addEventListener('visibleSlides', function(e) {
+            
+        console.log('Visible Slides Changed!', e.detail);
+            
+    });
 
 zRS API
 ---
