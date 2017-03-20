@@ -1,4 +1,5 @@
 import zRS_util from './zRS_util';
+import Promise from 'core-js/es6/promise';
 
 class zRS_lazy {
 
@@ -151,7 +152,13 @@ class zRS_lazy {
 		srcset = srcset.split(', ');
 		largest = srcset[0].split(' ');
 
-		for(let image of srcset) {
+		for(let image in srcset) {
+
+			if(!srcset.hasOwnProperty(image)) {
+
+				continue;
+
+			}
 
 			image = image.split(' ');
 

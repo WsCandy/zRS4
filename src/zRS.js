@@ -2,13 +2,42 @@
 
 'use strict';
 
-require('core-js/es6/symbol');
-require('core-js/es6/promise');
-
 import zRS_util from './zRS_util';
 import zRS_core from './zRS_core';
 
+type Settings = {
+
+	transition: string,
+	inner: string,
+	slides: string,
+	controls: Array<HTMLElement>,
+	pager: Array<string> | null,
+	delay: number,
+	speed: number,
+	slideBy: number,
+	slideSpacing: number,
+	direction: string,
+	keyboardControls: boolean,
+	alignment: number | string,
+	visibleSlides: number,
+	setVisibleSlides: null | {[key: number] : number},
+	drag: boolean,
+	infinite: boolean,
+	verbose: boolean,
+	freeStyle: boolean,
+	friction: number
+
+};
+
+type Instances = zRS_core | {[key: any] : zRS_core};
+
 class zRS {
+
+	element: string | Array<HTMLElement> | HTMLElement;
+	defaults: Settings;
+	settings: Settings;
+	sliders: boolean | Array<HTMLElement> | HTMLElement;
+	instances: Instances;
 
 	static version() {
 
@@ -16,7 +45,7 @@ class zRS {
 
 	}
 
-	constructor(element, options = {}) {
+	constructor(element: string | Array<HTMLElement> | HTMLElement, options: {} = {}): Instances {
 
 		this.element = element;
 		this.instances = {};
@@ -59,7 +88,7 @@ class zRS {
 
 	}
 
-	setOptions(update) {
+	setOptions(update: {}): void {
 
 		if(!update) {
 
@@ -96,7 +125,7 @@ class zRS {
 
 	}
 
-	manipulateOptions() {
+	manipulateOptions(): void {
 
 		if(this.settings.direction === 'reverse') {
 
@@ -112,7 +141,7 @@ class zRS {
 
 		if(typeof this.settings.alignment === 'string') {
 
-			switch (this.settings.alignment) {
+			switch(this.settings.alignment) {
 
 				case 'right' :
 
@@ -149,15 +178,16 @@ class zRS {
 
 	}
 
-	setObjects() {
+	setObjects(): void {
 
-		if(this.sliders.length) {
+		if(typeof this.sliders === 'object' && this.sliders.length > 0) {
 
 			for(let i = 0, l = this.sliders.length; i < l; i++) {
 
-				let id = this.sliders[i].getAttribute('id') || i;
+				let slider: HTMLElement = this.sliders[i],
+					id = slider.getAttribute('id') || i;
 
-				this.instances[id] = new zRS_core(this.sliders[i], this.settings);
+				this.instances[id] = new zRS_core(slider, this.settings);
 
 			}
 

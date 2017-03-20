@@ -2,6 +2,7 @@ import zRS_util from './zRS_util';
 import zRS_touch from './zRS_touch';
 import zRS_public from './zRS_public';
 import zRS_lazy from './zRS_lazy';
+import Promise from 'core-js/es6/promise';
 
 class zRS_core {
 

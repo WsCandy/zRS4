@@ -14,13 +14,13 @@ module.exports = {
 			{
 				loader: 'babel-loader',
 				query: {
-					presets: ['es2015']
+					presets: ['es2015', 'stage-0']
 				},
 				exclude: /(node_modules|bower_components)/
 			}
 		]
 	},
 	plugins: [
-		new webpack.optimize.UglifyJsPlugin()
+		new webpack.optimize.UglifyJsPlugin(),
 	]
 };

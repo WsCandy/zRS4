@@ -9,16 +9,16 @@
 		transition: 'slide',
 		//direction: 'reverse',
 		pager: '.zRS__pager',
-		visibleSlides: 2,
+		visibleSlides: 3,
 		slideSpacing: 0,
 		slideBy: 1,
 		setVisibleSlides: {
 
-			500: 1
+			800: 2
 
 		},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
-		alignment: 0.5,
+		//alignment: 0.5,
 		infinite: false,
 		verbose: true,
 		//freeStyle: true,
