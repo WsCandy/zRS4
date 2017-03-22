@@ -4,10 +4,13 @@ const webpack = require('webpack');
 module.exports = {
 
 	watch: true,
-	entry: `./index.js`,
+	entry: {
+		'zRS': `./index.js`,
+		'zRS.min':`./index.js`
+	},
 	output: {
 		path: path.resolve(__dirname, 'dist'),
-		filename: 'zRS.min.js'
+		filename: '[name].js'
 	},
 	module: {
 		loaders: [
@@ -21,6 +24,13 @@ module.exports = {
 		]
 	},
 	plugins: [
-		new webpack.optimize.UglifyJsPlugin(),
+		new webpack.optimize.UglifyJsPlugin({
+			include: /\.js$/,
+			beautify: true
+		}),
+		new webpack.optimize.UglifyJsPlugin({
+			include: /\.min\.js$/,
+			minimize: true
+		})
 	]
 };
