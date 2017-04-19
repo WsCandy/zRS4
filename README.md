@@ -1,9 +1,9 @@
-zRS - v4.1.3
+zRS - v4.1.4
 =====
 
 zRS is a responsive javascript slider that can be implemented onto your web pages. It is backwards compatable to IE9.
 
-Version `4.1.3` changes `package.json` configuration slightly.
+Version `4.1.4` returns more details from the `load` event.
 
 Initialisation
 ---
@@ -399,6 +399,12 @@ The `pause` event will fire every time the slider is paused from it's normal aut
 #### Load Event
 
 The `load` event will fire once per slider when it's first initialised.
+
+**Data:**
+
+- `e.detail.current` _(int)_
+- `e.detail.currentSlide` _(element object)_
+- `e.detail.slides` _([element object])_
 
 **Example:**
 

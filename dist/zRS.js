@@ -284,20 +284,27 @@
                 pager: null,
                 controls: [],
                 anchors: []
-            }, this.indexElements() === !0) return this.createEvents(), this.styleElements(), 
-            this.setUpPager(), this.setUpControls(), this.lazy = new v.default({
-                options: this.options,
-                elements: this.elements
-            }), this.transition = new this.zRS_trans({
-                elements: this.elements,
-                options: this.options,
-                lazy: this.lazy
-            }), this.play(), this.bindings(), this.setVisibleSlides(), this.loadInitialSlides(), 
-            l.default.dispatchEvent({
-                name: "load",
-                event: this.events.load,
-                element: this.elements.slider
-            }), new f.default(this);
+            }, this.indexElements() === !0) {
+                this.createEvents(), this.styleElements(), this.setUpPager(), this.setUpControls(), 
+                this.lazy = new v.default({
+                    options: this.options,
+                    elements: this.elements
+                }), this.transition = new this.zRS_trans({
+                    elements: this.elements,
+                    options: this.options,
+                    lazy: this.lazy
+                }), this.play(), this.bindings(), this.setVisibleSlides(), this.loadInitialSlides();
+                var r = l.default.createEvent("load", {
+                    slides: this.elements.slides,
+                    current: this.currentSlide,
+                    currentSlide: this.elements.slides[this.currentSlide]
+                });
+                return l.default.dispatchEvent({
+                    name: "load",
+                    event: r,
+                    element: this.elements.slider
+                }), new f.default(this);
+            }
         }
         return o(t, [ {
             key: "indexElements",
@@ -381,8 +388,7 @@
         }, {
             key: "createEvents",
             value: function() {
-                this.events.load = l.default.createEvent("load"), this.events.play = l.default.createEvent("play"), 
-                this.events.pause = l.default.createEvent("pause");
+                this.events.play = l.default.createEvent("play"), this.events.pause = l.default.createEvent("pause");
             }
         }, {
             key: "bindings",
@@ -922,7 +928,7 @@
         return o(t, null, [ {
             key: "version",
             value: function() {
-                return "4.1.1";
+                return "4.1.3";
             }
         } ]), o(t, [ {
             key: "setOptions",

@@ -68,12 +68,16 @@ class zRS_core {
 
 		this.loadInitialSlides();
 
+		const loadEvent = zRS_util.createEvent('load', {
+			slides: this.elements.slides,
+			current: this.currentSlide,
+			currentSlide: this.elements.slides[this.currentSlide]
+		});
+
 		zRS_util.dispatchEvent({
-
 			name: 'load',
-			event: this.events.load,
+			event: loadEvent,
 			element: this.elements.slider
-
 		});
 
 		return new zRS_public(this);
@@ -321,7 +325,6 @@ class zRS_core {
 
 	createEvents() {
 
-		this.events.load = zRS_util.createEvent('load');
 		this.events.play = zRS_util.createEvent('play');
 		this.events.pause = zRS_util.createEvent('pause');
 
