@@ -5,6 +5,16 @@ zRS is a responsive javascript slider that can be implemented onto your web page
 
 Version `4.1.4` returns more details from the `load` event.
 
+Installation
+---
+To install, run the following code:
+	
+	yarn add zrs4 -D
+	
+Then import it in your JS file using this:
+
+	import zRS from 'zrs4';
+
 Initialisation
 ---
 
