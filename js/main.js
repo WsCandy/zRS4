@@ -2,6 +2,12 @@
 
 	var cont = document.getElementById('zRS');
 
+	cont.addEventListener('load', (e) => {
+		console.log(e.detail);
+
+		console.log(e.detail.slides[e.detail.currentSlide])
+	});
+
 	window.slider = new zRS(cont, {
 
 		speed: 750,
@@ -9,7 +15,7 @@
 		transition: 'slide',
 		//direction: 'reverse',
 		pager: '.zRS__pager',
-		visibleSlides: 3,
+		visibleSlides: 1,
 		slideSpacing: 0,
 		slideBy: 1,
 		setVisibleSlides: {

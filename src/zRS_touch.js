@@ -27,12 +27,10 @@ class zRS_touch {
 			zRS_util.log('The active transition is missing touch handlers, is this intended? Touch is now disabled.', 'warn', this.core.options.verbose);
 
 			return;
-
 		}
 
 		this.bindings();
 		this.setScrolling();
-
 	}
 
 	bindings() {

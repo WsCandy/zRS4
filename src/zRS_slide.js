@@ -141,7 +141,7 @@ class zRS_slide {
 
 	fixInfinitePosition(position = null) {
 
-		position = position != null ? position : this.currentPos;
+		position = position !== null ? position : this.currentPos;
 
 		if(this.options.infinite === true) {
 
@@ -150,7 +150,7 @@ class zRS_slide {
 			do {
 
 				position <= this.minTransform ? position -= this.minTransform : null;
-				position >= 0 ? position += this.minTransform : null;
+				position > 0 ? position += this.minTransform : null;
 
 				over--
 

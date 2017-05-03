@@ -25,26 +25,20 @@ class zRS_core {
 		this.currentSlide = 0;
 		this.defaultVisible = this.options.visibleSlides;
 		this.elements = {
-
 			slider: element,
 			inner: null,
 			slides: null,
 			pager: null,
 			controls: [],
 			anchors: []
-
 		};
 
 		if(this.indexElements() !== true) {
-
 			return;
-
 		}
 
 		this.createEvents();
 		this.styleElements();
-		this.setUpPager();
-		this.setUpControls();
 
 		this.lazy = new zRS_lazy({
 
@@ -61,11 +55,15 @@ class zRS_core {
 
 		});
 
-		this.play();
-		this.bindings();
+		if(this.elements.slides.length > 1) {
+			this.play();
+			this.bindings();
+			this.setUpPager();
+			this.setUpControls();
+		}
 
+		this.bindResize();
 		this.setVisibleSlides();
-
 		this.loadInitialSlides();
 
 		const loadEvent = zRS_util.createEvent('load', {
@@ -81,7 +79,6 @@ class zRS_core {
 		});
 
 		return new zRS_public(this);
-
 	}
 
 	indexElements() {
@@ -330,6 +327,20 @@ class zRS_core {
 
 	}
 
+	bindResize() {
+		window.addEventListener('resize', () => {
+
+			zRS_util.animationFrame(() => {
+
+				this.lazy.loadImages(this.elements.slides[this.currentSlide]);
+
+				this.setVisibleSlides();
+
+			});
+
+		});
+	}
+
 	bindings() {
 
 		new zRS_touch(this);
@@ -351,18 +362,6 @@ class zRS_core {
 			}
 
 			this.play();
-
-		});
-
-		window.addEventListener('resize', () => {
-
-			zRS_util.animationFrame(() => {
-
-				this.lazy.loadImages(this.elements.slides[this.currentSlide]);
-
-				this.setVisibleSlides();
-
-			});
 
 		});
 
@@ -492,9 +491,7 @@ class zRS_core {
 	play() {
 
 		if(this.elements.slides.length <= 1) {
-
 			return;
-
 		}
 
 		this.resetTimer();
