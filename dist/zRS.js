@@ -267,7 +267,7 @@
         return function(e, n, i) {
             return n && t(e.prototype, n), i && t(e, i), e;
         };
-    }(), l = n(2), a = i(l), u = n(18), c = i(u), h = n(17), f = i(h), d = n(16), v = i(d), m = n(19), p = i(m), y = function() {
+    }(), l = n(2), a = i(l), u = n(18), c = i(u), h = n(17), f = i(h), d = n(16), v = i(d), m = n(19), p = i(m), g = function() {
         function t(e, i) {
             s(this, t);
             try {
@@ -292,9 +292,8 @@
                     elements: this.elements,
                     options: this.options,
                     lazy: this.lazy
-                }), this.elements.slides.length > this.options.visibleSlides && (this.play(), this.bindings(), 
-                this.setUpPager(), this.setUpControls()), this.bindResize(), this.setVisibleSlides(), 
-                this.loadInitialSlides();
+                }), this.setVisibleSlides(), this.elements.slides.length > this.options.visibleSlides && (this.play(), 
+                this.bindings(), this.setUpPager(), this.setUpControls()), this.bindResize(), this.loadInitialSlides();
                 var r = a.default.createEvent("load", {
                     slides: this.elements.slides,
                     current: this.currentSlide,
@@ -424,9 +423,13 @@
                 if ("fade" === this.options.transition) return void this.lazy.loadImages(this.elements.slides[0]);
                 if (0 !== this.options.alignment && 1 !== this.options.alignment) {
                     this.lazy.loadImages(this.elements.slides[0]);
-                    for (var t = Math.floor(this.options.visibleSlides / 2), e = 0, n = 0, i = t; e < i && (this.lazy.loadImages(this.elements.slides[a.default.targetSlide(e + 1, this.elements.slides.length)]), 
-                    this.options.infinite !== !1); e++, n--) this.lazy.loadImages(this.elements.slides[a.default.targetSlide(n - 1, this.elements.slides.length)]);
-                } else if (0 === this.options.alignment) for (var s = 0, r = this.options.visibleSlides; s < r; s++) this.lazy.loadImages(this.elements.slides[a.default.targetSlide(s, this.elements.slides.length)]); else for (var o = 0, l = -this.options.visibleSlides; o > l && !(o < 0 && this.options.infinite === !1); o--) this.lazy.loadImages(this.elements.slides[a.default.targetSlide(o, this.elements.slides.length)]);
+                    for (var t = Math.floor(this.options.visibleSlides / 2), e = 0, n = 0, i = t; e < i; e++, 
+                    n--) if (this.elements.slides[a.default.targetSlide(e + 1, this.elements.slides.length)]) {
+                        if (this.lazy.loadImages(this.elements.slides[a.default.targetSlide(e + 1, this.elements.slides.length)]), 
+                        this.options.infinite === !1) break;
+                        this.lazy.loadImages(this.elements.slides[a.default.targetSlide(n - 1, this.elements.slides.length)]);
+                    }
+                } else if (0 === this.options.alignment) for (var s = 0, r = this.options.visibleSlides; s < r; s++) this.elements.slides[a.default.targetSlide(s, this.elements.slides.length)] && this.lazy.loadImages(this.elements.slides[a.default.targetSlide(s, this.elements.slides.length)]); else for (var o = 0, l = -this.options.visibleSlides; o > l && !(o < 0 && this.options.infinite === !1); o--) this.elements.slides[a.default.targetSlide(o, this.elements.slides.length)] && this.lazy.loadImages(this.elements.slides[a.default.targetSlide(o, this.elements.slides.length)]);
             }
         }, {
             key: "setVisibleSlides",
@@ -523,7 +526,7 @@
             }
         } ]), t;
     }();
-    e.default = y;
+    e.default = g;
 }, function(t, e, n) {
     "use strict";
     function i(t) {
@@ -935,7 +938,7 @@
         return o(t, null, [ {
             key: "version",
             value: function() {
-                return "4.1.4";
+                return "4.1.7";
             }
         } ]), o(t, [ {
             key: "setOptions",
@@ -1194,10 +1197,10 @@
     t.exports = "constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",");
 }, function(t, e, n) {
     var i = n(1), s = n(5), r = n(4), o = n(9), l = n(11), a = "prototype", u = function(t, e, n) {
-        var c, h, f, d, v = t & u.F, m = t & u.G, p = t & u.S, y = t & u.P, g = t & u.B, b = m ? i : p ? i[e] || (i[e] = {}) : (i[e] || {})[a], S = m ? s : s[e] || (s[e] = {}), w = S[a] || (S[a] = {});
+        var c, h, f, d, v = t & u.F, m = t & u.G, p = t & u.S, g = t & u.P, y = t & u.B, b = m ? i : p ? i[e] || (i[e] = {}) : (i[e] || {})[a], S = m ? s : s[e] || (s[e] = {}), w = S[a] || (S[a] = {});
         m && (n = e);
-        for (c in n) h = !v && b && void 0 !== b[c], f = (h ? b : n)[c], d = g && h ? l(f, i) : y && "function" == typeof f ? l(Function.call, f) : f, 
-        b && o(b, c, f, t & u.U), S[c] != f && r(S, c, d), y && w[c] != f && (w[c] = f);
+        for (c in n) h = !v && b && void 0 !== b[c], f = (h ? b : n)[c], d = y && h ? l(f, i) : g && "function" == typeof f ? l(Function.call, f) : f, 
+        b && o(b, c, f, t & u.U), S[c] != f && r(S, c, d), g && w[c] != f && (w[c] = f);
     };
     i.core = s, u.F = 1, u.G = 2, u.S = 4, u.P = 8, u.B = 16, u.W = 32, u.U = 64, u.R = 128, 
     t.exports = u;
@@ -1213,12 +1216,12 @@
     t.exports = n(1).document && document.documentElement;
 }, function(t, e, n) {
     "use strict";
-    var i = n(36), s = n(32), r = n(9), o = n(4), l = n(7), a = n(8), u = n(50), c = n(24), h = n(56), f = n(0)("iterator"), d = !([].keys && "next" in [].keys()), v = "@@iterator", m = "keys", p = "values", y = function() {
+    var i = n(36), s = n(32), r = n(9), o = n(4), l = n(7), a = n(8), u = n(50), c = n(24), h = n(56), f = n(0)("iterator"), d = !([].keys && "next" in [].keys()), v = "@@iterator", m = "keys", p = "values", g = function() {
         return this;
     };
-    t.exports = function(t, e, n, g, b, S, w) {
-        u(n, e, g);
-        var _, P, E, k = function(t) {
+    t.exports = function(t, e, n, y, b, S, w) {
+        u(n, e, y);
+        var _, P, k, E = function(t) {
             if (!d && t in M) return M[t];
             switch (t) {
               case m:
@@ -1234,13 +1237,13 @@
             return function() {
                 return new n(this, t);
             };
-        }, x = e + " Iterator", T = b == p, j = !1, M = t.prototype, z = M[f] || M[v] || b && M[b], O = z || k(b), I = b ? T ? k("entries") : O : void 0, C = "Array" == e ? M.entries || z : z;
-        if (C && (E = h(C.call(new t())), E !== Object.prototype && (c(E, x, !0), i || l(E, f) || o(E, f, y))), 
+        }, x = e + " Iterator", T = b == p, j = !1, M = t.prototype, z = M[f] || M[v] || b && M[b], O = z || E(b), I = b ? T ? E("entries") : O : void 0, C = "Array" == e ? M.entries || z : z;
+        if (C && (k = h(C.call(new t())), k !== Object.prototype && (c(k, x, !0), i || l(k, f) || o(k, f, g))), 
         T && z && z.name !== p && (j = !0, O = function() {
             return z.call(this);
-        }), i && !w || !d && !j && M[f] || o(M, f, O), a[e] = O, a[x] = y, b) if (_ = {
-            values: T ? O : k(p),
-            keys: S ? O : k(m),
+        }), i && !w || !d && !j && M[f] || o(M, f, O), a[e] = O, a[x] = g, b) if (_ = {
+            values: T ? O : E(p),
+            keys: S ? O : E(m),
             entries: I
         }, w) for (P in _) P in M || r(M, P, _[P]); else s(s.P + s.F * (d || j), e, _);
         return _;
@@ -1262,14 +1265,14 @@
         return r[t] || (r[t] = {});
     };
 }, function(t, e, n) {
-    var i, s, r, o = n(11), l = n(46), a = n(34), u = n(23), c = n(1), h = c.process, f = c.setImmediate, d = c.clearImmediate, v = c.MessageChannel, m = 0, p = {}, y = "onreadystatechange", g = function() {
+    var i, s, r, o = n(11), l = n(46), a = n(34), u = n(23), c = n(1), h = c.process, f = c.setImmediate, d = c.clearImmediate, v = c.MessageChannel, m = 0, p = {}, g = "onreadystatechange", y = function() {
         var t = +this;
         if (p.hasOwnProperty(t)) {
             var e = p[t];
             delete p[t], e();
         }
     }, b = function(t) {
-        g.call(t.data);
+        y.call(t.data);
     };
     f && d || (f = function(t) {
         for (var e = [], n = 1; arguments.length > n; ) e.push(arguments[n++]);
@@ -1279,15 +1282,15 @@
     }, d = function(t) {
         delete p[t];
     }, "process" == n(10)(h) ? i = function(t) {
-        h.nextTick(o(g, t, 1));
+        h.nextTick(o(y, t, 1));
     } : v ? (s = new v(), r = s.port2, s.port1.onmessage = b, i = o(r.postMessage, r, 1)) : c.addEventListener && "function" == typeof postMessage && !c.importScripts ? (i = function(t) {
         c.postMessage(t + "", "*");
-    }, c.addEventListener("message", b, !1)) : i = y in u("script") ? function(t) {
-        a.appendChild(u("script"))[y] = function() {
-            a.removeChild(this), g.call(t);
+    }, c.addEventListener("message", b, !1)) : i = g in u("script") ? function(t) {
+        a.appendChild(u("script"))[g] = function() {
+            a.removeChild(this), y.call(t);
         };
     } : function(t) {
-        setTimeout(o(g, t, 1), 0);
+        setTimeout(o(y, t, 1), 0);
     }), t.exports = {
         set: f,
         clear: d
@@ -1320,14 +1323,14 @@
     };
 }, function(t, e, n) {
     var i = n(11), s = n(49), r = n(48), o = n(3), l = n(40), a = n(66), u = {}, c = {}, e = t.exports = function(t, e, n, h, f) {
-        var d, v, m, p, y = f ? function() {
+        var d, v, m, p, g = f ? function() {
             return t;
-        } : a(t), g = i(n, h, e ? 2 : 1), b = 0;
-        if ("function" != typeof y) throw TypeError(t + " is not iterable!");
-        if (r(y)) {
-            for (d = l(t.length); d > b; b++) if (p = e ? g(o(v = t[b])[0], v[1]) : g(t[b]), 
+        } : a(t), y = i(n, h, e ? 2 : 1), b = 0;
+        if ("function" != typeof g) throw TypeError(t + " is not iterable!");
+        if (r(g)) {
+            for (d = l(t.length); d > b; b++) if (p = e ? y(o(v = t[b])[0], v[1]) : y(t[b]), 
             p === u || p === c) return p;
-        } else for (m = y.call(t); !(v = m.next()).done; ) if (p = s(m, g, v.value, e), 
+        } else for (m = g.call(t); !(v = m.next()).done; ) if (p = s(m, y, v.value, e), 
         p === u || p === c) return p;
     };
     e.BREAK = u, e.RETURN = c;
@@ -1574,20 +1577,20 @@
     }, !0);
 }, function(t, e, n) {
     "use strict";
-    var i, s, r, o = n(36), l = n(1), a = n(11), u = n(21), c = n(32), h = n(12), f = n(20), d = n(42), v = n(44), m = n(61), p = n(39).set, y = n(53)(), g = "Promise", b = l.TypeError, S = l.process, w = l[g], S = l.process, _ = "process" == u(S), P = function() {}, E = !!function() {
+    var i, s, r, o = n(36), l = n(1), a = n(11), u = n(21), c = n(32), h = n(12), f = n(20), d = n(42), v = n(44), m = n(61), p = n(39).set, g = n(53)(), y = "Promise", b = l.TypeError, S = l.process, w = l[y], S = l.process, _ = "process" == u(S), P = function() {}, k = !!function() {
         try {
             var t = w.resolve(1), e = (t.constructor = {})[n(0)("species")] = function(t) {
                 t(P, P);
             };
             return (_ || "function" == typeof PromiseRejectionEvent) && t.then(P) instanceof e;
         } catch (t) {}
-    }(), k = function(t, e) {
+    }(), E = function(t, e) {
         return t === e || t === w && e === r;
     }, x = function(t) {
         var e;
         return !(!h(t) || "function" != typeof (e = t.then)) && e;
     }, T = function(t) {
-        return k(w, t) ? new j(t) : new s(t);
+        return E(w, t) ? new j(t) : new s(t);
     }, j = s = function(t) {
         var e, n;
         this.promise = new t(function(t, i) {
@@ -1606,7 +1609,7 @@
         if (!t._n) {
             t._n = !0;
             var n = t._c;
-            y(function() {
+            g(function() {
                 for (var i = t._v, s = 1 == t._s, r = 0, o = function(e) {
                     var n, r, o = s ? e.ok : e.fail, l = e.resolve, a = e.reject, u = e.domain;
                     try {
@@ -1651,7 +1654,7 @@
             n._d = !0, n = n._w || n;
             try {
                 if (n === t) throw b("Promise can't be resolved itself");
-                (e = x(t)) ? y(function() {
+                (e = x(t)) ? g(function() {
                     var i = {
                         _w: n,
                         _d: !1
@@ -1670,8 +1673,8 @@
             }
         }
     };
-    E || (w = function(t) {
-        d(this, w, g, "_h"), f(t), i.call(this);
+    k || (w = function(t) {
+        d(this, w, y, "_h"), f(t), i.call(this);
         try {
             t(a(L, this, 1), a(R, this, 1));
         } catch (t) {
@@ -1693,22 +1696,22 @@
     }), j = function() {
         var t = new i();
         this.promise = t, this.resolve = a(L, t, 1), this.reject = a(R, t, 1);
-    }), c(c.G + c.W + c.F * !E, {
+    }), c(c.G + c.W + c.F * !k, {
         Promise: w
-    }), n(24)(w, g), n(60)(g), r = n(5)[g], c(c.S + c.F * !E, g, {
+    }), n(24)(w, y), n(60)(y), r = n(5)[y], c(c.S + c.F * !k, y, {
         reject: function(t) {
             var e = T(this), n = e.reject;
             return n(t), e.promise;
         }
-    }), c(c.S + c.F * (o || !E), g, {
+    }), c(c.S + c.F * (o || !k), y, {
         resolve: function(t) {
-            if (t instanceof w && k(t.constructor, this)) return t;
+            if (t instanceof w && E(t.constructor, this)) return t;
             var e = T(this), n = e.resolve;
             return n(t), e.promise;
         }
-    }), c(c.S + c.F * !(E && n(51)(function(t) {
+    }), c(c.S + c.F * !(k && n(51)(function(t) {
         w.all(t).catch(P);
-    })), g, {
+    })), y, {
         all: function(t) {
             var e = this, n = T(e), i = n.resolve, s = n.reject, r = M(function() {
                 var n = [], r = 0, o = 1;
@@ -1747,10 +1750,10 @@
     });
 }, function(t, e, n) {
     for (var i = n(67), s = n(9), r = n(1), o = n(4), l = n(8), a = n(0), u = a("iterator"), c = a("toStringTag"), h = l.Array, f = [ "NodeList", "DOMTokenList", "MediaList", "StyleSheetList", "CSSRuleList" ], d = 0; d < 5; d++) {
-        var v, m = f[d], p = r[m], y = p && p.prototype;
-        if (y) {
-            y[u] || o(y, u, h), y[c] || o(y, c, m), l[m] = h;
-            for (v in i) y[v] || s(y, v, i[v], !0);
+        var v, m = f[d], p = r[m], g = p && p.prototype;
+        if (g) {
+            g[u] || o(g, u, h), g[c] || o(g, c, m), l[m] = h;
+            for (v in i) g[v] || s(g, v, i[v], !0);
         }
     }
 }, function(t, e, n) {

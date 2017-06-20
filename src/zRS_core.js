@@ -55,6 +55,8 @@ class zRS_core {
 
 		});
 
+		this.setVisibleSlides();
+
 		if(this.elements.slides.length > this.options.visibleSlides) {
 			this.play();
 			this.bindings();
@@ -63,7 +65,6 @@ class zRS_core {
 		}
 
 		this.bindResize();
-		this.setVisibleSlides();
 		this.loadInitialSlides();
 
 		const loadEvent = zRS_util.createEvent('load', {
@@ -329,15 +330,10 @@ class zRS_core {
 
 	bindResize() {
 		window.addEventListener('resize', () => {
-
 			zRS_util.animationFrame(() => {
-
 				this.lazy.loadImages(this.elements.slides[this.currentSlide]);
-
 				this.setVisibleSlides();
-
 			});
-
 		});
 	}
 
@@ -423,6 +419,10 @@ class zRS_core {
 
 			for(let i = 0, b = 0, l = slidesPerSide; i < l; i++, b--) {
 
+				if (!this.elements.slides[zRS_util.targetSlide(i + 1, this.elements.slides.length)]) {
+					continue;
+				}
+
 				this.lazy.loadImages(this.elements.slides[zRS_util.targetSlide(i + 1, this.elements.slides.length)]);
 
 				if(this.options.infinite === false) {
@@ -439,8 +439,11 @@ class zRS_core {
 
 			for(let i = 0, l = this.options.visibleSlides; i < l; i++) {
 
-				this.lazy.loadImages(this.elements.slides[zRS_util.targetSlide(i, this.elements.slides.length)]);
+				if (!this.elements.slides[zRS_util.targetSlide(i, this.elements.slides.length)]) {
+					continue;
+				}
 
+				this.lazy.loadImages(this.elements.slides[zRS_util.targetSlide(i, this.elements.slides.length)]);
 			}
 
 		} else {
@@ -448,9 +451,11 @@ class zRS_core {
 			for(let i = 0, l = -this.options.visibleSlides; i > l; i--) {
 
 				if(i < 0 && this.options.infinite === false) {
-
 					break;
+				}
 
+				if (!this.elements.slides[zRS_util.targetSlide(i, this.elements.slides.length)]) {
+					continue;
 				}
 
 				this.lazy.loadImages(this.elements.slides[zRS_util.targetSlide(i, this.elements.slides.length)]);
@@ -468,24 +473,16 @@ class zRS_core {
 		}
 
 		for(let size in this.options.setVisibleSlides) {
-
 			if(this.options.setVisibleSlides.hasOwnProperty(size)) {
-
 				if(document.documentElement.clientWidth <= size) {
 
 					this.updateVisible(this.options.setVisibleSlides[size]);
 					return;
-
 				} else {
-
 					this.updateVisible(this.defaultVisible);
-
 				}
-
 			}
-
 		}
-
 	}
 
 	play() {
