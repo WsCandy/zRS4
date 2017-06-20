@@ -15,14 +15,14 @@
 		transition: 'slide',
 		//direction: 'reverse',
 		pager: '.zRS__pager',
-		visibleSlides: 1,
-		slideSpacing: 0,
+		visibleSlides: 3,
+		slideSpacing: 5,
 		slideBy: 1,
-		setVisibleSlides: {
-
-			800: 2
-
-		},
+		//setVisibleSlides: {
+		//
+		//	800: 2
+		//
+		//},
 		controls: ['.zRS__nav--next', '.zRS__nav--prev'],
 		//alignment: 0.5,
 		//infinite: false,

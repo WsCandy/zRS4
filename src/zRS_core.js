@@ -55,7 +55,7 @@ class zRS_core {
 
 		});
 
-		if(this.elements.slides.length > 1) {
+		if(this.elements.slides.length > this.options.visibleSlides) {
 			this.play();
 			this.bindings();
 			this.setUpPager();

@@ -1,9 +1,9 @@
-zRS - v4.1.5
+zRS - v4.1.6
 =====
 
 zRS is a responsive javascript slider that can be implemented onto your web pages. It is backwards compatable to IE9.
 
-Version `4.1.5` fixes an issue related to only having one slide with the slide transition. Events are now not bound if there is one or less slides. 
+Version `4.1.6` Fixes an issue that caused a crash when the number of visible slides is higher than the total number of slides. 
 
 Initialisation
 ---

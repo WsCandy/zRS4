@@ -177,6 +177,10 @@ class zRS_slide {
 
 			for(let i = 0; i < this.options.visibleSlides; i++) {
 
+				if (i >= this.elements.slides.length) {
+					break
+				}
+
 				if(Math.abs(this.currentPos) > (i + 1) * this.slideWidth) {
 
 					this.elements.slides[i].style.left = `${Math.abs(this.minTransform - (this.slideWidth * i))}%`;

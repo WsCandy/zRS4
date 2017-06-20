@@ -292,8 +292,9 @@
                     elements: this.elements,
                     options: this.options,
                     lazy: this.lazy
-                }), this.elements.slides.length > 1 && (this.play(), this.bindings(), this.setUpPager(), 
-                this.setUpControls()), this.bindResize(), this.setVisibleSlides(), this.loadInitialSlides();
+                }), this.elements.slides.length > this.options.visibleSlides && (this.play(), this.bindings(), 
+                this.setUpPager(), this.setUpControls()), this.bindResize(), this.setVisibleSlides(), 
+                this.loadInitialSlides();
                 var r = a.default.createEvent("load", {
                     slides: this.elements.slides,
                     current: this.currentSlide,
@@ -1081,7 +1082,7 @@
         }, {
             key: "coordinateSlides",
             value: function() {
-                if (this.options.infinite === !0) for (var t = 0; t < this.options.visibleSlides; t++) Math.abs(this.currentPos) > (t + 1) * this.slideWidth ? this.elements.slides[t].style.left = Math.abs(this.minTransform - this.slideWidth * t) + "%" : this.elements.slides[t].style.left = t * this.slideWidth + "%";
+                if (this.options.infinite === !0) for (var t = 0; t < this.options.visibleSlides && !(t >= this.elements.slides.length); t++) Math.abs(this.currentPos) > (t + 1) * this.slideWidth ? this.elements.slides[t].style.left = Math.abs(this.minTransform - this.slideWidth * t) + "%" : this.elements.slides[t].style.left = t * this.slideWidth + "%";
             }
         }, {
             key: "positionInner",
