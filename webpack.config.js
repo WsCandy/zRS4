@@ -5,8 +5,8 @@ module.exports = {
 
 	watch: true,
 	entry: {
-		'zRS': `./index.js`,
-		'zRS.min':`./index.js`
+		'zRS': `./src/index.js`,
+		'zRS.min':`./src/index.js`
 	},
 	output: {
 		path: path.resolve(__dirname, 'dist'),

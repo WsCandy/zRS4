@@ -2,15 +2,19 @@
   "name": "zrs4",
   "version": "4.1.7",
   "description": "zrs4",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "flow": "flow; test $? -eq 0 -o $? -eq 2"
+    "flow": "flow; test $? -eq 0 -o $? -eq 2",
+    "prepublish": "./node_modules/.bin/babel src -d lib && flow-copy-source src lib"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/WsCandy/zRS4.git"
   },
-  "dependencies": {},
+  "files": [
+    "lib",
+    ".flowconfig"
+  ],
   "author": "Samuel Woodbridge",
   "license": "ISC",
   "bugs": {
@@ -19,6 +23,7 @@
   "homepage": "https://github.com/WsCandy/zRS4",
   "devDependencies": {
     "babel": "^6.5.2",
+    "babel-cli": "^6.24.1",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
@@ -26,6 +31,7 @@
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-stage-0": "^6.22.0",
     "flow-bin": "^0.38.0",
-    "webpack": "^2.2.1"
+    "flow-copy-source": "^1.2.0",
+    "webpack": "^3.0.0"
   }
 }

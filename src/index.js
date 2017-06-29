@@ -1,4 +1,4 @@
-import zRS from './src/zRS';
+import zRS from './zRS';
 
 window.zRS = zRS;
 
