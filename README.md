@@ -1,9 +1,9 @@
-zRS - v4.1.7
+zRS - v4.1.8
 =====
 
 zRS is a responsive javascript slider that can be implemented onto your web pages. It is backwards compatable to IE9.
 
-Version `4.1.7` Fixes an issue that tries to load images from slides that do not exist. 
+Version `4.1.8` Updates the package to provide the correct files when installing via `npm` or `yarn` 
 
 Initialisation
 ---

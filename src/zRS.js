@@ -41,7 +41,7 @@ class zRS {
 
 	static version() {
 
-		return `4.1.7`;
+		return `4.1.8`;
 
 	}
 
