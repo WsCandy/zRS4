@@ -1,35 +1,30 @@
 //@flow
-
-'use strict';
-
 import zRS_util from './zRS_util';
 import zRS_core from './zRS_core';
 
-type Settings = {
-
-	transition: string,
-	inner: string,
-	slides: string,
-	controls: Array<HTMLElement>,
-	pager: Array<string> | null,
-	delay: number,
-	speed: number,
-	slideBy: number,
-	slideSpacing: number,
-	direction: string,
-	keyboardControls: boolean,
-	alignment: number | string,
-	visibleSlides: number,
-	setVisibleSlides: null | {[key: number] : number},
-	drag: boolean,
-	infinite: boolean,
-	verbose: boolean,
-	freeStyle: boolean,
-	friction: number
-
+declare type Settings = {
+	transition?: string,
+	inner?: string,
+	slides?: string,
+	controls?: Array<HTMLElement>,
+	pager?: Array<string> | null,
+	delay?: number,
+	speed?: number,
+	slideBy?: number,
+	slideSpacing?: number,
+	direction?: string,
+	keyboardControls?: boolean,
+	alignment?: number | string,
+	visibleSlides?: number,
+	setVisibleSlides?: null | {[key: number] : number},
+	drag?: boolean,
+	infinite?: boolean,
+	verbose?: boolean,
+	freeStyle?: boolean,
+	friction?: number
 };
 
-type Instances = zRS_core | {[key: any] : zRS_core};
+declare type Instances = zRS_core | {[key: any] : zRS_core};
 
 class zRS {
 
