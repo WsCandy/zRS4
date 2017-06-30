@@ -1,9 +1,22 @@
-zRS - v4.1.9
+zRS - v4.1.10
 =====
 
 zRS is a responsive javascript slider that can be implemented onto your web pages. It is backwards compatable to IE9.
 
-Version `4.1.9` Fixes an issue with the "main" property in the `package.json` 
+Version `4.1.10` makes changes to the way transition classes are imported into the core and updates the flow type declarations for the `Settings` type. 
+
+Installation
+---
+
+You can install zRS4 using `yarn` or `npm` or by including one of the `dist` files in your project.
+
+To install using `yarn` run the following command:
+    
+    yarn add zrs4
+    
+To install using `npm` run the following command:
+
+    npm install zrs4
 
 Initialisation
 ---
@@ -11,9 +24,7 @@ Initialisation
 To initialise a slider simply use the following code:
 
 	var slider = new zRS('#slider', {
-    
         ...options
-    
     });
     
 Initialisation will accept either an element object or a string, for example:
@@ -21,9 +32,7 @@ Initialisation will accept either an element object or a string, for example:
     var element = document.getElementById('slider');
 
     var slider = new zRS(element, {
-    
         ...options
-    
     });
     
 Initialisation will accept both classes and ID's although it's recommended you use ID's
