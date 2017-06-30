@@ -18,6 +18,16 @@ To install using `npm` run the following command:
 
     npm install zrs4
 
+Installation
+---
+To install, run the following code:
+	
+	yarn add zrs4 -D
+	
+Then import it in your JS file using this:
+
+	import zRS from 'zrs4';
+
 Initialisation
 ---
 
