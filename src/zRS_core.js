@@ -10,12 +10,12 @@ class zRS_core {
 
 		try {
 
-			this.zRS_trans = require(`./zRS_${options.transition}`).default;
+			this.zRS_trans = require(`./zRS_${options.transition}.js`).default;
 
 		} catch(error) {
 
 			zRS_util.log(`The transition '${options.transition}' doesn't exist, falling back to fade.`, `warn`, this.options.verbose);
-			this.zRS_trans = require(`./zRS_fade`).default;
+			this.zRS_trans = require(`./zRS_fade.js`).default;
 
 		}
 
